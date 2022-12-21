@@ -1,4 +1,4 @@
-﻿namespace Player
+﻿namespace Gameplay.Player.Model
 {
     public class Player
     {

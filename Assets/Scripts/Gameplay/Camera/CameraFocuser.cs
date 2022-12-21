@@ -1,7 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Camera
+namespace Gameplay.Camera
 {
     public class CameraFocuser : MonoBehaviour
     {

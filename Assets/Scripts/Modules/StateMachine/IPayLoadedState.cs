@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.StateMachine.States
+﻿namespace Modules.StateMachine
 {
     public interface IPayLoadedState<in TPayLoad> : IExitableState
     {

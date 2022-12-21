@@ -1,11 +1,9 @@
-﻿using Camera;
+﻿using Gameplay.Camera;
+using Gameplay.Player.MonoBehaviour.Movement;
 using Infrastructure.Factory;
-using Infrastructure.ServiceManagement;
-using Player;
+using Modules.StateMachine;
 using UI;
-using Unity.VisualScripting;
 using UnityEngine;
-using Utility.Static;
 
 namespace Infrastructure.StateMachine.States
 {
@@ -13,21 +11,19 @@ namespace Infrastructure.StateMachine.States
     {
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
+        private readonly IGameObjectFactory _gameObjectFactory;
         
-        private IGameObjectFactory _gameObjectFactory;
         private LoadingCurtain _loadingCurtain;
 
-        public LoadLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader)
+        public LoadLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, IGameObjectFactory gameObjectFactory)
         {
+            _gameObjectFactory = gameObjectFactory;
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
         }
 
-        private IGameObjectFactory GameObjectFactory =>
-            _gameObjectFactory ??= Services.Container.Single<IGameObjectFactory>();
-
         private LoadingCurtain LoadingCurtain => _loadingCurtain ??=
-            GameObjectFactory.CreateLoadingCurtain().GetComponent<LoadingCurtain>();
+            _gameObjectFactory.CreateLoadingCurtain().GetComponent<LoadingCurtain>();
 
         public void Enter(string name)
         {
@@ -45,8 +41,8 @@ namespace Infrastructure.StateMachine.States
             Transform playerSpawnPoint = GameObject.FindWithTag("PlayerSpawnPoint").transform;    //TODO: BURN this
             Transform enemyBasket = GameObject.FindWithTag("EnemyBasket").transform;  
          
-            GameObject player = GameObjectFactory.CreatePlayer(playerSpawnPoint.position);
-            GameObject camera = GameObjectFactory.CreateCamera();
+            GameObject player = _gameObjectFactory.CreatePlayer(playerSpawnPoint.position);
+            GameObject camera = _gameObjectFactory.CreateCamera();
             
             CameraTargetTracker cameraTargetTracker = camera.GetComponent<CameraTargetTracker>();
             cameraTargetTracker.SetTarget(player.transform);
@@ -54,9 +50,9 @@ namespace Infrastructure.StateMachine.States
             cameraFocuser.SetTarget(enemyBasket);
             player.GetComponent<InputPlayerMover>().SetTargetTracker(cameraTargetTracker);
             
-            GameObjectFactory.CreateHUD();               //TODO different for different platforms
+            _gameObjectFactory.CreateHUD();               //TODO different for different platforms
             
-            _gameStateMachine.Enter<GameLoopState>();
+            _gameStateMachine.Enter<GamePlayState>();
         }
     }
 }

@@ -1,4 +1,8 @@
-﻿using Infrastructure.ServiceManagement;
+﻿using Infrastructure.Factory;
+using Infrastructure.Input;
+using Infrastructure.Provider;
+using Infrastructure.ServiceManagement;
+using Modules.StateMachine;
 using Utility.Static;
 
 namespace Infrastructure.StateMachine.States
@@ -7,18 +11,18 @@ namespace Infrastructure.StateMachine.States
     {
         private readonly GameStateMachine _stateMachine;
         private readonly SceneLoader _sceneLoader;
-        private readonly ServiceRegistrator _serviceRegistrator;
+        private readonly Services _services;
 
-        public BootstrapState(GameStateMachine stateMachine, SceneLoader sceneLoader, ServiceRegistrator serviceRegistrator)
+        public BootstrapState(GameStateMachine stateMachine, SceneLoader sceneLoader, Services services)
         {
             _stateMachine = stateMachine;
             _sceneLoader = sceneLoader;
-            _serviceRegistrator = serviceRegistrator;
+            _services = services;
+            RegisterServices();
         }
         
         public void Enter()
         {
-            _serviceRegistrator.RegisterServices();
             _sceneLoader.LoadScene(SceneNames.Initial, onLoaded: EnterLoadLevel);
         }
         
@@ -30,6 +34,13 @@ namespace Infrastructure.StateMachine.States
         private void EnterLoadLevel()
         {
             _stateMachine.Enter<LoadLevelState, string>(SceneNames.Scene);
+        }
+        
+        private void RegisterServices()
+        {
+            _services.RegisterSingle<IInputService>(new SimpleInputService()); //TODO: for different platforms
+            _services.RegisterSingle<IAssetProvider>(new AssetProvider());
+            _services.RegisterSingle<IGameObjectFactory>(new GameObjectFactory(Services.Container.Single<IAssetProvider>()));
         }
     }
 }

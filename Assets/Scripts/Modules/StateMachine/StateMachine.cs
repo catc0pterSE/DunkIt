@@ -1,25 +1,17 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Infrastructure.ServiceManagement;
 
-namespace Infrastructure.StateMachine.States
+namespace Modules.StateMachine
 {
-    public class GameStateMachine
+    public abstract class StateMachine
     {
-        private readonly Dictionary<Type, IExitableState> _states;
-
         private IExitableState _currentState;
 
-        public GameStateMachine(SceneLoader sceneLoader, ServiceRegistrator serviceRegistrator)
-        {
-            _states = new Dictionary<Type, IExitableState>
-            {
-                [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, serviceRegistrator),
-                [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader),
-                [typeof(GameLoopState)] = new GameLoopState(this),
-            };
-        }
-
+        protected Dictionary<Type, IExitableState> States; 
+     
+        
+        
+        
         public void Enter<TState>() where TState : class, IState
         {
             if (TryChangeState(out TState state))
@@ -33,7 +25,7 @@ namespace Infrastructure.StateMachine.States
         }
 
         private TState GetState<TState>() where TState : class, IExitableState =>
-            _states[typeof(TState)] as TState;
+            States[typeof(TState)] as TState;
 
         private bool TryChangeState<TState>(out TState state) where TState : class, IExitableState
         {

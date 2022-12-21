@@ -1,13 +1,12 @@
-using Camera;
-using Infrastructure;
+using Gameplay.Camera;
 using Infrastructure.Input;
 using Infrastructure.ServiceManagement;
 using UnityEngine;
 
-namespace Player
+namespace Gameplay.Player.MonoBehaviour.Movement
 {
     [RequireComponent(typeof(CharacterController))]
-    public class InputPlayerMover : MonoBehaviour
+    public class InputPlayerMover : UnityEngine.MonoBehaviour
     {
         [SerializeField] private float _movementSpeed = 4;
         [SerializeField] private float _rotationSpeed = 400;

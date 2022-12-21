@@ -1,4 +1,5 @@
 using System;
+using Infrastructure.ServiceManagement;
 using Infrastructure.StateMachine;
 using Infrastructure.StateMachine.States;
 using UnityEngine;
@@ -7,12 +8,15 @@ namespace Infrastructure
 {
     public class GameBootstrapper : MonoBehaviour
     {
-        private Game _game;
+        private GameStateMachine _stateMachine;
 
         private void Awake()
         {
-            _game = new Game();
-            _game.StateMachine.Enter<BootstrapState>();
+           _stateMachine =  new GameStateMachine(
+               new SceneLoader(),
+               Services.Container
+           );
+           _stateMachine.Enter<BootstrapState>();
             
             DontDestroyOnLoad(this);
         }
