@@ -1,5 +1,4 @@
-using System;
-using Cysharp.Threading.Tasks;
+using System.Collections;
 using UnityEngine;
 
 namespace UI
@@ -8,9 +7,9 @@ namespace UI
     {
         [SerializeField] private CanvasGroup _curtain;
         
-        private const float FadingStep = 0.03f;
-
+        private const float FadingStep = 0.005f;
         private float _defaultCurtainAlpha;
+        private Coroutine _fadeJob;
 
         private void Awake()
         {
@@ -21,18 +20,26 @@ namespace UI
         public void Show()
         {
             gameObject.SetActive(true);
+            _curtain.alpha = _defaultCurtainAlpha;
         }
 
-        public async void Hide()
+        public void Hide()
+        {
+            if (_fadeJob !=null)
+                StopCoroutine(_fadeJob);
+
+            _fadeJob = StartCoroutine(FadeIn());
+        }
+
+        private IEnumerator FadeIn()
         {
             while (_curtain.alpha>0)
             {
                 _curtain.alpha -= FadingStep;
-                await UniTask.NextFrame();
+                yield return null;
             }
             
             gameObject.SetActive(false);
         }
-        
     }
 }

@@ -1,15 +1,20 @@
-﻿using Infrastructure.StateMachine;
-using Services.Input;
+﻿using Infrastructure.Input;
+using Infrastructure.ServiceManagement;
+using Infrastructure.StateMachine;
+using Infrastructure.StateMachine.States;
+
 namespace Infrastructure
 {
     public class Game
     {
-        public static IInputService InputService;
         private readonly GameStateMachine _stateMachine;
 
         public Game()
         {
-            _stateMachine = new GameStateMachine(new SceneLoader());
+            _stateMachine = new GameStateMachine(
+                new SceneLoader(),
+                new ServiceRegistrator()
+                );
         }
 
         public GameStateMachine StateMachine => _stateMachine;

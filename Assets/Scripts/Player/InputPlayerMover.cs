@@ -1,6 +1,7 @@
 using Camera;
 using Infrastructure;
-using Services.Input;
+using Infrastructure.Input;
+using Infrastructure.ServiceManagement;
 using UnityEngine;
 
 namespace Player
@@ -17,13 +18,14 @@ namespace Player
         private CharacterController _characterController;
         private IInputService _inputService;
 
+        private IInputService InputService => _inputService ??= Services.Container.Single<IInputService>();
+        
         private Vector3 CameraRelativeDirection =>
-            _cameraTargetTracker.CalculateCameraRelativeDirection(_inputService.MovementDirection);
+            _cameraTargetTracker.CalculateCameraRelativeDirection(InputService.MovementDirection);
 
         private void Awake()
         {
             _characterController = GetComponent<CharacterController>();
-            _inputService = Game.InputService;
         }
 
         private void FixedUpdate()
@@ -47,8 +49,6 @@ namespace Player
         {
             if (CameraRelativeDirection == Vector3.zero)
                 return;
-
-            //   transform.forward = CameraRelativeDirection; //TODO: choose realization
 
             Quaternion toRotation = Quaternion.LookRotation(CameraRelativeDirection, Vector3.up);
             transform.rotation =

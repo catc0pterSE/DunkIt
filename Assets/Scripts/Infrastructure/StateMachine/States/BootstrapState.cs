@@ -1,43 +1,35 @@
-﻿using Services.Input;
-using Utility;
+﻿using Infrastructure.ServiceManagement;
+using Utility.Static;
 
-namespace Infrastructure.StateMachine
+namespace Infrastructure.StateMachine.States
 {
     public class BootstrapState : IState
     {
         private readonly GameStateMachine _stateMachine;
         private readonly SceneLoader _sceneLoader;
+        private readonly ServiceRegistrator _serviceRegistrator;
 
-        public BootstrapState(GameStateMachine stateMachine, SceneLoader sceneLoader)
+        public BootstrapState(GameStateMachine stateMachine, SceneLoader sceneLoader, ServiceRegistrator serviceRegistrator)
         {
             _stateMachine = stateMachine;
             _sceneLoader = sceneLoader;
+            _serviceRegistrator = serviceRegistrator;
         }
         
         public void Enter()
         {
-            RegisterServices();
+            _serviceRegistrator.RegisterServices();
             _sceneLoader.LoadScene(SceneNames.Initial, onLoaded: EnterLoadLevel);
-        }
-
-        private void EnterLoadLevel()
-        {
-            _stateMachine.Enter<LoadLevelState, string>(SceneNames.Scene);
         }
         
         public void Exit()
         {
             
         }
-        
-        private void RegisterServices()
-        {
-            Game.InputService = RegisterInputService();
-        }
 
-        private IInputService RegisterInputService() //TODO: for different platforms
+        private void EnterLoadLevel()
         {
-            return new SimpleInputService();
+            _stateMachine.Enter<LoadLevelState, string>(SceneNames.Scene);
         }
     }
 }

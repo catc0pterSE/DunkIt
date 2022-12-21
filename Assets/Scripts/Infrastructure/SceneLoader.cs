@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,12 +15,7 @@ namespace Infrastructure
                 return;
             }
 
-            AsyncOperation waitSceneLoad = SceneManager.LoadSceneAsync(name);
-
-            while (waitSceneLoad.isDone == false)
-            {
-                await UniTask.NextFrame();
-            }
+            await SceneManager.LoadSceneAsync(name); //TODO: cancellation? progressbar?
 
             onLoaded?.Invoke();
         }
