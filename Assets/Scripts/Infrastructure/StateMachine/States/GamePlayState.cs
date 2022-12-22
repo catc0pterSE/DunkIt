@@ -2,7 +2,7 @@
 
 namespace Infrastructure.StateMachine.States
 {
-    public class GamePlayState: IState
+    public class GamePlayState: IParameterlessState
     {
         public GamePlayState(GameStateMachine gameStateMachine)
         {

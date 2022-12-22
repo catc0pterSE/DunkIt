@@ -7,7 +7,7 @@ using Utility.Static;
 
 namespace Infrastructure.StateMachine.States
 {
-    public class BootstrapState : IState
+    public class BootstrapState : IParameterlessState
     {
         private readonly GameStateMachine _stateMachine;
         private readonly SceneLoader _sceneLoader;

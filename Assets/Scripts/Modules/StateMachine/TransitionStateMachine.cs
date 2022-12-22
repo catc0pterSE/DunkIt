@@ -1,7 +1,12 @@
-﻿namespace Modules.TransitionStateMachine
+﻿using Utility.Extensions;
+
+namespace Modules.StateMachine
 {
-    public class TransitionStateMachine
+    public abstract class TransitionStateMachine : StateMachine
     {
-        
+        protected TransitionStateMachine()
+        {
+            
+        }
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 namespace Infrastructure
 {
+    using await = Cysharp.Threading.Tasks;
     public class SceneLoader
     {
         public async void LoadScene(string name, Action onLoaded = null)

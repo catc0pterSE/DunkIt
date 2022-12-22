@@ -1,5 +1,5 @@
 ﻿using Gameplay.Camera;
-using Gameplay.Player.MonoBehaviour.Movement;
+using Gameplay.Player.MonoBehaviour.Brain;
 using Infrastructure.Factory;
 using Modules.StateMachine;
 using UI;
@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Infrastructure.StateMachine.States
 {
-    public class LoadLevelState : IPayLoadedState<string>
+    public class LoadLevelState : IParameterState<string>
     {
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
@@ -48,7 +48,7 @@ namespace Infrastructure.StateMachine.States
             cameraTargetTracker.SetTarget(player.transform);
             CameraFocuser cameraFocuser = camera.GetComponent<CameraFocuser>();
             cameraFocuser.SetTarget(enemyBasket);
-            player.GetComponent<InputPlayerMover>().SetTargetTracker(cameraTargetTracker);
+            player.GetComponent<InputControlledBrain>().SetTargetTracker(cameraTargetTracker);
             
             _gameObjectFactory.CreateHUD();               //TODO different for different platforms
             

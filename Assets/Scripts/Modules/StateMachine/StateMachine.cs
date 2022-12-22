@@ -5,29 +5,26 @@ namespace Modules.StateMachine
 {
     public abstract class StateMachine
     {
-        private IExitableState _currentState;
+        private IState _currentState;
 
-        protected Dictionary<Type, IExitableState> States; 
-     
+        protected Dictionary<Type, IState> States; 
         
-        
-        
-        public void Enter<TState>() where TState : class, IState
+        public void Enter<TState>() where TState : class, IParameterlessState
         {
             if (TryChangeState(out TState state))
                 state.Enter();
         }
 
-        public void Enter<TState, TPayLoad>(TPayLoad payload) where TState : class, IPayLoadedState<TPayLoad>
+        public void Enter<TState, TPayLoad>(TPayLoad payload) where TState : class, IParameterState<TPayLoad>
         {
             if (TryChangeState(out TState state))
                 state.Enter(payload);
         }
 
-        private TState GetState<TState>() where TState : class, IExitableState =>
+        private TState GetState<TState>() where TState : class, IState =>
             States[typeof(TState)] as TState;
 
-        private bool TryChangeState<TState>(out TState state) where TState : class, IExitableState
+        private bool TryChangeState<TState>(out TState state) where TState : class, IState
         {
             state = GetState<TState>();
 
@@ -42,7 +39,7 @@ namespace Modules.StateMachine
         private void ExitCurrentState() =>
             _currentState?.Exit();
 
-        private void SetCurrentState(IExitableState state) =>
+        private void SetCurrentState(IState state) =>
             _currentState = state;
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace Modules.StateMachine
 {
-    public interface IState: IExitableState
+    public interface IState
     {
-        public void Enter();
+        public void Exit();
     }
 }

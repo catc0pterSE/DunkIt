@@ -14,7 +14,7 @@ namespace Infrastructure.StateMachine
         public GameStateMachine(SceneLoader sceneLoader, Services services
         )
         {
-            States = new Dictionary<Type, IExitableState>
+            States = new Dictionary<Type, IState>
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, services),
                 [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader, services.Single<IGameObjectFactory>()),
