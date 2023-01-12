@@ -1,6 +1,6 @@
 ﻿namespace Modules.StateMachine
 {
-    public abstract class Transition<TState> where TState: class, IParameterlessState
+    public abstract class Transition<TState> : ITransition where TState: class, IParameterlessState 
     {
         private readonly StateMachine _stateMachine;
 
@@ -13,5 +13,9 @@
         {
             _stateMachine.Enter<TState>();
         }
+
+        public abstract void Enable();
+
+        public abstract void Disable();
     }
 }

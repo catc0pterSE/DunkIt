@@ -13,7 +13,8 @@ namespace Gameplay.Player.StateMachine
             States = new Dictionary<Type, IState>()
             {
                 [typeof(ControlledState)] = new ControlledState(playerFacade),
-                [typeof(AIState)] = new AIState(playerFacade)
+                [typeof(AIState)] = new AIState(playerFacade), 
+                [typeof(CutsceneState)] = new CutsceneState(playerFacade)
             };
         }
     }

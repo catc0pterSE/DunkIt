@@ -18,7 +18,7 @@ namespace Infrastructure.StateMachine
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, services),
                 [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader, services.Single<IGameObjectFactory>()),
-                [typeof(GamePlayState)] = new GamePlayState(this)
+                [typeof(GamePlayLoopState)] = new GamePlayLoopState(this)
             };
         }
     }

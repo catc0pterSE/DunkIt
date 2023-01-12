@@ -3,7 +3,7 @@ using Infrastructure.Input;
 using Infrastructure.Provider;
 using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
-using Utility.Static;
+using Utility.Constants;
 
 namespace Infrastructure.StateMachine.States
 {

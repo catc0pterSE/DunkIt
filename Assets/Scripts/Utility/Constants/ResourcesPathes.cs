@@ -1,8 +1,11 @@
-﻿namespace Utility.Static
+﻿namespace Utility.Constants
 {
     public static class ResourcesPathes
     {
         public const string PlayerPath = "Player/Player";
+        public const string EnemyPath = "NPC/Enemy/Enemy";
+        public const string RefereePath = "NPC/Referee/Referee";
+        public const string BallPath = "Essentials/Ball/Ball";
         public const string CameraPath = "Camera/Camera";
         public const string LoadingCurtainPath = "UI/LoadingCurtain/LoadingCurtain";
         public const string HUDPath = "UI/HUD/HUD";

@@ -1,14 +1,17 @@
-﻿using UnityEngine;
+﻿using Modules.MonoBehaviour;
+using UnityEngine;
 
-namespace Gameplay.Camera
+namespace Gameplay.Camera.MonoBehaviour
 {
-    public class CameraTargetTracker: MonoBehaviour
+    public class CameraTargetFollower: SwitchableComponent
     {
         [SerializeField] private float _trackingSpeed = 5;
         [SerializeField] private float _projectionDistanceToPlayer = 17;
         [SerializeField] private float _cameraHeight = 5;
 
         private Transform _target;
+
+        private Vector3 TargetPosition => _target.position;
 
         private void FixedUpdate()
         {
@@ -19,13 +22,6 @@ namespace Gameplay.Camera
         {
             _target = target;
         }
-
-        public Vector3 CalculateCameraRelativeDirection(Vector2 inputDirection)
-        {
-            Vector3 direction = transform.TransformDirection(inputDirection.x, 0, inputDirection.y);
-
-            return direction;
-        }
         
         private void MoveToPlayer()
         {
@@ -34,9 +30,8 @@ namespace Gameplay.Camera
 
         private Vector3 GetDirection()
         {
-            Vector3 targetPosition = _target.position;
-            Vector3 projectionPosition = targetPosition - GetNormalizedForwardProjection() * _projectionDistanceToPlayer;
-            float yPosition = targetPosition.y + _cameraHeight;
+            Vector3 projectionPosition = TargetPosition - GetNormalizedForwardProjection() * _projectionDistanceToPlayer;
+            float yPosition = TargetPosition.y + _cameraHeight;
             
             return new Vector3(projectionPosition.x, yPosition, projectionPosition.z);
         }

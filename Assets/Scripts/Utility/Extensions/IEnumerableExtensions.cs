@@ -4,16 +4,12 @@ using System.Linq;
 
 namespace Utility.Extensions
 {
-    public static partial class EnumerableExtension
+    public static class EnumerableExtensions
     {
-        public static IEnumerable<T> Map<T>(this IEnumerable<T> array, Action<T> function)
+        public static void Map<T>(this IEnumerable<T> array, Action<T> function)
         {
-            var enumerable = array.ToArray();
-
-            foreach (var item in enumerable)
+            foreach (var item in array)
                 function(item);
-
-            return enumerable;
         }
     }
 }

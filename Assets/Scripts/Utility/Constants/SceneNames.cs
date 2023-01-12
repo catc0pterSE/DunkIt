@@ -1,4 +1,4 @@
-﻿namespace Utility.Static
+﻿namespace Utility.Constants
 {
     public static class SceneNames
     {

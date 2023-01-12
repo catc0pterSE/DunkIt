@@ -1,13 +1,11 @@
-﻿using UnityEngine;
+﻿using Modules.MonoBehaviour;
+using UnityEngine;
 
-namespace Gameplay.Camera
+namespace Gameplay.Camera.MonoBehaviour
 {
-    public class CameraFocuser : MonoBehaviour
+    public class CameraFocuser : SwitchableComponent
     {
         private Transform _lookTarget;
-
-        private Vector3 LookTarget =>
-            _lookTarget.position; //TODO: when Player has ball -> enemy basket, when he don't -  character with ball.
 
         private void FixedUpdate()
         {
@@ -21,7 +19,7 @@ namespace Gameplay.Camera
 
         private void Focus()
         {
-            transform.LookAt(LookTarget);
+            transform.LookAt(_lookTarget);
         }
     }
 }
