@@ -35,7 +35,7 @@ namespace Modules.StateMachine
             SetCurrentState(state);
             return true;
         }
-
+        
         private void ExitCurrentState() =>
             _currentState?.Exit();
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using Gameplay.Camera.MonoBehaviour;
+using Gameplay.Camera.StateMachine.States;
 using Gameplay.NPC.EnemyPlayer.MonoBehaviour;
-using Gameplay.NPC.EnemyPlayer.StateMachine.States;
 using Gameplay.NPC.Referee.MonoBehaviour;
 using Gameplay.Player.MonoBehaviour;
 using Modules.StateMachine;
@@ -36,20 +36,19 @@ namespace Gameplay.StateMachine.States.CutsceneStates
             ArrangeCharacters();
             SetBallPosition();
             SetCharactersStates();
-
-            _camera.StateMachine.Enter<CutsceneState>();
-            _camera.RouteFollower.Run(_sceneConfig.CameraRoute.GetTransformPositions());
-            _camera.RouteFollower.Finished += OnFinished;
+            
+            _camera.StateMachine.Enter<DynamicCutsceneState, CameraRoutePoint[]>(_sceneConfig.CameraRoute);
+            _camera.RouteFollower.Finished += OnCameraMovementFinished;
         }
-
+        
         public void Exit()
         {
-            _camera.RouteFollower.Finished -= OnFinished;
+            
         }
 
-        private void OnFinished()
+        private void OnCameraMovementFinished()
         {
-            throw new NotImplementedException();
+           
         }
 
         private void ArrangeCharacters()

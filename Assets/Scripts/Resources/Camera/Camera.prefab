@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7866336503275337626}
   - component: {fileID: 1770828267996315814}
   - component: {fileID: 7581229857296738834}
+  - component: {fileID: 2417018297479186070}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -114,6 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9701ae91c99d434dbd8cc498ca418a6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _rotationSpeed: 400
 --- !u!114 &7581229857296738834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,3 +130,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _focuser: {fileID: 1770828267996315814}
   _targetFollower: {fileID: 7866336503275337626}
+  _routeFollower: {fileID: 2417018297479186070}
+--- !u!114 &2417018297479186070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3984079571190800386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1abaf566406b4392a35787451b0a39b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _defaultMovementSpeed: 4
+  _focuser: {fileID: 1770828267996315814}

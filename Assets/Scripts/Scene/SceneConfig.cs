@@ -1,31 +1,32 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Utility.Constants;
 
 namespace Scene
 {
     public class SceneConfig : MonoBehaviour
     {
-        [Header("Essentials")]
-        [SerializeField] private Transform _playerBucket;
+        [Header("Essentials")] [SerializeField]
+        private Transform _playerBucket;
 
         [SerializeField] private Transform _enemyBucket;
 
-        [Header("Start Cutscene")]
-        [SerializeField] private Transform[] _cameraRoute;
+        [Header("Start Cutscene")] [SerializeField]
+        private CameraRoutePoint[] _cameraRoute;
+
         [SerializeField] private Transform[] _playerTeamPositions;
         [SerializeField] private Transform _playerTeamCameraTarget;
         [SerializeField] private Transform[] _enemyTeamPositions;
         [SerializeField] private Transform _enemyTeamCameraTarget;
-            
 
-        [Header("Referee ball")] 
-        [SerializeField] private Transform _refereePosition;
+
+        [Header("Referee ball")] [SerializeField]
+        private Transform _refereePosition;
 
         [SerializeField] private Transform[] _playerRoute;
         [SerializeField] private Transform[] _enemyRoute;
 
-        [Header("Dunk")] 
-        [SerializeField] private Transform[] _cameraPositions;
+        [Header("Dunk")] [SerializeField] private Transform[] _cameraPositions;
 
         public Transform PlayerBucket => _playerBucket;
 
@@ -35,7 +36,7 @@ namespace Scene
 
         public Transform EnemyTeamCameraTarget => _enemyTeamCameraTarget;
 
-        public Transform[] CameraRoute => _cameraRoute;
+        public CameraRoutePoint[] CameraRoute => _cameraRoute;
 
         public Transform[] PlayerTeamPositions => _playerTeamPositions;
 
