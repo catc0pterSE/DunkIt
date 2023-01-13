@@ -1,8 +1,7 @@
-﻿using System;
-using Gameplay.NPC.EnemyPlayer.StateMachine;
+﻿using Gameplay.Character.NPC.EnemyPlayer.StateMachine;
 using UnityEngine;
 
-namespace Gameplay.NPC.EnemyPlayer.MonoBehaviour
+namespace Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour
 {
     public class EnemyFacade : UnityEngine.MonoBehaviour
     {

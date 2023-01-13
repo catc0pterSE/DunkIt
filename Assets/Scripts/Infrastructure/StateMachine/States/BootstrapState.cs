@@ -28,7 +28,6 @@ namespace Infrastructure.StateMachine.States
         
         public void Exit()
         {
-            
         }
 
         private void EnterLoadLevel()

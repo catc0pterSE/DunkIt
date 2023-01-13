@@ -12,8 +12,7 @@ namespace Gameplay.Camera.StateMachine
         {
             States = new Dictionary<Type, IState>()
             {
-                [typeof(DynamicCutsceneState)] = new DynamicCutsceneState(cameraFacade),
-                [typeof(StaticCutsceneState)] = new StaticCutsceneState(cameraFacade),
+                [typeof(CutsceneState)] = new CutsceneState(cameraFacade)
             };
         }
     }

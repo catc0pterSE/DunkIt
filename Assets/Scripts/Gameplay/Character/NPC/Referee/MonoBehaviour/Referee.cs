@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Gameplay.NPC.Referee.MonoBehaviour
+namespace Gameplay.Character.NPC.Referee.MonoBehaviour
 {
     public class Referee : UnityEngine.MonoBehaviour
     {

@@ -1,11 +1,10 @@
-﻿using Gameplay.Camera.MonoBehaviour;
-using Gameplay.Player.MonoBehaviour.Movement;
+﻿using Gameplay.Character.Player.MonoBehaviour.Movement;
 using Infrastructure.Input;
 using Infrastructure.ServiceManagement;
 using Modules.MonoBehaviour;
 using UnityEngine;
 
-namespace Gameplay.Player.MonoBehaviour.Brains
+namespace Gameplay.Character.Player.MonoBehaviour.Brains
 {
     public class InputControlledBrain : SwitchableComponent
     {

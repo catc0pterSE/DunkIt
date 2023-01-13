@@ -28,5 +28,19 @@ namespace Utility.Extensions
 
             return transforms;
         }
+
+        public static Vector3 GetIntermediatePosition(this Vector3[] positions)
+        {
+            Vector3 intermediatePosition = new Vector3();
+
+            foreach (Vector3 position in positions)
+            {
+                intermediatePosition += position;
+            }
+
+            intermediatePosition /= positions.Length;
+
+            return intermediatePosition;
+        }
     }
 }

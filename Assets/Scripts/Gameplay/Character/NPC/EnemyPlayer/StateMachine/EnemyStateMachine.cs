@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Gameplay.NPC.EnemyPlayer.MonoBehaviour;
-using Gameplay.NPC.EnemyPlayer.StateMachine.States;
+using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
+using Gameplay.Character.NPC.EnemyPlayer.StateMachine.States;
 using Modules.StateMachine;
 
-namespace Gameplay.NPC.EnemyPlayer.StateMachine
+namespace Gameplay.Character.NPC.EnemyPlayer.StateMachine
 {
     public class EnemyStateMachine : Modules.StateMachine.StateMachine
     {

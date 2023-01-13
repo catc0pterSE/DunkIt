@@ -7,53 +7,50 @@ namespace Gameplay.Camera.MonoBehaviour
 {
     public class CameraFocuser : SwitchableComponent
     {
-        [SerializeField] private float _rotationSpeed = 400;
-        
         private Transform _lookTarget;
         private Coroutine _changingTarget;
-        
+        private bool _isChangingTarget;
+
         private void Update()
         {
             Focus();
         }
 
-        public void SetTarget(Transform target, bool smoothly = false)
+        public void SetTarget(Transform target)
         {
-            if (_lookTarget == target)
-                return;
-            
-            if (smoothly == false)
-            {
-                _lookTarget = target;
-            }
-            else
-            {
-                if (_changingTarget!=null)
-                    StopCoroutine(_changingTarget);
-
-                _changingTarget = StartCoroutine(ChangeTarget(target));
-            }
+            _lookTarget = target;
         }
+
+        public void SetTarget(Transform target, float changingTargetSpeed)
+        {
+            if (_changingTarget != null)
+                StopCoroutine(_changingTarget);
+
+            _changingTarget = StartCoroutine(ChangeTarget(target, changingTargetSpeed));
+        }
+
 
         private void Focus()
         {
-            if (_lookTarget != null)
+            if (_isChangingTarget == false)
                 transform.LookAt(_lookTarget);
         }
 
-        private IEnumerator ChangeTarget(Transform target)
+        private IEnumerator ChangeTarget(Transform target, float changingTargetSpeed)
         {
-            _lookTarget = null;
+            _isChangingTarget = true;
             Vector3 newDirection = target.position - transform.position;
 
-            while (Vector3.Angle(transform.forward, newDirection)>NumericConstants.MinimalDelta)
+            while (Vector3.Angle(transform.forward, newDirection) > NumericConstants.MinimalDelta)
             {
                 Quaternion toRotation = Quaternion.LookRotation(newDirection, Vector3.up);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, _rotationSpeed * Time.deltaTime);
+                transform.rotation =
+                    Quaternion.RotateTowards(transform.rotation, toRotation, changingTargetSpeed * Time.deltaTime);
                 yield return null;
             }
 
             _lookTarget = target;
+            _isChangingTarget = false;
         }
     }
 }

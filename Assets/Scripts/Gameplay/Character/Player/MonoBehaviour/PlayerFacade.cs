@@ -1,10 +1,9 @@
-﻿using Gameplay.Camera.MonoBehaviour;
-using Gameplay.Player.MonoBehaviour.Brains;
-using Gameplay.Player.MonoBehaviour.Movement;
-using Gameplay.Player.StateMachine;
+﻿using Gameplay.Character.Player.MonoBehaviour.Brains;
+using Gameplay.Character.Player.MonoBehaviour.Movement;
+using Gameplay.Character.Player.StateMachine;
 using UnityEngine;
 
-namespace Gameplay.Player.MonoBehaviour
+namespace Gameplay.Character.Player.MonoBehaviour
 {
     using MonoBehaviour = UnityEngine.MonoBehaviour;
 

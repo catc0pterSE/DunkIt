@@ -1,7 +1,7 @@
-﻿using Gameplay.NPC.EnemyPlayer.MonoBehaviour;
+﻿using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Modules.StateMachine;
 
-namespace Gameplay.NPC.EnemyPlayer.StateMachine.States
+namespace Gameplay.Character.NPC.EnemyPlayer.StateMachine.States
 {
     public class CutsceneState : IParameterlessState
     {

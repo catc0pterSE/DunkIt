@@ -1,6 +1,6 @@
 ﻿using Modules.MonoBehaviour;
 
-namespace Gameplay.NPC.EnemyPlayer.MonoBehaviour
+namespace Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour
 {
     public class Defence : SwitchableComponent
     {

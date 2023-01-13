@@ -9,5 +9,6 @@
         public const string CameraPath = "Camera/Camera";
         public const string LoadingCurtainPath = "UI/LoadingCurtain/LoadingCurtain";
         public const string HUDPath = "UI/HUD/HUD";
+        public const string MultipleObjectFollowerPath = "Cutscene/MultipleObjectFollower";
     }
 }

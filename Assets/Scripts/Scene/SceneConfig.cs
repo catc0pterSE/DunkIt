@@ -1,6 +1,5 @@
-﻿using System;
+﻿using Gameplay.Cutscene;
 using UnityEngine;
-using Utility.Constants;
 
 namespace Scene
 {
@@ -12,13 +11,7 @@ namespace Scene
         [SerializeField] private Transform _enemyBucket;
 
         [Header("Start Cutscene")] [SerializeField]
-        private CameraRoutePoint[] _cameraRoute;
-
-        [SerializeField] private Transform[] _playerTeamPositions;
-        [SerializeField] private Transform _playerTeamCameraTarget;
-        [SerializeField] private Transform[] _enemyTeamPositions;
-        [SerializeField] private Transform _enemyTeamCameraTarget;
-
+        private CutsceneConfig _startCutsceneConfig;
 
         [Header("Referee ball")] [SerializeField]
         private Transform _refereePosition;
@@ -31,17 +24,8 @@ namespace Scene
         public Transform PlayerBucket => _playerBucket;
 
         public Transform EnemyBucket => _enemyBucket;
-
-        public Transform PlayerTeamCameraTarget => _playerTeamCameraTarget;
-
-        public Transform EnemyTeamCameraTarget => _enemyTeamCameraTarget;
-
-        public CameraRoutePoint[] CameraRoute => _cameraRoute;
-
-        public Transform[] PlayerTeamPositions => _playerTeamPositions;
-
-        public Transform[] EnemyTeamPositions => _enemyTeamPositions;
-
+        
+        public CutsceneConfig StartCutsceneConfig => _startCutsceneConfig;
         public Transform RefereePosition => _refereePosition;
 
         public Transform[] PlayerRoute => _playerRoute;
@@ -49,15 +33,5 @@ namespace Scene
         public Transform[] EnemyRoute => _enemyRoute;
 
         public Transform[] CameraPositions => _cameraPositions;
-
-
-        private void OnValidate()
-        {
-            if (_playerTeamPositions == null)
-                _playerTeamPositions = new Transform[NumericConstants.PlayersInTeam];
-
-            if (_enemyTeamPositions == null)
-                _enemyTeamPositions = new Transform[NumericConstants.PlayersInTeam];
-        }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Gameplay.NPC.EnemyPlayer.StateMachine.States
+﻿namespace Gameplay.Character.NPC.EnemyPlayer.StateMachine.States
 {
     public class DefenceState
     {

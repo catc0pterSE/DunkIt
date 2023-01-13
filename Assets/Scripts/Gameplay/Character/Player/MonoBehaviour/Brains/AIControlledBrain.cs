@@ -1,6 +1,6 @@
 ﻿using Modules.MonoBehaviour;
 
-namespace Gameplay.Player.MonoBehaviour.Brains
+namespace Gameplay.Character.Player.MonoBehaviour.Brains
 {
     public class AIControlledBrain : SwitchableComponent
     {

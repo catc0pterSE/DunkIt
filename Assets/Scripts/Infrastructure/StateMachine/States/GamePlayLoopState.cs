@@ -19,6 +19,7 @@ namespace Infrastructure.StateMachine.States
 
         public void Exit()
         {
+            
         }
     }
 }

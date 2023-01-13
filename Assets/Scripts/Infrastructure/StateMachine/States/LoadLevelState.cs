@@ -1,11 +1,10 @@
 ﻿using Gameplay.Ball.MonoBehavior;
-using Gameplay.Camera;
 using Gameplay.Camera.MonoBehaviour;
-using Gameplay.NPC.EnemyPlayer;
-using Gameplay.NPC.EnemyPlayer.MonoBehaviour;
-using Gameplay.NPC.Referee.MonoBehaviour;
-using Gameplay.Player.MonoBehaviour;
+using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
+using Gameplay.Character.NPC.Referee.MonoBehaviour;
+using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine;
+using Infrastructure.CoroutineRunner;
 using Infrastructure.Factory;
 using Modules.StateMachine;
 using Scene;
@@ -20,13 +19,15 @@ namespace Infrastructure.StateMachine.States
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
         private readonly IGameObjectFactory _gameObjectFactory;
+        private readonly ICoroutineRunner _coroutineRunner;
 
         private LoadingCurtain _loadingCurtain;
 
         public LoadLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
-            IGameObjectFactory gameObjectFactory)
+            IGameObjectFactory gameObjectFactory, ICoroutineRunner coroutineRunner)
         {
             _gameObjectFactory = gameObjectFactory;
+            _coroutineRunner = coroutineRunner;
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
         }
@@ -56,7 +57,7 @@ namespace Infrastructure.StateMachine.States
             Ball ball = SpawnBall();
 
             GameplayLoopStateMachine gameplayLoopStateMachine =
-                new GameplayLoopStateMachine(playerTeam, enemyTeam, referee, ball, camera, sceneConfig, _gameStateMachine);
+                new GameplayLoopStateMachine(playerTeam, enemyTeam, referee, ball, camera, sceneConfig, _coroutineRunner,  _gameStateMachine);
 
             _gameStateMachine.Enter<GamePlayLoopState, GameplayLoopStateMachine>(gameplayLoopStateMachine);
         }

@@ -1,9 +1,9 @@
 ﻿using Gameplay.Ball.MonoBehavior;
 using Gameplay.Camera.MonoBehaviour;
-using Gameplay.NPC.EnemyPlayer;
-using Gameplay.NPC.EnemyPlayer.MonoBehaviour;
-using Gameplay.NPC.Referee.MonoBehaviour;
-using Gameplay.Player.MonoBehaviour;
+using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
+using Gameplay.Character.NPC.Referee.MonoBehaviour;
+using Gameplay.Character.Player.MonoBehaviour;
+using Gameplay.Cutscene;
 using Infrastructure.ServiceManagement;
 using UI;
 using UnityEngine;
@@ -18,7 +18,7 @@ namespace Infrastructure.Factory
         public Ball CreateBall();
         public GameObject CreateHUD();
         public CameraFacade CreateCamera();
-
         public LoadingCurtain CreateLoadingCurtain();
+        public MultipleObjectFollower CreateMultipleObjectFollower();
     }
 }

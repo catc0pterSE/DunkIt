@@ -28,6 +28,9 @@ namespace Modules.StateMachine
         {
             state = GetState<TState>();
 
+            if (state == null)
+                return false;
+
             if (_currentState == state)
                 return false;
 

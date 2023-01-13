@@ -1,10 +1,10 @@
 ﻿using System;
 using Gameplay.Ball.MonoBehavior;
 using Gameplay.Camera.MonoBehaviour;
-using Gameplay.NPC.EnemyPlayer;
-using Gameplay.NPC.EnemyPlayer.MonoBehaviour;
-using Gameplay.NPC.Referee.MonoBehaviour;
-using Gameplay.Player.MonoBehaviour;
+using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
+using Gameplay.Character.NPC.Referee.MonoBehaviour;
+using Gameplay.Character.Player.MonoBehaviour;
+using Gameplay.Cutscene;
 using Infrastructure.Provider;
 using UI;
 using UnityEngine;
@@ -60,6 +60,12 @@ namespace Infrastructure.Factory
         {
             return _assetProvider.Instantiate(ResourcesPathes.CameraPath).GetComponent<CameraFacade>()
                 ??  throw new NullReferenceException("No CameraFacade script on Camera prefab") ;
+        }
+
+        public MultipleObjectFollower CreateMultipleObjectFollower()
+        {
+            return _assetProvider.Instantiate(ResourcesPathes.MultipleObjectFollowerPath).GetComponent<MultipleObjectFollower>()
+                   ??  throw new NullReferenceException("No MultipleObjectFollower script on MultipleObjectFollower prefab") ;
         }
 
     }

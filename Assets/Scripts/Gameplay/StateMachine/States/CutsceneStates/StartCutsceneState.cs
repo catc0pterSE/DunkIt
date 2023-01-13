@@ -1,83 +1,48 @@
-﻿using System;
-using Gameplay.Camera.MonoBehaviour;
-using Gameplay.Camera.StateMachine.States;
-using Gameplay.NPC.EnemyPlayer.MonoBehaviour;
-using Gameplay.NPC.Referee.MonoBehaviour;
-using Gameplay.Player.MonoBehaviour;
-using Modules.StateMachine;
+﻿using Gameplay.Camera.MonoBehaviour;
+using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
+using Gameplay.Character.NPC.Referee.MonoBehaviour;
+using Gameplay.Character.Player.MonoBehaviour;
+using Gameplay.Cutscene;
+using Gameplay.StateMachine.States.MiniGameStates;
+using Infrastructure.CoroutineRunner;
 using Scene;
-using UnityEngine;
-using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.CutsceneStates
 {
     using Ball.MonoBehavior;
-    public class StartCutsceneState : IParameterlessState
+
+    public class StartCutsceneState : CutsceneState
     {
-        private readonly PlayerFacade[] _playerTeam;
-        private readonly EnemyFacade[] _enemyTeam;
-        private readonly Referee _referee;
-        private readonly Ball _ball;
-        private readonly CameraFacade _camera;
-        private readonly SceneConfig _sceneConfig;
+        private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
 
-        public StartCutsceneState(PlayerFacade[] playerTeam, EnemyFacade[] enemyTeam, Referee referee, Ball ball, CameraFacade camera, SceneConfig sceneConfig)
+        public StartCutsceneState
+        (
+            PlayerFacade[] playerTeam,
+            EnemyFacade[] enemyTeam,
+            Referee referee,
+            Ball ball,
+            CameraFacade camera,
+            SceneConfig sceneConfig,
+            ICoroutineRunner coroutineRunner,
+            GameplayLoopStateMachine gameplayLoopStateMachine
+        ) : base
+        (
+            playerTeam,
+            enemyTeam,
+            camera,
+            new StartCutscene(playerTeam, enemyTeam, ball, referee, camera, sceneConfig.StartCutsceneConfig,coroutineRunner))
         {
-            _playerTeam = playerTeam;
-            _enemyTeam = enemyTeam;
-            _referee = referee;
-            _ball = ball;
-            _camera = camera;
-            _sceneConfig = sceneConfig;
+            _gameplayLoopStateMachine = gameplayLoopStateMachine;
         }
 
-        public void Enter()
+
+        public override void Exit()
         {
-            ArrangeCharacters();
-            SetBallPosition();
-            SetCharactersStates();
-            
-            _camera.StateMachine.Enter<DynamicCutsceneState, CameraRoutePoint[]>(_sceneConfig.CameraRoute);
-            _camera.RouteFollower.Finished += OnCameraMovementFinished;
-        }
-        
-        public void Exit()
-        {
-            
         }
 
-        private void OnCameraMovementFinished()
+        protected override void EnterNextState()
         {
-           
-        }
-
-        private void ArrangeCharacters()
-        {
-            ArrangeTransformArray(_playerTeam.GetTransforms(), _sceneConfig.PlayerTeamPositions);
-            ArrangeTransformArray(_enemyTeam.GetTransforms(), _sceneConfig.EnemyTeamPositions);
-            _referee.transform.CopyValuesFrom(_sceneConfig.RefereePosition);
-        }
-
-        private void SetBallPosition()
-        {
-           _ball.SetParent(_referee.BallPosition);
-        }
-
-        private void ArrangeTransformArray(Transform[] transforms, Transform[] points)
-        {
-            if (transforms.Length != points.Length)
-                throw new Exception("Lengths of arrays are unequal");
-
-            for (int i = 0; i < transforms.Length; i++)
-            {
-                transforms[i].CopyValuesFrom(points[i]);
-            }
-        }
-
-        private void SetCharactersStates()
-        {
-            _playerTeam.Map(player => player.StateMachine.Enter<Player.StateMachine.States.CutsceneState>());
-            _enemyTeam.Map(enemy => enemy.StateMachine.Enter<NPC.EnemyPlayer.StateMachine.States.CutsceneState>());
+           _gameplayLoopStateMachine.Enter<RefereeBallState>();
         }
     }
 }

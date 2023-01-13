@@ -1,4 +1,0 @@
-﻿namespace z_Test
-{
-    
-}

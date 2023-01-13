@@ -1,7 +1,7 @@
 using Modules.MonoBehaviour;
 using UnityEngine;
 
-namespace Gameplay.Player.MonoBehaviour.Movement
+namespace Gameplay.Character.Player.MonoBehaviour.Movement
 {
     public class PlayerMover : SwitchableComponent
     {
