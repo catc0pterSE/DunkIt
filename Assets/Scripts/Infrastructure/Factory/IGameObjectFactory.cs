@@ -19,6 +19,6 @@ namespace Infrastructure.Factory
         public GameObject CreateHUD();
         public CameraFacade CreateCamera();
         public LoadingCurtain CreateLoadingCurtain();
-        public MultipleObjectFollower CreateMultipleObjectFollower();
+        public MultipleObjectFollower CreateMultipleObjectFollower(Vector3 at);
     }
 }

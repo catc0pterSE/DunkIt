@@ -23,8 +23,9 @@ namespace Gameplay.Cutscene
         private readonly CameraFacade _camera;
         private readonly CutsceneConfig _cutsceneConfig;
         private readonly ICoroutineRunner _coroutineRunner;
-        private readonly MultipleObjectFollower _playerTeamFollower;
-        private readonly MultipleObjectFollower _enemyTeamFollower;
+        
+        private  MultipleObjectFollower _playerTeamFollower;
+        private  MultipleObjectFollower _enemyTeamFollower;
 
         private Coroutine _running;
 
@@ -47,6 +48,10 @@ namespace Gameplay.Cutscene
             _camera = camera;
             _cutsceneConfig = cutsceneConfig;
             _coroutineRunner = coroutineRunner;
+        }
+
+        private void SpawnTeamFollowers()
+        {
             _playerTeamFollower = SpawnTeamFollower(_playerTeam.GetTransforms());
             _enemyTeamFollower = SpawnTeamFollower(_enemyTeam.GetTransforms());
         }
@@ -54,6 +59,7 @@ namespace Gameplay.Cutscene
         public void Run()
         {
             ArrangeCharacters();
+            SpawnTeamFollowers();
             SetBallPosition();
             SetCameraStartPosition();
             InitializeCameraRoute();
@@ -74,7 +80,7 @@ namespace Gameplay.Cutscene
         private MultipleObjectFollower SpawnTeamFollower(Transform[] team)
         {
             MultipleObjectFollower teamFollower =
-                Services.Container.Single<IGameObjectFactory>().CreateMultipleObjectFollower();
+                Services.Container.Single<IGameObjectFactory>().CreateMultipleObjectFollower(team.GetTransformPositions().GetIntermediatePosition());
             teamFollower.Initialize(team);
             return teamFollower;
         }
@@ -82,7 +88,7 @@ namespace Gameplay.Cutscene
         private void SetCameraStartPosition()
         {
             _camera.transform.CopyValuesFrom(_cutsceneConfig.CameraStartPosition);
-            _camera.SetFocusTarget(_playerTeamFollower.transform);
+            _camera.SetFocusTarget(_playerTeamFollower.transform, true);
         }
 
         private void ArrangeCharacters()
@@ -116,7 +122,7 @@ namespace Gameplay.Cutscene
             for (int i = 0; i < route.Length; i++)
             {
                 if (route[i].FocusTarget !=null)
-                    _camera.SetFocusTarget(route[i].FocusTarget, false);
+                    _camera.SetFocusTarget(route[i].FocusTarget);
                 
                 float cameraMovementSpeed = route[i].MovementSpeed;
                 Vector3 pointPosition = route[i].transform.position;

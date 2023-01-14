@@ -1,6 +1,5 @@
 ﻿using Gameplay.Camera.StateMachine;
 using UnityEngine;
-using Utility.Constants;
 
 namespace Gameplay.Camera.MonoBehaviour
 {
@@ -15,12 +14,9 @@ namespace Gameplay.Camera.MonoBehaviour
         public void SetFollowTarget(Transform target) =>
             _targetFollower.SetTarget(target);
 
-        public void SetFocusTarget(Transform target, bool instantly = true, float changingTargetSpeed = NumericConstants.DefaultCameraChangingTargetSpeed)
+        public void SetFocusTarget(Transform target, bool instantly = false)
         {
-          if (instantly)
-              _focuser.SetTarget(target);
-          else
-              _focuser.SetTarget(target, changingTargetSpeed);
+            _focuser.SetTarget(target, instantly);
         }
 
         public void EnableTargetFollowing() =>

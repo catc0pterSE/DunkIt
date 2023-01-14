@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using Utility.Extensions;
 
 namespace Gameplay.Cutscene
@@ -8,7 +7,7 @@ namespace Gameplay.Cutscene
     {
         private Transform[] _targets;
 
-        private void Update()
+        private void LateUpdate()
         {
             if (_targets != null)
                 transform.position = _targets.GetTransformPositions().GetIntermediatePosition();

@@ -62,9 +62,9 @@ namespace Infrastructure.Factory
                 ??  throw new NullReferenceException("No CameraFacade script on Camera prefab") ;
         }
 
-        public MultipleObjectFollower CreateMultipleObjectFollower()
+        public MultipleObjectFollower CreateMultipleObjectFollower(Vector3 at)
         {
-            return _assetProvider.Instantiate(ResourcesPathes.MultipleObjectFollowerPath).GetComponent<MultipleObjectFollower>()
+            return _assetProvider.Instantiate(ResourcesPathes.MultipleObjectFollowerPath, at).GetComponent<MultipleObjectFollower>()
                    ??  throw new NullReferenceException("No MultipleObjectFollower script on MultipleObjectFollower prefab") ;
         }
 
