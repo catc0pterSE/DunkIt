@@ -7,10 +7,12 @@ namespace Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour
     {
         [SerializeField] private Attack _attack;
         [SerializeField] private Defence _defence;
+        [SerializeField] private Animator _animator;
 
         private EnemyStateMachine _stateMachine;
 
         public EnemyStateMachine StateMachine => _stateMachine ??= new EnemyStateMachine(this);
+        public Animator Animator => _animator;
         
         public void EnableAttack() =>
             _attack.Enable();

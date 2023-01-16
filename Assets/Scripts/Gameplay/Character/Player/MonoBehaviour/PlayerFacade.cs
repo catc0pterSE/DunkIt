@@ -12,10 +12,12 @@ namespace Gameplay.Character.Player.MonoBehaviour
         [SerializeField] private InputControlledBrain _inputControlledBrain;
         [SerializeField] private AIControlledBrain _aiControlledBrain;
         [SerializeField] private PlayerMover _playerMover;
+        [SerializeField] private Animator _animator;
 
         private PlayerStateMachine _stateMachine;
 
         public PlayerStateMachine StateMachine => _stateMachine??=new PlayerStateMachine(this);
+        public Animator Animator => _animator;
 
         public void EnableInputControlledBrain() =>
             _inputControlledBrain.Enable();

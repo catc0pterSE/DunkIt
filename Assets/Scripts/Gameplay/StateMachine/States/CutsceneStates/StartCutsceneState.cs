@@ -1,16 +1,13 @@
-﻿using Gameplay.Camera.MonoBehaviour;
+﻿using Cinemachine;
 using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
-using Gameplay.Cutscene;
 using Gameplay.StateMachine.States.MiniGameStates;
-using Infrastructure.CoroutineRunner;
-using Scene;
+using Infrastructure.Factory;
+using Infrastructure.ServiceManagement;
 
 namespace Gameplay.StateMachine.States.CutsceneStates
 {
-    using Ball.MonoBehavior;
-
     public class StartCutsceneState : CutsceneState
     {
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
@@ -20,24 +17,17 @@ namespace Gameplay.StateMachine.States.CutsceneStates
             PlayerFacade[] playerTeam,
             EnemyFacade[] enemyTeam,
             Referee referee,
-            Ball ball,
-            CameraFacade camera,
-            SceneConfig sceneConfig,
-            ICoroutineRunner coroutineRunner,
+            Ball.MonoBehavior.Ball ball,
+            CinemachineBrain camera,
             GameplayLoopStateMachine gameplayLoopStateMachine
         ) : base
         (
             playerTeam,
             enemyTeam,
-            camera,
-            new StartCutscene(playerTeam, enemyTeam, ball, referee, camera, sceneConfig.StartCutsceneConfig,coroutineRunner))
+            Services.Container.Single<IGameObjectFactory>().CreateStartCutscene().Initialize(camera, playerTeam, enemyTeam, referee, ball)
+        )
         {
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
-        }
-
-
-        public override void Exit()
-        {
         }
 
         protected override void EnterNextState()

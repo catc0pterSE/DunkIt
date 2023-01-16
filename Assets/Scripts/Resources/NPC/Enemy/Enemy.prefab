@@ -262,6 +262,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _attack: {fileID: 0}
   _defence: {fileID: 0}
+  _animator: {fileID: 1107175024321876342}
 --- !u!95 &1107175024321876342
 Animator:
   serializedVersion: 4

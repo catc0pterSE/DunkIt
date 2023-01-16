@@ -1,4 +1,5 @@
 ﻿using Modules.StateMachine;
+using UnityEngine;
 
 namespace Gameplay.StateMachine.States.MiniGameStates
 {
@@ -6,7 +7,7 @@ namespace Gameplay.StateMachine.States.MiniGameStates
     {
         public void Enter()
         {
-            throw new System.NotImplementedException();
+            Debug.Log("Entered referee ball");
         }
         
         public void Exit()

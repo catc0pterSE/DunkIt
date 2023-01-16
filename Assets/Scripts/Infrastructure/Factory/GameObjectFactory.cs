@@ -1,6 +1,6 @@
 ﻿using System;
+using Cinemachine;
 using Gameplay.Ball.MonoBehavior;
-using Gameplay.Camera.MonoBehaviour;
 using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
@@ -26,7 +26,13 @@ namespace Infrastructure.Factory
             return _assetProvider.Instantiate(ResourcesPathes.LoadingCurtainPath).GetComponent<LoadingCurtain>()
                 ?? throw new NullReferenceException("No LoadingCurtain script on LoadingCurtain prefab");
         }
-        
+
+        public StartCutscene CreateStartCutscene()
+        {
+            return _assetProvider.Instantiate(ResourcesPathes.StartCutscenePath).GetComponent<StartCutscene>()
+                   ?? throw new NullReferenceException("No LoadingCurtain script on LoadingCurtain prefab");
+        }
+
         public PlayerFacade CreatePlayer()
         {
             return _assetProvider.Instantiate(ResourcesPathes.PlayerPath).GetComponent<PlayerFacade>()
@@ -56,17 +62,10 @@ namespace Infrastructure.Factory
             return _assetProvider.Instantiate(ResourcesPathes.HUDPath);
         }
 
-        public CameraFacade CreateCamera()
+        public CinemachineBrain CreateCamera()
         {
-            return _assetProvider.Instantiate(ResourcesPathes.CameraPath).GetComponent<CameraFacade>()
+            return _assetProvider.Instantiate(ResourcesPathes.CameraPath).GetComponent<CinemachineBrain>()
                 ??  throw new NullReferenceException("No CameraFacade script on Camera prefab") ;
         }
-
-        public MultipleObjectFollower CreateMultipleObjectFollower(Vector3 at)
-        {
-            return _assetProvider.Instantiate(ResourcesPathes.MultipleObjectFollowerPath, at).GetComponent<MultipleObjectFollower>()
-                   ??  throw new NullReferenceException("No MultipleObjectFollower script on MultipleObjectFollower prefab") ;
-        }
-
     }
 }

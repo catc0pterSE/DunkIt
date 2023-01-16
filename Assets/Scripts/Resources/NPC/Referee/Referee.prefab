@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6822549826676721857}
   - component: {fileID: 6822549826676721858}
   - component: {fileID: 6822549826676721859}
-  - component: {fileID: 3166816623934733759}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -101,19 +100,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3166816623934733759
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6822549826676721861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fce7c21eb960485cbeda30cb67dd1ef6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _ballPosition: {fileID: 6822549828605008183}
 --- !u!1 &6822549828165046032
 GameObject:
   m_ObjectHideFlags: 0
@@ -237,6 +223,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8407202580012692689}
+  - component: {fileID: 3297542744650427425}
+  - component: {fileID: 9137298592171969017}
   m_Layer: 0
   m_Name: Referee
   m_TagString: Untagged
@@ -260,3 +248,37 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3297542744650427425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9210905266444643240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fce7c21eb960485cbeda30cb67dd1ef6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ballPosition: {fileID: 0}
+  _animator: {fileID: 9137298592171969017}
+--- !u!95 &9137298592171969017
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9210905266444643240}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: af8e1fa6d5644ee49b3b43aee24975e7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
