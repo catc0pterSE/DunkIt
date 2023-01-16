@@ -11,9 +11,7 @@ GameObject:
   - component: {fileID: 4845372400087832884}
   - component: {fileID: 4810625998303762801}
   - component: {fileID: 2481336039605156539}
-  - component: {fileID: 7866336503275337626}
-  - component: {fileID: 1770828267996315814}
-  - component: {fileID: 7581229857296738834}
+  - component: {fileID: 8684490186646873467}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -28,8 +26,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3984079571190800386}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.42986068, y: 0.048695788, z: -0.020773146, w: 0.9013418}
+  m_LocalPosition: {x: -3.2796507, y: 14.366368, z: -19.327568}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -87,35 +85,7 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3984079571190800386}
   m_Enabled: 1
---- !u!114 &7866336503275337626
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3984079571190800386}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8872874fb2249ba9b56d432f594abcc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _trackingSpeed: 5
-  _projectionDistanceToPlayer: 17
-  _cameraHeight: 5
---- !u!114 &1770828267996315814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3984079571190800386}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9701ae91c99d434dbd8cc498ca418a6f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _defaultCameraRotationSpeed: 150
---- !u!114 &7581229857296738834
+--- !u!114 &8684490186646873467
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -124,8 +94,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 3984079571190800386}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 992516683cee4f9aba8938198bba5270, type: 3}
+  m_Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _focuser: {fileID: 1770828267996315814}
-  _targetFollower: {fileID: 7866336503275337626}
+  m_ShowDebugText: 0
+  m_ShowCameraFrustum: 1
+  m_IgnoreTimeScale: 0
+  m_WorldUpOverride: {fileID: 0}
+  m_UpdateMethod: 2
+  m_BlendUpdateMethod: 1
+  m_DefaultBlend:
+    m_Style: 1
+    m_Time: 2
+    m_CustomCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  m_CustomBlends: {fileID: 0}
+  m_CameraCutEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_CameraActivatedEvent:
+    m_PersistentCalls:
+      m_Calls: []
