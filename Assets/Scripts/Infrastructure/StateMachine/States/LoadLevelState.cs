@@ -3,6 +3,7 @@ using Gameplay.Ball.MonoBehavior;
 using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
+using Gameplay.HUD;
 using Gameplay.StateMachine;
 using Infrastructure.CoroutineRunner;
 using Infrastructure.Factory;
@@ -48,47 +49,55 @@ namespace Infrastructure.StateMachine.States
 
         private void OnLoaded()
         {
-            SpawnHUD();
+            GameplayHUD gameplayHUD = SpawnHUD();
             SceneConfig sceneConfig = GameObject.FindObjectOfType<SceneConfig>();
             CinemachineBrain camera = SpawnCamera();
-            PlayerFacade[] playerTeam = SpawnPlayerTeam();
-            EnemyFacade[] enemyTeam = SpawnEnemyTeam();
-            Referee referee = SpawnReferee();
             Ball ball = SpawnBall();
+            PlayerFacade[] playerTeam = SpawnPlayerTeam(camera.transform, ball);
+            EnemyFacade[] enemyTeam = SpawnEnemyTeam(ball);
+            Referee referee = SpawnReferee(ball);
+
 
             GameplayLoopStateMachine gameplayLoopStateMachine =
-                new GameplayLoopStateMachine(playerTeam, enemyTeam, referee, ball, camera, sceneConfig, _coroutineRunner,  _gameStateMachine);
+                new GameplayLoopStateMachine(playerTeam, enemyTeam, referee, camera, gameplayHUD, ball, sceneConfig,
+                    _coroutineRunner, _gameStateMachine);
 
             _gameStateMachine.Enter<GamePlayLoopState, GameplayLoopStateMachine>(gameplayLoopStateMachine);
         }
 
-        private PlayerFacade[] SpawnPlayerTeam()
+        private PlayerFacade[] SpawnPlayerTeam(Transform camera, Ball ball)
         {
             PlayerFacade[] playerTeam = new PlayerFacade[NumericConstants.PlayersInTeam];
 
             for (int i = 0; i < playerTeam.Length; i++)
             {
-                playerTeam[i] = _gameObjectFactory.CreatePlayer().GetComponent<PlayerFacade>();
+                PlayerFacade player = _gameObjectFactory.CreatePlayer().GetComponent<PlayerFacade>();
+                player.Initialize(ball, camera);
+                playerTeam[i] = player;
             }
 
             return playerTeam;
         }
 
-        private EnemyFacade[] SpawnEnemyTeam()
+        private EnemyFacade[] SpawnEnemyTeam(Ball ball)
         {
             EnemyFacade[] enemyTeam = new EnemyFacade[NumericConstants.PlayersInTeam];
 
             for (int i = 0; i < enemyTeam.Length; i++)
             {
-                enemyTeam[i] = _gameObjectFactory.CreateEnemy().GetComponent<EnemyFacade>();
+                EnemyFacade enemy = _gameObjectFactory.CreateEnemy().GetComponent<EnemyFacade>();
+                enemy.Initialize(ball);
+                enemyTeam[i] = enemy;
             }
 
             return enemyTeam;
         }
 
-        private Referee SpawnReferee()
+        private Referee SpawnReferee(Ball ball)
         {
-            return _gameObjectFactory.CreateReferee();
+            Referee referee = _gameObjectFactory.CreateReferee();
+            referee.Initialize(ball);
+            return referee;
         }
 
         private CinemachineBrain SpawnCamera()
@@ -101,9 +110,9 @@ namespace Infrastructure.StateMachine.States
             return _gameObjectFactory.CreateBall();
         }
 
-        private void SpawnHUD()
+        private GameplayHUD SpawnHUD()
         {
-            _gameObjectFactory.CreateHUD(); //TODO different for different platforms
+            return _gameObjectFactory.CreateHUD(); //TODO different for different platforms
         }
     }
 }

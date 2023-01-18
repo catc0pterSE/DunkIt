@@ -8,5 +8,8 @@ namespace Gameplay.Ball.MonoBehavior
         {
             transform.SetParent(parent, false);
         }
+
+        public void RemoveParent() =>
+            transform.parent = null;
     }
 }

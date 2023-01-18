@@ -4,6 +4,7 @@ using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Cutscene;
+using Gameplay.HUD;
 using Infrastructure.ServiceManagement;
 using UI;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace Infrastructure.Factory
         public EnemyFacade CreateEnemy();
         public Referee CreateReferee();
         public Ball CreateBall();
-        public GameObject CreateHUD();
+        public GameplayHUD CreateHUD();
         public CinemachineBrain CreateCamera();
         public LoadingCurtain CreateLoadingCurtain();
         public StartCutscene CreateStartCutscene();

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Infrastructure.Input
 {
@@ -12,5 +13,7 @@ namespace Infrastructure.Input
             SimpleInput.GetAxis(Horizontal),
             SimpleInput.GetAxis(Vertical)
         );
+
+        public bool Clicked => SimpleInput.GetMouseButtonDown(0);
     }
 }

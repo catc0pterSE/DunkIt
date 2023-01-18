@@ -4,6 +4,7 @@ using Cinemachine;
 using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
+using Gameplay.Minigame;
 using Modules.MonoBehaviour;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -12,13 +13,18 @@ using UnityEngine.Timeline;
 namespace Gameplay.Cutscene
 {
     using Ball.MonoBehavior;
+
     public class StartCutscene : SwitchableMonoBehaviour, ICutscene
     {
         [SerializeField] private PlayableDirector _director;
         [SerializeField] private CinemachineVirtualCamera _refereeCamera;
         [SerializeField] private CinemachineTargetGroup _playerTeamTargetGroup;
         [SerializeField] private CinemachineTargetGroup _enemyTeamTargetGroup;
+        [SerializeField] private JumpBall _jumpBallMiniGame;
 
+        private PlayerFacade _jumpBallPlayer;
+        private EnemyFacade _jumpBallEnemy;
+        
         public event Action Finished;
 
         private TimelineAsset TimelineAsset => _director.playableAsset as TimelineAsset;
@@ -43,22 +49,26 @@ namespace Gameplay.Cutscene
 
         private void OnEnable()
         {
+            _jumpBallMiniGame.Wined += GiveBallToPlayer;
+            _jumpBallMiniGame.Lost += GiveBallToEnemy;
             _director.stopped += Finish;
         }
 
         private void OnDisable()
         {
+            _jumpBallMiniGame.Wined -= GiveBallToPlayer;
+            _jumpBallMiniGame.Lost -= GiveBallToEnemy;
             _director.stopped -= Finish;
         }
 
         public StartCutscene Initialize(CinemachineBrain gameplayCamera, PlayerFacade[] playerTeam,
-            EnemyFacade[] enemyTeam, Referee referee, Ball ball)
+            EnemyFacade[] enemyTeam, Referee referee)
         {
             PlayerFacade player1 = playerTeam[0];
             PlayerFacade player2 = playerTeam[1];
             EnemyFacade enemy1 = enemyTeam[0];
             EnemyFacade enemy2 = enemyTeam[1];
-            
+
             _refereeCamera.LookAt = referee.transform;
             _playerTeamTargetGroup.m_Targets[0].target = player1.transform;
             _playerTeamTargetGroup.m_Targets[1].target = player2.transform;
@@ -70,20 +80,38 @@ namespace Gameplay.Cutscene
             _director.SetGenericBinding(Enemy1TrackAsset, enemy1.Animator);
             _director.SetGenericBinding(Enemy2TrackAsset, enemy2.Animator);
             _director.SetGenericBinding(RefereeTrackAsset, referee.Animator);
-            
-            ball.SetParent(referee.transform);
-            
+
+            referee.TakeBall();
+
             return this;
         }
-        
+
         public void Run()
         {
             _director.Play();
         }
 
+        private void GiveBallToPlayer()
+        {
+            _jumpBallPlayer.TakeBall();
+            EndCutscene();
+        }
+
+
+        private void GiveBallToEnemy()
+        {
+            _jumpBallEnemy.TakeBall();
+            EndCutscene();
+        }
+            
+
+        private void EndCutscene()
+        {
+            _director.Stop();
+        }
+
         private void Finish(PlayableDirector director)
         {
-            gameObject.SetActive(false);
             Finished?.Invoke();
         }
     }

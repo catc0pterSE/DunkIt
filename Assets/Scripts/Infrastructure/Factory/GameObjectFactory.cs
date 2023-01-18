@@ -5,6 +5,7 @@ using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Cutscene;
+using Gameplay.HUD;
 using Infrastructure.Provider;
 using UI;
 using UnityEngine;
@@ -57,15 +58,16 @@ namespace Infrastructure.Factory
                    ?? throw new NullReferenceException("No Ball script on Ball prefab");
         }
 
-        public GameObject CreateHUD()
+        public GameplayHUD CreateHUD()
         {
-            return _assetProvider.Instantiate(ResourcesPathes.HUDPath);
+            return _assetProvider.Instantiate(ResourcesPathes.HUDPath).GetComponent<GameplayHUD>()
+                   ?? throw new NullReferenceException("No GameplayHUD script on GameplayHUD prefab");
         }
 
         public CinemachineBrain CreateCamera()
         {
             return _assetProvider.Instantiate(ResourcesPathes.CameraPath).GetComponent<CinemachineBrain>()
-                ??  throw new NullReferenceException("No CameraFacade script on Camera prefab") ;
+                ??  throw new NullReferenceException("No CameraFacade script on Camera prefab");
         }
     }
 }

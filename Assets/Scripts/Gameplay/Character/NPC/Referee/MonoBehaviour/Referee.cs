@@ -1,13 +1,18 @@
-﻿using UnityEngine;
+﻿using Modules.MonoBehaviour;
+using UnityEngine;
 
 namespace Gameplay.Character.NPC.Referee.MonoBehaviour
 {
-    public class Referee : UnityEngine.MonoBehaviour
+    using Ball.MonoBehavior;
+    public class Referee : Character
     {
         [SerializeField] private Transform _ballPosition;
         [SerializeField] private Animator _animator;
         
         public Transform BallPosition => _ballPosition;
         public Animator Animator => _animator;
+
+        public void Initialize(Ball ball) =>
+            SetBall(ball);
     }
 }

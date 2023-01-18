@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace Gameplay.Character.Player.MonoBehaviour
 {
-    using MonoBehaviour = UnityEngine.MonoBehaviour;
+    using Ball.MonoBehavior;
 
-    public class PlayerFacade : MonoBehaviour
+    public class PlayerFacade : Character
     {
         [SerializeField] private InputControlledBrain _inputControlledBrain;
         [SerializeField] private AIControlledBrain _aiControlledBrain;
@@ -37,7 +37,10 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public void DisablePlayerMover() =>
             _playerMover.Disable();
 
-        public void SetCamera(Transform gameplayCamera) =>
-            _inputControlledBrain.SetCamera(gameplayCamera.transform);
+        public void Initialize(Ball ball, Transform gameplayCamera) 
+        {
+            SetBall(ball);
+            _inputControlledBrain.SetCamera(gameplayCamera.transform); 
+        }
     }
 }

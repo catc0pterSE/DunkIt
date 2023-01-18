@@ -29,6 +29,7 @@ namespace UI
                 StopCoroutine(_fadeJob);
 
             _fadeJob = StartCoroutine(FadeIn());
+            
         }
 
         private IEnumerator FadeIn()

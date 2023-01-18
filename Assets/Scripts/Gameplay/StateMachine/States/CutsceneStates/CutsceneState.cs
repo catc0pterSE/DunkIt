@@ -1,6 +1,7 @@
 ﻿using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Cutscene;
+using Gameplay.HUD;
 using Modules.StateMachine;
 using Utility.Extensions;
 
@@ -12,30 +13,39 @@ namespace Gameplay.StateMachine.States.CutsceneStates
     {
         private readonly PlayerFacade[] _playerTeam;
         private readonly EnemyFacade[] _enemyTeam;
+        private readonly GameplayHUD _gameplayHUD;
         private readonly ICutscene _cutscene;
 
         protected CutsceneState
         (
             PlayerFacade[] playerTeam,
             EnemyFacade[] enemyTeam,
+            GameplayHUD gameplayHUD,
             ICutscene cutscene
         )
         {
             _playerTeam = playerTeam;
             _enemyTeam = enemyTeam;
+            _gameplayHUD = gameplayHUD;
             _cutscene = cutscene;
         }
 
 
         public virtual void Enter()
         {
+            DisableGameplayHUD();
             SetCharactersStates();
             SubscribeOnCutscene();
             EnableCutscene();
             LaunchCutscene();
         }
 
-        public void Exit()
+        private void DisableGameplayHUD()
+        {
+           _gameplayHUD.Disable();
+        }
+
+        public virtual void Exit()
         {
             DisableCutscene();
         }

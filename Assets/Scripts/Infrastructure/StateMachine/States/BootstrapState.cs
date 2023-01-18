@@ -18,7 +18,7 @@ namespace Infrastructure.StateMachine.States
             _stateMachine = stateMachine;
             _sceneLoader = sceneLoader;
             _services = services;
-            RegisterServices();
+            RegisterServices(); 
         }
         
         public void Enter()
