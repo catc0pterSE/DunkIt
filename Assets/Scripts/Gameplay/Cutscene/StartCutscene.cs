@@ -18,6 +18,7 @@ namespace Gameplay.Cutscene
     {
         [SerializeField] private PlayableDirector _director;
         [SerializeField] private CinemachineVirtualCamera _refereeCamera;
+        [SerializeField] private CinemachineVirtualCamera _ballCamera;
         [SerializeField] private CinemachineTargetGroup _playerTeamTargetGroup;
         [SerializeField] private CinemachineTargetGroup _enemyTeamTargetGroup;
         [SerializeField] private JumpBall _jumpBallMiniGame;
@@ -62,14 +63,17 @@ namespace Gameplay.Cutscene
         }
 
         public StartCutscene Initialize(CinemachineBrain gameplayCamera, PlayerFacade[] playerTeam,
-            EnemyFacade[] enemyTeam, Referee referee)
+            EnemyFacade[] enemyTeam, Referee referee, Ball ball)
         {
             PlayerFacade player1 = playerTeam[0];
+            _jumpBallPlayer = player1;
             PlayerFacade player2 = playerTeam[1];
             EnemyFacade enemy1 = enemyTeam[0];
+            _jumpBallEnemy = enemy1;
             EnemyFacade enemy2 = enemyTeam[1];
 
             _refereeCamera.LookAt = referee.transform;
+            _ballCamera.LookAt = ball.transform;
             _playerTeamTargetGroup.m_Targets[0].target = player1.transform;
             _playerTeamTargetGroup.m_Targets[1].target = player2.transform;
             _enemyTeamTargetGroup.m_Targets[0].target = enemy1.transform;

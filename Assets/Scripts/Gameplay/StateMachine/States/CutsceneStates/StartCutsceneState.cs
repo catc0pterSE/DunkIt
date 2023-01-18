@@ -9,6 +9,7 @@ using Infrastructure.ServiceManagement;
 
 namespace Gameplay.StateMachine.States.CutsceneStates
 {
+    using Ball.MonoBehavior;
     public class StartCutsceneState : CutsceneState
     {
         private readonly Referee _referee;
@@ -18,6 +19,7 @@ namespace Gameplay.StateMachine.States.CutsceneStates
         (PlayerFacade[] playerTeam,
             EnemyFacade[] enemyTeam,
             Referee referee,
+            Ball ball,
             CinemachineBrain camera,
             GameplayHUD gameplayHUD,
             GameplayLoopStateMachine gameplayLoopStateMachine) : base
@@ -25,7 +27,7 @@ namespace Gameplay.StateMachine.States.CutsceneStates
             playerTeam,
             enemyTeam,
             gameplayHUD,
-            Services.Container.Single<IGameObjectFactory>().CreateStartCutscene().Initialize(camera, playerTeam, enemyTeam, referee)
+            Services.Container.Single<IGameObjectFactory>().CreateStartCutscene().Initialize(camera, playerTeam, enemyTeam, referee, ball)
         )
         {
             _referee = referee;

@@ -22,6 +22,7 @@ namespace Gameplay.Minigame
         private void OnEnable()
         {
             Reset();
+            Launch();
         }
 
         public event Action Wined;

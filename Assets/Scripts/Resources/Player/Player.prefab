@@ -109,6 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cebd0ab98b44fe2a1b50661e68fb3a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _ballPosition: {fileID: 4042918883656718937}
   _inputControlledBrain: {fileID: 9116447531277526744}
   _aiControlledBrain: {fileID: 2336375831225123186}
   _playerMover: {fileID: 3567767349144517149}

@@ -260,8 +260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8da29a34d6464c61ac919e705c92e8ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attack: {fileID: 0}
-  _defence: {fileID: 0}
+  _ballPosition: {fileID: 136616562251668703}
   _animator: {fileID: 1107175024321876342}
 --- !u!95 &1107175024321876342
 Animator:

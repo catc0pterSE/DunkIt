@@ -30,8 +30,8 @@ namespace Gameplay.StateMachine
         {
             States = new Dictionary<Type, IState>
             {
-                [typeof(StartCutsceneState)] = new StartCutsceneState(playerTeam, enemyTeam, referee, camera, gameplayHUD, this),
-                [typeof(RefereeBallState)] = new RefereeBallState()
+                [typeof(StartCutsceneState)] = new StartCutsceneState(playerTeam, enemyTeam, referee, ball, camera, gameplayHUD, this),
+                
             };
         }
 
