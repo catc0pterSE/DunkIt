@@ -6,10 +6,10 @@ namespace Scene
     public class SceneConfig : MonoBehaviour
     {
         [SerializeField] private Transform _playerBucket;
-        [SerializeField] private Transform _enemyBucket;
+        [SerializeField] private Transform _enemyBascket;
       
         public Transform PlayerBucket => _playerBucket;
-        public Transform EnemyBucket => _enemyBucket;
+        public Transform EnemyBascket => _enemyBascket;
 
       
     }

@@ -3,11 +3,11 @@ using Modules.StateMachine;
 
 namespace Gameplay.Character.NPC.EnemyPlayer.StateMachine.States
 {
-    public class CutsceneState : IParameterlessState
+    public class NotControlledState : IParameterlessState
     {
         private readonly EnemyFacade _enemyFacade;
 
-        public CutsceneState(EnemyFacade enemyFacade)
+        public NotControlledState(EnemyFacade enemyFacade)
         {
             _enemyFacade = enemyFacade;
         }

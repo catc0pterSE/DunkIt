@@ -1,15 +1,26 @@
-﻿using UnityEngine;
+﻿using Modules.LiveData;
+using UnityEngine;
 
 namespace Gameplay.Ball.MonoBehavior
 {
+    using Character;
+
     public class Ball : MonoBehaviour
     {
-        public void SetParent(Transform parent)
+        private readonly MutableLiveData<Character> _ownerData = new MutableLiveData<Character>();
+
+        public LiveData<Character> OwnerData => _ownerData;
+
+        public void SetOwner(Character parent)
         {
-            transform.SetParent(parent, false);
+            transform.SetParent(parent.BallPosition.transform, false);
+            _ownerData.Value = parent;
         }
 
-        public void RemoveParent() =>
+        public void RemoveParent()
+        {
             transform.parent = null;
+            _ownerData.Value = null;
+        }
     }
 }

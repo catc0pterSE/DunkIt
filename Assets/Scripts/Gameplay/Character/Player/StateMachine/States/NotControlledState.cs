@@ -3,11 +3,11 @@ using Modules.StateMachine;
 
 namespace Gameplay.Character.Player.StateMachine.States
 {
-    public class CutsceneState : IParameterlessState
+    public class NotControlledState : IParameterlessState
     {
         private readonly PlayerFacade _playerFacade;
 
-        public CutsceneState(PlayerFacade playerFacade)
+        public NotControlledState(PlayerFacade playerFacade)
         {
             _playerFacade = playerFacade;
         }

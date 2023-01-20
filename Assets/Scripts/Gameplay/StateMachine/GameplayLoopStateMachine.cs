@@ -6,7 +6,8 @@ using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.HUD;
 using Gameplay.StateMachine.States.CutsceneStates;
-using Gameplay.StateMachine.States.MiniGameStates;
+using Gameplay.StateMachine.States.Gameplay;
+using Gameplay.StateMachine.States.MinigameStates;
 using Infrastructure.CoroutineRunner;
 using Infrastructure.StateMachine;
 using Scene;
@@ -30,8 +31,9 @@ namespace Gameplay.StateMachine
         {
             States = new Dictionary<Type, IState>
             {
-                [typeof(StartCutsceneState)] = new StartCutsceneState(playerTeam, enemyTeam, referee, ball, camera, gameplayHUD, this),
-                
+                [typeof(StartCutsceneState)] = new StartCutsceneState(playerTeam, enemyTeam, referee, camera, gameplayHUD, this),
+                [typeof(JumpBallState)] = new JumpBallState(playerTeam, enemyTeam, referee, ball, camera, gameplayHUD, this),
+                [typeof(GameplayState)] = new GameplayState(playerTeam, ball, gameplayHUD, sceneConfig)
             };
         }
 

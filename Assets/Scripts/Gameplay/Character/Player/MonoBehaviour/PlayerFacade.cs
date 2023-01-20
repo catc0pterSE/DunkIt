@@ -1,7 +1,9 @@
-﻿using Gameplay.Character.Player.MonoBehaviour.Brains;
+﻿using Cinemachine;
+using Gameplay.Character.Player.MonoBehaviour.Brains;
 using Gameplay.Character.Player.MonoBehaviour.Movement;
 using Gameplay.Character.Player.StateMachine;
 using UnityEngine;
+using Utility.Constants;
 
 namespace Gameplay.Character.Player.MonoBehaviour
 {
@@ -14,9 +16,9 @@ namespace Gameplay.Character.Player.MonoBehaviour
         [SerializeField] private PlayerMover _playerMover;
         [SerializeField] private Animator _animator;
 
+        private CinemachineVirtualCamera _virtualCamera;
         private PlayerStateMachine _stateMachine;
-
-        public PlayerStateMachine StateMachine => _stateMachine??=new PlayerStateMachine(this);
+        public PlayerStateMachine StateMachine => _stateMachine ??= new PlayerStateMachine(this);
         public Animator Animator => _animator;
 
         public void EnableInputControlledBrain() =>
@@ -37,10 +39,21 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public void DisablePlayerMover() =>
             _playerMover.Disable();
 
-        public void Initialize(Ball ball, Transform gameplayCamera) 
+        public void Initialize(Ball ball, Transform gameplayCamera, CinemachineVirtualCamera virtualCamera)
         {
             SetBall(ball);
-            _inputControlledBrain.SetCamera(gameplayCamera.transform); 
+            _inputControlledBrain.SetCamera(gameplayCamera.transform);
+            _virtualCamera = virtualCamera;
+            _virtualCamera.Follow = transform;
         }
+
+        public void PrioritizeCamera(Transform lookTarget)
+        {
+            _virtualCamera.Priority = NumericConstants.CinemachineActualCameraOrder;
+            _virtualCamera.LookAt = lookTarget;
+        }
+
+        public void DeprioritizeCamera() =>
+            _virtualCamera.Priority = NumericConstants.CinemachineDefaultCameraOrder;
     }
 }

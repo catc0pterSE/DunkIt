@@ -42,30 +42,34 @@ namespace Gameplay.StateMachine.States.CutsceneStates
 
         private void DisableGameplayHUD()
         {
-           _gameplayHUD.Disable();
+            UnsubscribeOnCutscene();
+            _gameplayHUD.Disable();
         }
 
-        public virtual void Exit()
-        {
+        public virtual void Exit() =>
             DisableCutscene();
-        }
+
 
         protected abstract void EnterNextState();
 
         private void SetCharactersStates()
         {
-            _playerTeam.Map(player => player.StateMachine.Enter<Character.Player.StateMachine.States.CutsceneState>());
-            _enemyTeam.Map(enemy => enemy.StateMachine.Enter<Character.NPC.EnemyPlayer.StateMachine.States.CutsceneState>());
+            _playerTeam.Map(player =>
+                player.StateMachine.Enter<Character.Player.StateMachine.States.NotControlledState>());
+            _enemyTeam.Map(enemy =>
+                enemy.StateMachine.Enter<Character.NPC.EnemyPlayer.StateMachine.States.NotControlledState>());
         }
-        
+
         private void SubscribeOnCutscene() =>
             _cutscene.Finished += EnterNextState;
 
-        private void LaunchCutscene()
-        {
+        private void UnsubscribeOnCutscene() =>
+            _cutscene.Finished -= EnterNextState;
+
+        private void LaunchCutscene() =>
             _cutscene.Run();
-        }
-            
+
+
         private void EnableCutscene() =>
             _cutscene.Enable();
 

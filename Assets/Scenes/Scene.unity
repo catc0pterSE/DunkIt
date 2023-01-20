@@ -335,6 +335,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 614635908203535716}
+  - component: {fileID: 614635908203535720}
   m_Layer: 0
   m_Name: Geometry
   m_TagString: Untagged
@@ -342,6 +343,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &614635908203535720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 614635908203535719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db3a474188a34ae48950e8a33ddea60b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerBucket: {fileID: 614635908285649777}
+  _enemyBascket: {fileID: 614635908517141482}
 --- !u!33 &614635908241114864
 MeshFilter:
   m_ObjectHideFlags: 0

@@ -68,7 +68,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f0008a9fe78e5d438fd208127afa53b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterController: {fileID: 0}
+  _characterController: {fileID: 4871018274306801538}
   _movementSpeed: 4
   _rotationSpeed: 400
   _gravityModifier: 1
@@ -84,7 +84,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c9ef004d9ff41a1b848dd4111bf5705, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerMover: {fileID: 0}
+  _playerMover: {fileID: 3567767349144517149}
 --- !u!114 &2336375831225123186
 MonoBehaviour:
   m_ObjectHideFlags: 0

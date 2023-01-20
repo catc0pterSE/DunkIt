@@ -10,5 +10,7 @@
         public const string LoadingCurtainPath = "UI/LoadingCurtain/LoadingCurtain";
         public const string HUDPath = "UI/HUD/HUD";
         public const string StartCutscenePath = "Cutscene/StartCutscene/StartCutscene";
+        public const string CinemachineVirtualCamera = "Cinemachine/CinemachineVirtualCamera";
+        public const string JumpBallMinigamePath = "Minigames/JumpBall";
     }
 }

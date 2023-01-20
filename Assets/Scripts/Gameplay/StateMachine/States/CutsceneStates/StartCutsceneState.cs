@@ -3,13 +3,12 @@ using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.HUD;
-using Gameplay.StateMachine.States.MiniGameStates;
+using Gameplay.StateMachine.States.MinigameStates;
 using Infrastructure.Factory;
 using Infrastructure.ServiceManagement;
 
 namespace Gameplay.StateMachine.States.CutsceneStates
 {
-    using Ball.MonoBehavior;
     public class StartCutsceneState : CutsceneState
     {
         private readonly Referee _referee;
@@ -19,7 +18,6 @@ namespace Gameplay.StateMachine.States.CutsceneStates
         (PlayerFacade[] playerTeam,
             EnemyFacade[] enemyTeam,
             Referee referee,
-            Ball ball,
             CinemachineBrain camera,
             GameplayHUD gameplayHUD,
             GameplayLoopStateMachine gameplayLoopStateMachine) : base
@@ -27,16 +25,29 @@ namespace Gameplay.StateMachine.States.CutsceneStates
             playerTeam,
             enemyTeam,
             gameplayHUD,
-            Services.Container.Single<IGameObjectFactory>().CreateStartCutscene().Initialize(camera, playerTeam, enemyTeam, referee, ball)
+            Services.Container.Single<IGameObjectFactory>().CreateStartCutscene().Initialize(camera, playerTeam, enemyTeam, referee)
         )
         {
             _referee = referee;
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
         }
 
+        public override void Enter()
+        {
+            base.Enter();
+            _referee.Enable();
+            _referee.TakeBall();
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            _referee.Disable();
+        }
+
         protected override void EnterNextState()
         {
-           _gameplayLoopStateMachine.Enter<RefereeBallState>();
+           _gameplayLoopStateMachine.Enter<JumpBallState>();
         }
     }
 }

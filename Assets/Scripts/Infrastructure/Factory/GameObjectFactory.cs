@@ -6,9 +6,10 @@ using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Cutscene;
 using Gameplay.HUD;
+using Gameplay.Minigame;
+using Gameplay.Minigame.JumpBall;
 using Infrastructure.Provider;
 using UI;
-using UnityEngine;
 using Utility.Constants;
 
 namespace Infrastructure.Factory
@@ -68,6 +69,18 @@ namespace Infrastructure.Factory
         {
             return _assetProvider.Instantiate(ResourcesPathes.CameraPath).GetComponent<CinemachineBrain>()
                 ??  throw new NullReferenceException("No CameraFacade script on Camera prefab");
+        }
+
+        public CinemachineVirtualCamera CreateCinemachineVirtualCamera()
+        {
+            return _assetProvider.Instantiate(ResourcesPathes.CinemachineVirtualCamera).GetComponent<CinemachineVirtualCamera>()
+                   ??  throw new NullReferenceException("No CinemachineVirtualCamera component on CinemachineVirtualCamera prefab");
+        }
+
+        public JumpBallMinigame CreateJumpBallMinigame()
+        {
+            return _assetProvider.Instantiate(ResourcesPathes.JumpBallMinigamePath).GetComponent<JumpBallMinigame>()
+                   ??  throw new NullReferenceException("No JumpBallMinigame component on JumpBallMinigame prefab");
         }
     }
 }

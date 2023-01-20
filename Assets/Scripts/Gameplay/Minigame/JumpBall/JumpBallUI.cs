@@ -4,11 +4,11 @@ using Infrastructure.Input;
 using Infrastructure.ServiceManagement;
 using Modules.MonoBehaviour;
 using UnityEngine;
-using Slider = UnityEngine.UI.Slider;
+using UnityEngine.UI;
 
 namespace Gameplay.Minigame
 {
-    public class JumpBall : SwitchableMonoBehaviour, IMinigame
+    public class JumpBallUI: SwitchableMonoBehaviour
     {
         [SerializeField] private Slider _slider;
         [SerializeField] private float _speed;
@@ -25,10 +25,10 @@ namespace Gameplay.Minigame
             Launch();
         }
 
-        public event Action Wined;
+        public event Action Won;
         public event Action Lost;
 
-        public void Launch()
+        private void Launch()
         {
             Enable();
 
@@ -64,11 +64,11 @@ namespace Gameplay.Minigame
         private void Finish()
         {
             if (_handle.IsInZone)
-                Wined?.Invoke();
+                Won?.Invoke();
             else
                 Lost?.Invoke();
             
             Disable();
-        }
+        }  
     }
 }

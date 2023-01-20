@@ -12,7 +12,8 @@ namespace Gameplay.Character.NPC.EnemyPlayer.StateMachine
         {
             States = new Dictionary<Type, IState>()
             {
-                [typeof(CutsceneState)] = new CutsceneState(enemyFacade),
+                [typeof(NotControlledState)] = new NotControlledState(enemyFacade),
+                [typeof(AIControlledState)] = new AIControlledState()
             };
         }
     }

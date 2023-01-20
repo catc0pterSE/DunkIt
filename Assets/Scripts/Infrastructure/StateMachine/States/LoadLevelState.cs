@@ -72,7 +72,9 @@ namespace Infrastructure.StateMachine.States
             for (int i = 0; i < playerTeam.Length; i++)
             {
                 PlayerFacade player = _gameObjectFactory.CreatePlayer().GetComponent<PlayerFacade>();
-                player.Initialize(ball, camera);
+                CinemachineVirtualCamera virtualCamera = SpawnVirtualCamera();
+                player.Initialize(ball, camera, virtualCamera);
+
                 playerTeam[i] = player;
             }
 
@@ -100,19 +102,19 @@ namespace Infrastructure.StateMachine.States
             return referee;
         }
 
-        private CinemachineBrain SpawnCamera()
-        {
-            return _gameObjectFactory.CreateCamera();
-        }
+        private CinemachineBrain SpawnCamera() =>
+            _gameObjectFactory.CreateCamera();
 
-        private Ball SpawnBall()
-        {
-            return _gameObjectFactory.CreateBall();
-        }
 
-        private GameplayHUD SpawnHUD()
-        {
-            return _gameObjectFactory.CreateHUD(); //TODO different for different platforms
-        }
+        private Ball SpawnBall() =>
+            _gameObjectFactory.CreateBall();
+
+
+        private GameplayHUD SpawnHUD() =>
+            _gameObjectFactory.CreateHUD(); //TODO different for different platforms
+
+
+        private CinemachineVirtualCamera SpawnVirtualCamera() =>
+            _gameObjectFactory.CreateCinemachineVirtualCamera();
     }
 }

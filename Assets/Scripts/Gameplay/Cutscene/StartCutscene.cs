@@ -4,16 +4,14 @@ using Cinemachine;
 using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
-using Gameplay.Minigame;
 using Modules.MonoBehaviour;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
+using Utility.Constants;
 
 namespace Gameplay.Cutscene
 {
-    using Ball.MonoBehavior;
-
     public class StartCutscene : SwitchableMonoBehaviour, ICutscene
     {
         [SerializeField] private PlayableDirector _director;
@@ -21,10 +19,6 @@ namespace Gameplay.Cutscene
         [SerializeField] private CinemachineVirtualCamera _ballCamera;
         [SerializeField] private CinemachineTargetGroup _playerTeamTargetGroup;
         [SerializeField] private CinemachineTargetGroup _enemyTeamTargetGroup;
-        [SerializeField] private JumpBall _jumpBallMiniGame;
-
-        private PlayerFacade _jumpBallPlayer;
-        private EnemyFacade _jumpBallEnemy;
         
         public event Action Finished;
 
@@ -50,68 +44,40 @@ namespace Gameplay.Cutscene
 
         private void OnEnable()
         {
-            _jumpBallMiniGame.Wined += GiveBallToPlayer;
-            _jumpBallMiniGame.Lost += GiveBallToEnemy;
             _director.stopped += Finish;
         }
 
         private void OnDisable()
         {
-            _jumpBallMiniGame.Wined -= GiveBallToPlayer;
-            _jumpBallMiniGame.Lost -= GiveBallToEnemy;
             _director.stopped -= Finish;
         }
 
         public StartCutscene Initialize(CinemachineBrain gameplayCamera, PlayerFacade[] playerTeam,
-            EnemyFacade[] enemyTeam, Referee referee, Ball ball)
+            EnemyFacade[] enemyTeam, Referee referee)
         {
-            PlayerFacade player1 = playerTeam[0];
-            _jumpBallPlayer = player1;
-            PlayerFacade player2 = playerTeam[1];
-            EnemyFacade enemy1 = enemyTeam[0];
-            _jumpBallEnemy = enemy1;
-            EnemyFacade enemy2 = enemyTeam[1];
+            PlayerFacade player1 = playerTeam[NumericConstants.PrimaryPlayerIndex];
+            PlayerFacade player2 = playerTeam[NumericConstants.SecondaryPlayerIndex];
+            EnemyFacade enemy1 = enemyTeam[NumericConstants.PrimaryPlayerIndex];
+            EnemyFacade enemy2 = enemyTeam[NumericConstants.SecondaryPlayerIndex];
 
             _refereeCamera.LookAt = referee.transform;
-            _ballCamera.LookAt = ball.transform;
-            _playerTeamTargetGroup.m_Targets[0].target = player1.transform;
-            _playerTeamTargetGroup.m_Targets[1].target = player2.transform;
-            _enemyTeamTargetGroup.m_Targets[0].target = enemy1.transform;
-            _enemyTeamTargetGroup.m_Targets[1].target = enemy2.transform;
+            _playerTeamTargetGroup.m_Targets[NumericConstants.PrimaryPlayerIndex].target = player1.transform;
+            _playerTeamTargetGroup.m_Targets[NumericConstants.SecondaryPlayerIndex].target = player2.transform;
+            _enemyTeamTargetGroup.m_Targets[NumericConstants.PrimaryPlayerIndex].target = enemy1.transform;
+            _enemyTeamTargetGroup.m_Targets[NumericConstants.SecondaryPlayerIndex].target = enemy2.transform;
             _director.SetGenericBinding(CinemachineTrackAsset, gameplayCamera);
             _director.SetGenericBinding(Player1TrackAsset, player1.Animator);
             _director.SetGenericBinding(Player2TrackAsset, player2.Animator);
             _director.SetGenericBinding(Enemy1TrackAsset, enemy1.Animator);
             _director.SetGenericBinding(Enemy2TrackAsset, enemy2.Animator);
             _director.SetGenericBinding(RefereeTrackAsset, referee.Animator);
-
-            referee.TakeBall();
-
+            
             return this;
         }
 
         public void Run()
         {
             _director.Play();
-        }
-
-        private void GiveBallToPlayer()
-        {
-            _jumpBallPlayer.TakeBall();
-            EndCutscene();
-        }
-
-
-        private void GiveBallToEnemy()
-        {
-            _jumpBallEnemy.TakeBall();
-            EndCutscene();
-        }
-            
-
-        private void EndCutscene()
-        {
-            _director.Stop();
         }
 
         private void Finish(PlayableDirector director)
