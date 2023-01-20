@@ -53,10 +53,9 @@ namespace Infrastructure.StateMachine.States
             SceneConfig sceneConfig = GameObject.FindObjectOfType<SceneConfig>();
             CinemachineBrain camera = SpawnCamera();
             Ball ball = SpawnBall();
-            PlayerFacade[] playerTeam = SpawnPlayerTeam(camera.transform, ball);
+            PlayerFacade[] playerTeam = SpawnPlayerTeam(camera.transform, ball, sceneConfig);
             EnemyFacade[] enemyTeam = SpawnEnemyTeam(ball);
             Referee referee = SpawnReferee(ball);
-
 
             GameplayLoopStateMachine gameplayLoopStateMachine =
                 new GameplayLoopStateMachine(playerTeam, enemyTeam, referee, camera, gameplayHUD, ball, sceneConfig,
@@ -65,7 +64,7 @@ namespace Infrastructure.StateMachine.States
             _gameStateMachine.Enter<GamePlayLoopState, GameplayLoopStateMachine>(gameplayLoopStateMachine);
         }
 
-        private PlayerFacade[] SpawnPlayerTeam(Transform camera, Ball ball)
+        private PlayerFacade[] SpawnPlayerTeam(Transform camera, Ball ball, SceneConfig sceneConfig)
         {
             PlayerFacade[] playerTeam = new PlayerFacade[NumericConstants.PlayersInTeam];
 
@@ -73,7 +72,7 @@ namespace Infrastructure.StateMachine.States
             {
                 PlayerFacade player = _gameObjectFactory.CreatePlayer().GetComponent<PlayerFacade>();
                 CinemachineVirtualCamera virtualCamera = SpawnVirtualCamera();
-                player.Initialize(ball, camera, virtualCamera);
+                player.Initialize(ball, camera, virtualCamera, sceneConfig);
 
                 playerTeam[i] = player;
             }

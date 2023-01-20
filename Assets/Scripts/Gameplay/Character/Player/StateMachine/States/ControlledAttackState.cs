@@ -17,7 +17,8 @@ namespace Gameplay.Character.Player.StateMachine.States
         {
             _playerFacade.EnableInputControlledBrain();
             _playerFacade.EnablePlayerMover();
-            _playerFacade.PrioritizeCamera(lookTarget);
+            _playerFacade.PrioritizeCamera();
+            _playerFacade.FocusOnEnemyBasket();
         }
 
 
