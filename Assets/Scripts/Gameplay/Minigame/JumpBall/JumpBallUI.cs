@@ -6,7 +6,7 @@ using Modules.MonoBehaviour;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Gameplay.Minigame
+namespace Gameplay.Minigame.JumpBall
 {
     public class JumpBallUI: SwitchableMonoBehaviour
     {

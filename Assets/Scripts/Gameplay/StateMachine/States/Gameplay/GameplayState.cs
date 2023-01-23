@@ -70,7 +70,7 @@ namespace Gameplay.StateMachine.States.Gameplay
                .Map(GiveUpControlOf);
 
             _currentControlledPlayer = player;
-            _currentControlledPlayer.StateMachine.Enter<ControlledAttackState, Transform>(_sceneConfig.EnemyBascket);
+            _currentControlledPlayer.StateMachine.Enter<ControlledAttackState, Transform>(_sceneConfig.EnemyBasket);
         }
 
         private void GiveUpControlOf(PlayerFacade player)

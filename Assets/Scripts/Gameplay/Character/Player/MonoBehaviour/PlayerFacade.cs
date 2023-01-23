@@ -1,4 +1,5 @@
 ﻿using Cinemachine;
+using Gameplay.Character.Player.BallHandle.Throw;
 using Gameplay.Character.Player.MonoBehaviour.Brains;
 using Gameplay.Character.Player.MonoBehaviour.Movement;
 using Gameplay.Character.Player.StateMachine;
@@ -16,6 +17,8 @@ namespace Gameplay.Character.Player.MonoBehaviour
         [SerializeField] private AIControlledBrain _aiControlledBrain;
         [SerializeField] private PlayerMover _playerMover;
         [SerializeField] private Animator _animator;
+        [SerializeField] private TrajectoryDrawer _trajectoryDrawer;
+        [SerializeField] private BallThrower _ballThrower;
 
         private CinemachineVirtualCamera _virtualCamera;
         private PlayerStateMachine _stateMachine;
@@ -44,11 +47,12 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public void Initialize(Ball ball, Transform gameplayCamera, CinemachineVirtualCamera virtualCamera,
             SceneConfig sceneConfig)
         {
-            SetBall(ball);
+            _ballThrower.SetBall(ball);
             _inputControlledBrain.SetCamera(gameplayCamera.transform);
             _virtualCamera = virtualCamera;
             _virtualCamera.Follow = transform;
             _sceneConfig = sceneConfig;
+            _trajectoryDrawer.SetSimulationScene(sceneConfig.SimulationScene);
         }
 
         public void PrioritizeCamera()
@@ -58,10 +62,11 @@ namespace Gameplay.Character.Player.MonoBehaviour
 
         public void FocusOnEnemyBasket()
         {
-            _virtualCamera.LookAt = _sceneConfig.EnemyBascket;
+            _virtualCamera.LookAt = _sceneConfig.EnemyBasket;
         }
 
         public void DeprioritizeCamera() =>
             _virtualCamera.Priority = NumericConstants.CinemachineDefaultCameraOrder;
+
     }
 }

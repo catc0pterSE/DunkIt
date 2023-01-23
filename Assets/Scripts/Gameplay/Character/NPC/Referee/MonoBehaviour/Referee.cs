@@ -8,8 +8,5 @@ namespace Gameplay.Character.NPC.Referee.MonoBehaviour
     {
         [SerializeField] private Animator _animator;
         public Animator Animator => _animator;
-
-        public void Initialize(Ball ball) =>
-            SetBall(ball);
     }
 }

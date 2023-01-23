@@ -12,8 +12,5 @@ namespace Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour
 
         public EnemyStateMachine StateMachine => _stateMachine ??= new EnemyStateMachine(this);
         public Animator Animator => _animator;
-
-        public void Initialize(Ball ball) =>
-            SetBall(ball);
     }
 }

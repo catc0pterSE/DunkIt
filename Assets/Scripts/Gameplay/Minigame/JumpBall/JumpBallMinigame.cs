@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Cinemachine;
 using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
@@ -7,32 +6,17 @@ using Gameplay.Character.Player.MonoBehaviour;
 using Modules.MonoBehaviour;
 using UnityEngine;
 using UnityEngine.Playables;
-using UnityEngine.Timeline;
+using Utility.Constants;
+using Utility.Extensions;
 
 namespace Gameplay.Minigame.JumpBall
 {
-    using Ball.MonoBehavior;
-
     public class JumpBallMinigame : SwitchableMonoBehaviour, IMinigame
     {
         [SerializeField] private PlayableDirector _director;
         [SerializeField] private JumpBallUI _uiMinigame;
         [SerializeField] private CinemachineVirtualCamera _ballCamera;
         [SerializeField] private CinemachineVirtualCamera _refereeCamera;
-
-        private TimelineAsset TimelineAsset => _director.playableAsset as TimelineAsset;
-
-        private TrackAsset CinemachineTrackAsset => TimelineAsset.GetOutputTracks()
-            .FirstOrDefault(track => track.name == "CinemachineTrack");
-
-        private TrackAsset PlayerTrackAsset => TimelineAsset.GetOutputTracks()
-            .FirstOrDefault(track => track.name == "PlayerAnimation");
-
-        private TrackAsset EnemyTrackAsset => TimelineAsset.GetOutputTracks()
-            .FirstOrDefault(track => track.name == "EnemyAnimation");
-
-        private TrackAsset RefereeTrackAsset => TimelineAsset.GetOutputTracks()
-            .FirstOrDefault(track => track.name == "RefereeAnimation");
 
         public event Action Won;
 
@@ -50,34 +34,41 @@ namespace Gameplay.Minigame.JumpBall
             _uiMinigame.Lost -= OnLost;
         }
 
-        public JumpBallMinigame Initialize(CinemachineBrain gameplayCamera, Referee referee, PlayerFacade[] playerTeam,
-            EnemyFacade[] enemyTeam, Ball ball)
+        public JumpBallMinigame Initialize
+        (
+            CinemachineBrain gameplayCamera,
+            Referee referee,
+            PlayerFacade[] playerTeam,
+            EnemyFacade[] enemyTeam,
+            Ball.MonoBehavior.Ball ball
+        )
         {
-            PlayerFacade player = playerTeam[0];
-            EnemyFacade enemy = enemyTeam[0];
+            PlayerFacade player = playerTeam[NumericConstants.PrimaryTeamMemberIndex];
+            EnemyFacade enemy = enemyTeam[NumericConstants.PrimaryTeamMemberIndex];
 
             _ballCamera.LookAt = ball.transform;
             _refereeCamera.LookAt = referee.transform;
-            _director.SetGenericBinding(CinemachineTrackAsset, gameplayCamera);
-            _director.SetGenericBinding(PlayerTrackAsset, player.Animator);
-            _director.SetGenericBinding(EnemyTrackAsset, enemy.Animator);
-            _director.SetGenericBinding(RefereeTrackAsset, referee.Animator);
 
-            referee.TakeBall();
+            _director.BindCinemachineBrain(TimelineTrackNames.CinemachineTrackName, gameplayCamera);
+            _director.BindAnimator(TimelineTrackNames.PrimaryPlayerAnimationTrackName, player.Animator);
+            _director.BindAnimator(TimelineTrackNames.PrimaryEnemyAnimationTrackName, enemy.Animator);
+            _director.BindAnimator(TimelineTrackNames.RefereeAnimationTrackName, referee.Animator);
+
+            ball.SetOwner(referee);
 
             return this;
         }
 
         private void OnWon()
         {
-            Won?.Invoke();
             End();
+            Won?.Invoke();
         }
 
         private void OnLost()
         {
-            Lost?.Invoke();
             End();
+            Lost?.Invoke();
         }
 
         private void End() =>

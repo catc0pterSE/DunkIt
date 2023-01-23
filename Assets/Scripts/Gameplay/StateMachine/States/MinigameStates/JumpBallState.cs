@@ -17,6 +17,7 @@ namespace Gameplay.StateMachine.States.MinigameStates
         private readonly PlayerFacade _player;
         private readonly EnemyFacade _enemy;
         private readonly Referee _referee;
+        private readonly Ball _ball;
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
 
         public JumpBallState
@@ -37,9 +38,10 @@ namespace Gameplay.StateMachine.States.MinigameStates
                 .Initialize(gameplayCamera, referee, playerTeam, enemyTeam, ball)
         )
         {
-            _player = playerTeam[NumericConstants.PrimaryPlayerIndex];
-            _enemy = enemyTeam[NumericConstants.PrimaryPlayerIndex];
+            _player = playerTeam[NumericConstants.PrimaryTeamMemberIndex];
+            _enemy = enemyTeam[NumericConstants.PrimaryTeamMemberIndex];
             _referee = referee;
+            _ball = ball;
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
         }
 
@@ -47,7 +49,7 @@ namespace Gameplay.StateMachine.States.MinigameStates
         {
             base.Enter();
             _referee.Enable();
-            _referee.TakeBall();
+            _ball.SetOwner(_referee);
         }
 
         public override void Exit()
@@ -58,13 +60,13 @@ namespace Gameplay.StateMachine.States.MinigameStates
 
         protected override void OnMiniGameWon()
         {
-            _player.TakeBall();
+            _ball.SetOwner(_player);
             EnterNextState();
         }
 
         protected override void OnMiniGameLost()
         {
-            _enemy.TakeBall();
+            _ball.SetOwner(_enemy);
             EnterNextState();
         }
 

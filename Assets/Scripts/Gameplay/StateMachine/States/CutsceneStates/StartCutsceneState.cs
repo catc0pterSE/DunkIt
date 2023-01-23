@@ -9,9 +9,11 @@ using Infrastructure.ServiceManagement;
 
 namespace Gameplay.StateMachine.States.CutsceneStates
 {
+    using Ball.MonoBehavior;
     public class StartCutsceneState : CutsceneState
     {
         private readonly Referee _referee;
+        private readonly Ball _ball;
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
 
         public StartCutsceneState
@@ -19,6 +21,7 @@ namespace Gameplay.StateMachine.States.CutsceneStates
             EnemyFacade[] enemyTeam,
             Referee referee,
             CinemachineBrain camera,
+            Ball ball,
             GameplayHUD gameplayHUD,
             GameplayLoopStateMachine gameplayLoopStateMachine) : base
         (
@@ -29,6 +32,7 @@ namespace Gameplay.StateMachine.States.CutsceneStates
         )
         {
             _referee = referee;
+            _ball = ball;
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
         }
 
@@ -36,7 +40,7 @@ namespace Gameplay.StateMachine.States.CutsceneStates
         {
             base.Enter();
             _referee.Enable();
-            _referee.TakeBall();
+            _ball.SetOwner(_referee);
         }
 
         public override void Exit()

@@ -4,18 +4,19 @@ using UnityEngine;
 namespace Gameplay.Character
 {
     using Ball.MonoBehavior;
-    public abstract class Character: SwitchableMonoBehaviour
+
+    public abstract class Character : SwitchableMonoBehaviour
     {
         [SerializeField] private Transform _ballPosition;
 
-        private Ball _ball;
-        
-        public Transform BallPosition => _ballPosition;
-       
-        public void TakeBall() =>
-            _ball.SetOwner(this);
+        private bool _ownsBall;
 
-        protected void SetBall(Ball ball) =>
-            _ball = ball;
+        public Transform BallPosition => _ballPosition;
+
+        public void TakeBall() =>
+            _ownsBall = true;
+
+        public void LoseBall() =>
+            _ownsBall = false;
     }
 }

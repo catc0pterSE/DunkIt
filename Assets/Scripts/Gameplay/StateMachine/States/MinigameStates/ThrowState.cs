@@ -1,4 +1,4 @@
-﻿namespace Gameplay.StateMachine.States.MiniGameStates
+﻿namespace Gameplay.StateMachine.States.MinigameStates
 {
     public class ThrowState
     {

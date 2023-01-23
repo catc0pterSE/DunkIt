@@ -54,8 +54,8 @@ namespace Infrastructure.StateMachine.States
             CinemachineBrain camera = SpawnCamera();
             Ball ball = SpawnBall();
             PlayerFacade[] playerTeam = SpawnPlayerTeam(camera.transform, ball, sceneConfig);
-            EnemyFacade[] enemyTeam = SpawnEnemyTeam(ball);
-            Referee referee = SpawnReferee(ball);
+            EnemyFacade[] enemyTeam = SpawnEnemyTeam();
+            Referee referee = SpawnReferee();
 
             GameplayLoopStateMachine gameplayLoopStateMachine =
                 new GameplayLoopStateMachine(playerTeam, enemyTeam, referee, camera, gameplayHUD, ball, sceneConfig,
@@ -80,24 +80,22 @@ namespace Infrastructure.StateMachine.States
             return playerTeam;
         }
 
-        private EnemyFacade[] SpawnEnemyTeam(Ball ball)
+        private EnemyFacade[] SpawnEnemyTeam()
         {
             EnemyFacade[] enemyTeam = new EnemyFacade[NumericConstants.PlayersInTeam];
 
             for (int i = 0; i < enemyTeam.Length; i++)
             {
                 EnemyFacade enemy = _gameObjectFactory.CreateEnemy().GetComponent<EnemyFacade>();
-                enemy.Initialize(ball);
                 enemyTeam[i] = enemy;
             }
 
             return enemyTeam;
         }
 
-        private Referee SpawnReferee(Ball ball)
+        private Referee SpawnReferee()
         {
             Referee referee = _gameObjectFactory.CreateReferee();
-            referee.Initialize(ball);
             return referee;
         }
 
