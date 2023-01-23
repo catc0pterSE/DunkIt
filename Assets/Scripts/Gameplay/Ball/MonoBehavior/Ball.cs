@@ -38,7 +38,9 @@ namespace Gameplay.Ball.MonoBehavior
             foreach (MeshRenderer meshRenderer in _renderers)
                 meshRenderer.enabled = false;
         }
-            
+
+        public void ZeroVelocity() =>
+            _rigidBody.velocity = Vector3.zero;
 
         private void RemoveParent()
         {

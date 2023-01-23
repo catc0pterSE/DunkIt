@@ -26,7 +26,7 @@ namespace Gameplay.Character.Player.BallHandle.Throw
         private void Update()
         {
             Aim();
-            _trajectory.SimulateTrajectory(_ball, _ballPosition.position, _ballPosition.forward * _force);
+            _trajectory.SimulateTrajectory(_ballPosition.position, _ballPosition.forward * _force);
             Trow();
         }
 
