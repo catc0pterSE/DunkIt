@@ -1,9 +1,10 @@
 ﻿using System.Linq;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Character.Player.StateMachine.States;
-using Gameplay.HUD;
 using Modules.StateMachine;
 using Scene;
+using UI.HUD;
+using UI.HUD.Mobile;
 using UnityEngine;
 using Utility.Extensions;
 
@@ -16,25 +17,25 @@ namespace Gameplay.StateMachine.States.Gameplay
     {
         private readonly PlayerFacade[] _playerTeam;
         private readonly Ball _ball;
-        private readonly GameplayHUD _hud;
+        private readonly IGameplayHUD _gameplayHud;
         private readonly SceneConfig _sceneConfig;
         private PlayerFacade _currentControlledPlayer;
 
-        public GameplayState(PlayerFacade[] playerTeam, Ball ball, GameplayHUD hud, SceneConfig sceneConfig) : base(new ITransition[]
+        public GameplayState(PlayerFacade[] playerTeam, Ball ball, IGameplayHUD gameplayHud, SceneConfig sceneConfig) : base(new ITransition[]
             {
             }
         )
         {
             _playerTeam = playerTeam;
             _ball = ball;
-            _hud = hud;
+            _gameplayHud = gameplayHud;
             _sceneConfig = sceneConfig;
         }
 
         public override void Enter()
         {
             base.Enter();
-            _hud.Enable();
+            _gameplayHud.Enable();
             
             if (_currentControlledPlayer == null)
                 TakeControlOf(_playerTeam[0]);
@@ -70,7 +71,10 @@ namespace Gameplay.StateMachine.States.Gameplay
                .Map(GiveUpControlOf);
 
             _currentControlledPlayer = player;
-            _currentControlledPlayer.StateMachine.Enter<ControlledAttackState, Transform>(_sceneConfig.EnemyBasket);
+            Debug.Log(_currentControlledPlayer);
+            Debug.Log(_currentControlledPlayer.StateMachine);
+            Debug.Log(_sceneConfig.EnemyRing.transform);
+            _currentControlledPlayer.StateMachine.Enter<ControlledAttackState, Transform>(_sceneConfig.EnemyRing.transform);
         }
 
         private void GiveUpControlOf(PlayerFacade player)

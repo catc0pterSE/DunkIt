@@ -3,13 +3,14 @@ using Gameplay.Ball.MonoBehavior;
 using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
-using Gameplay.HUD;
 using Gameplay.StateMachine;
 using Infrastructure.CoroutineRunner;
 using Infrastructure.Factory;
 using Modules.StateMachine;
 using Scene;
 using UI;
+using UI.HUD;
+using UI.HUD.Mobile;
 using UnityEngine;
 using Utility.Constants;
 
@@ -49,7 +50,7 @@ namespace Infrastructure.StateMachine.States
 
         private void OnLoaded()
         {
-            GameplayHUD gameplayHUD = SpawnHUD();
+            IGameplayHUD gameplayHUDView = SpawnHUD();
             SceneConfig sceneConfig = GameObject.FindObjectOfType<SceneConfig>();
             CinemachineBrain camera = SpawnCamera();
             Ball ball = SpawnBall();
@@ -58,7 +59,7 @@ namespace Infrastructure.StateMachine.States
             Referee referee = SpawnReferee();
 
             GameplayLoopStateMachine gameplayLoopStateMachine =
-                new GameplayLoopStateMachine(playerTeam, enemyTeam, referee, camera, gameplayHUD, ball, sceneConfig,
+                new GameplayLoopStateMachine(playerTeam, enemyTeam, referee, camera, gameplayHUDView, ball, sceneConfig,
                     _coroutineRunner, _gameStateMachine);
 
             _gameStateMachine.Enter<GamePlayLoopState, GameplayLoopStateMachine>(gameplayLoopStateMachine);
@@ -107,8 +108,12 @@ namespace Infrastructure.StateMachine.States
             _gameObjectFactory.CreateBall();
 
 
-        private GameplayHUD SpawnHUD() =>
-            _gameObjectFactory.CreateHUD(); //TODO different for different platforms
+        private IGameplayHUD SpawnHUD()  //TODO different for different platforms
+        {
+            MobileGameplayHUD mobileGameplayHUD = _gameObjectFactory.CreateMobileHUD();
+            return mobileGameplayHUD;
+        }
+            
 
 
         private CinemachineVirtualCamera SpawnVirtualCamera() =>

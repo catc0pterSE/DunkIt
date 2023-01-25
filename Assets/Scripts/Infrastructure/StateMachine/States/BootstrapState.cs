@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Factory;
 using Infrastructure.Input;
+using Infrastructure.Input.InputService;
 using Infrastructure.Provider;
 using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
@@ -18,14 +19,14 @@ namespace Infrastructure.StateMachine.States
             _stateMachine = stateMachine;
             _sceneLoader = sceneLoader;
             _services = services;
-            RegisterServices(); 
+            RegisterServices();
         }
-        
+
         public void Enter()
         {
             _sceneLoader.LoadScene(SceneNames.Initial, onLoaded: EnterLoadLevel);
         }
-        
+
         public void Exit()
         {
         }
@@ -34,12 +35,25 @@ namespace Infrastructure.StateMachine.States
         {
             _stateMachine.Enter<LoadLevelState, string>(SceneNames.Scene);
         }
-        
+
         private void RegisterServices()
         {
-            _services.RegisterSingle<IInputService>(new SimpleInputService()); //TODO: for different platforms
+            RegisterInputService();
             _services.RegisterSingle<IAssetProvider>(new AssetProvider());
-            _services.RegisterSingle<IGameObjectFactory>(new GameObjectFactory(Services.Container.Single<IAssetProvider>()));
+            _services.RegisterSingle<IGameObjectFactory>(
+                new GameObjectFactory(Services.Container.Single<IAssetProvider>()));
+        }
+
+        private void RegisterInputService() //TODO: for different platforms
+        {
+            RegisterMobileInputService();
+        }
+
+        private void RegisterMobileInputService()
+        {
+            MobileInputService mobileInputService = new MobileInputService();
+            _services.RegisterSingle<IInputService>(mobileInputService);
+            _services.RegisterSingle<IUIInputController>(mobileInputService);
         }
     }
 }

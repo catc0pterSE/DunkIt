@@ -5,11 +5,12 @@ using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Cutscene;
-using Gameplay.HUD;
 using Gameplay.Minigame;
 using Gameplay.Minigame.JumpBall;
 using Infrastructure.Provider;
 using UI;
+using UI.HUD;
+using UI.HUD.Mobile;
 using Utility.Constants;
 
 namespace Infrastructure.Factory
@@ -59,9 +60,9 @@ namespace Infrastructure.Factory
                    ?? throw new NullReferenceException("No Ball script on Ball prefab");
         }
 
-        public GameplayHUD CreateHUD()
+        public MobileGameplayHUD CreateMobileHUD()
         {
-            return _assetProvider.Instantiate(ResourcesPathes.HUDPath).GetComponent<GameplayHUD>()
+            return _assetProvider.Instantiate(ResourcesPathes.HUDPath).GetComponent<MobileGameplayHUD>()
                    ?? throw new NullReferenceException("No GameplayHUD script on GameplayHUD prefab");
         }
 

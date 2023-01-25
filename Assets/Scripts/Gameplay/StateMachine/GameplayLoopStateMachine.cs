@@ -4,13 +4,14 @@ using Cinemachine;
 using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
-using Gameplay.HUD;
 using Gameplay.StateMachine.States.CutsceneStates;
 using Gameplay.StateMachine.States.Gameplay;
 using Gameplay.StateMachine.States.MinigameStates;
 using Infrastructure.CoroutineRunner;
 using Infrastructure.StateMachine;
 using Scene;
+using UI.HUD;
+using UI.HUD.Mobile;
 
 namespace Gameplay.StateMachine
 {
@@ -23,7 +24,7 @@ namespace Gameplay.StateMachine
             EnemyFacade[] enemyTeam,
             Referee referee,
             CinemachineBrain camera,
-            GameplayHUD gameplayHUD,
+            IGameplayHUD gameplayHUD,
             Ball ball,
             SceneConfig sceneConfig,
             ICoroutineRunner coroutineRunner,

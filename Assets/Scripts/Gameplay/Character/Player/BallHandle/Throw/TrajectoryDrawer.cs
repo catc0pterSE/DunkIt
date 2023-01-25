@@ -1,54 +1,47 @@
-﻿using Infrastructure.Factory;
-using Infrastructure.ServiceManagement;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Modules.MonoBehaviour;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using Utility.Constants;
 
 namespace Gameplay.Character.Player.BallHandle.Throw
 {
-    using UnityEngine.SceneManagement;
     using Ball.MonoBehavior;
 
     public class TrajectoryDrawer : SwitchableMonoBehaviour
     {
-        [SerializeField] private LineRenderer _line;
-        [SerializeField] private int _maxPhysicsFrameIterations = 100;
+        [SerializeField] private LineRenderer _lineRenderer;
+        [Range(0.02f, 1f)]
+        [SerializeField] private float _timeStep = 0.02f;
+        [SerializeField] private int _maxLineRendererPoints = 1000;
+        [SerializeField] private LayerMask _lineStopperLayerMask;
 
-        private Transform _obstaclesParent;
-        private Ball _ballSimulation;
-        private Scene _simulationScene;
-        private PhysicsScene _physicsScene;
-
-        private Ball BallSimulation => _ballSimulation ??= CreateBallSimulation();
-
-        public void SetSimulationScene(Scene simulationScene)
+        public void Draw(Vector3 startPosition, Vector3 velocity)
         {
-            _simulationScene = simulationScene;
-            _physicsScene = simulationScene.GetPhysicsScene();
-        }
+           
+            List<Vector3> points = new List<Vector3>();
+            points.Add(startPosition);
 
-        public void SimulateTrajectory(Vector3 startPosition, Vector3 velocity)
-        {
-            BallSimulation.ZeroVelocity();
-            BallSimulation.transform.position = startPosition;
-
-            BallSimulation.Throw(velocity);
-
-            _line.positionCount = _maxPhysicsFrameIterations;
-
-            for (var i = 0; i < _maxPhysicsFrameIterations; i++)
+            for (int i = 0; i < _maxLineRendererPoints; i++)
             {
-                _physicsScene.Simulate(Time.fixedDeltaTime);
-                _line.SetPosition(i, BallSimulation.transform.position);
-            }
-        }
+                float timeShift = _timeStep * i;
 
-        private Ball CreateBallSimulation()
-        {
-            Ball ball = Services.Container.Single<IGameObjectFactory>().CreateBall();
-            SceneManager.MoveGameObjectToScene(ball.gameObject, _simulationScene);
-            ball.StopRendering();
-            return ball;
+                Vector3 progressBeforeGravity = velocity * timeShift;
+                Vector3 gravityComponent = Vector3.up * (NumericConstants.Half * Physics.gravity.y * timeShift * timeShift);
+                Vector3 newPosition = startPosition + progressBeforeGravity + gravityComponent;
+
+                points.Add(newPosition);
+
+                Vector3 directionToPreviousPoint = points[i] - newPosition;
+                float distanceTuPreviousPoint = directionToPreviousPoint.magnitude;
+                
+                if (Physics.Raycast(newPosition, directionToPreviousPoint, distanceTuPreviousPoint, _lineStopperLayerMask))
+                    break;
+            }
+
+            _lineRenderer.positionCount = points.Count;
+            _lineRenderer.SetPositions(points.ToArray());
         }
     }
 }

@@ -1,8 +1,9 @@
 ﻿using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
-using Gameplay.HUD;
 using Gameplay.Minigame;
 using Modules.StateMachine;
+using UI.HUD;
+using UI.HUD.Mobile;
 using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.MinigameStates
@@ -11,10 +12,10 @@ namespace Gameplay.StateMachine.States.MinigameStates
     {
         private readonly PlayerFacade[] _playerTeam;
         private readonly EnemyFacade[] _enemyTeam;
-        private readonly GameplayHUD _gameplayHUD;
+        private readonly IGameplayHUD _gameplayHUD;
         private readonly IMinigame _minigame;
 
-        public MinigameState(PlayerFacade[] playerTeam, EnemyFacade[] enemyTeam, GameplayHUD gameplayHUD,
+        public MinigameState(PlayerFacade[] playerTeam, EnemyFacade[] enemyTeam, IGameplayHUD gameplayHUD,
             IMinigame minigame)
         {
             _playerTeam = playerTeam;

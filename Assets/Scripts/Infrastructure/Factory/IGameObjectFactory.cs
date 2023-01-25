@@ -4,12 +4,10 @@ using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Cutscene;
-using Gameplay.HUD;
-using Gameplay.Minigame;
 using Gameplay.Minigame.JumpBall;
 using Infrastructure.ServiceManagement;
 using UI;
-using UnityEngine;
+using UI.HUD.Mobile;
 
 namespace Infrastructure.Factory
 {
@@ -19,7 +17,7 @@ namespace Infrastructure.Factory
         public EnemyFacade CreateEnemy();
         public Referee CreateReferee();
         public Ball CreateBall();
-        public GameplayHUD CreateHUD();
+        public MobileGameplayHUD CreateMobileHUD();
         public CinemachineBrain CreateCamera();
         public LoadingCurtain CreateLoadingCurtain();
         public StartCutscene CreateStartCutscene();

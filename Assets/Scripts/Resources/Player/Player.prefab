@@ -15,8 +15,8 @@ GameObject:
   - component: {fileID: 2336375831225123186}
   - component: {fileID: 5054484669908984701}
   - component: {fileID: 5437166744856396153}
-  - component: {fileID: 378124054297509187}
-  - component: {fileID: 5016125334771528733}
+  - component: {fileID: 5250586742983876560}
+  - component: {fileID: 4538433228081721433}
   - component: {fileID: 4157564897576991621}
   m_Layer: 0
   m_Name: Player
@@ -117,8 +117,7 @@ MonoBehaviour:
   _aiControlledBrain: {fileID: 2336375831225123186}
   _playerMover: {fileID: 3567767349144517149}
   _animator: {fileID: 5437166744856396153}
-  _trajectoryDrawer: {fileID: 5016125334771528733}
-  _ballThrower: {fileID: 378124054297509187}
+  _ballThrower: {fileID: 5250586742983876560}
 --- !u!95 &5437166744856396153
 Animator:
   serializedVersion: 4
@@ -139,7 +138,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &378124054297509187
+--- !u!114 &5250586742983876560
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -148,14 +147,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1919622327166402665}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac57d1066fad4ed8bc60940c3627a256, type: 3}
+  m_Script: {fileID: 11500000, guid: 32081bcff70d42b6a9b89f8935ac9267, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _trajectory: {fileID: 5016125334771528733}
-  _force: 20
   _ballPosition: {fileID: 4042918883656718937}
-  _rotateSpeed: 30
---- !u!114 &5016125334771528733
+  _trajectoryDrawer: {fileID: 4538433228081721433}
+  _flightTime: 0.1
+  _maxBallSpeed: 19
+--- !u!114 &4538433228081721433
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -164,11 +163,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1919622327166402665}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8b669d2e646424091a3bf9674967279, type: 3}
+  m_Script: {fileID: 11500000, guid: d0a071820a404069a41208365a650a3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _line: {fileID: 4157564897576991621}
-  _maxPhysicsFrameIterations: 100
+  _lineRenderer: {fileID: 4157564897576991621}
+  _timeStep: 0.02
+  _maxLineRendererPoints: 1000
+  _lineStopperLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!120 &4157564897576991621
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -220,7 +223,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.21052551
+        value: 0.12440491
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -229,7 +232,7 @@ LineRenderer:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: 0.21052551
+        value: 0.019134521
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -243,7 +246,7 @@ LineRenderer:
       serializedVersion: 2
       key0: {r: 1, g: 1, b: 1, a: 1}
       key1: {r: 1, g: 1, b: 1, a: 1}
-      key2: {r: 0, g: 0, b: 0, a: 0}
+      key2: {r: 1, g: 1, b: 1, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
@@ -251,7 +254,7 @@ LineRenderer:
       key7: {r: 0, g: 0, b: 0, a: 0}
       ctime0: 0
       ctime1: 65535
-      ctime2: 0
+      ctime2: 65535
       ctime3: 0
       ctime4: 0
       ctime5: 0
@@ -259,8 +262,8 @@ LineRenderer:
       ctime7: 0
       atime0: 0
       atime1: 65535
-      atime2: 0
-      atime3: 0
+      atime2: 65535
+      atime3: 65535
       atime4: 0
       atime5: 0
       atime6: 0

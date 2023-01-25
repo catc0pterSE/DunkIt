@@ -3,9 +3,11 @@ using Gameplay.Character.Player.BallHandle.Throw;
 using Gameplay.Character.Player.MonoBehaviour.Brains;
 using Gameplay.Character.Player.MonoBehaviour.Movement;
 using Gameplay.Character.Player.StateMachine;
-using Scene;
 using UnityEngine;
 using Utility.Constants;
+using Utility.Extensions;
+using z_Test;
+using SceneConfig = Scene.SceneConfig;
 
 namespace Gameplay.Character.Player.MonoBehaviour
 {
@@ -17,13 +19,12 @@ namespace Gameplay.Character.Player.MonoBehaviour
         [SerializeField] private AIControlledBrain _aiControlledBrain;
         [SerializeField] private PlayerMover _playerMover;
         [SerializeField] private Animator _animator;
-        [SerializeField] private TrajectoryDrawer _trajectoryDrawer;
         [SerializeField] private BallThrower _ballThrower;
 
         private CinemachineVirtualCamera _virtualCamera;
         private PlayerStateMachine _stateMachine;
         private SceneConfig _sceneConfig;
-        public PlayerStateMachine StateMachine => _stateMachine ??= new PlayerStateMachine(this);
+        public PlayerStateMachine StateMachine => _stateMachine ??= new PlayerStateMachine(this); //TODO: methods
         public Animator Animator => _animator;
 
         public void EnableInputControlledBrain() =>
@@ -47,26 +48,24 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public void Initialize(Ball ball, Transform gameplayCamera, CinemachineVirtualCamera virtualCamera,
             SceneConfig sceneConfig)
         {
-            _ballThrower.SetBall(ball);
+            _ballThrower.Initialize(ball, gameplayCamera.GetComponent<Camera>()); // TODO: make it safe
             _inputControlledBrain.SetCamera(gameplayCamera.transform);
             _virtualCamera = virtualCamera;
             _virtualCamera.Follow = transform;
             _sceneConfig = sceneConfig;
-            _trajectoryDrawer.SetSimulationScene(sceneConfig.SimulationScene);
         }
 
         public void PrioritizeCamera()
         {
-            _virtualCamera.Priority = NumericConstants.CinemachineActualCameraOrder;
+            _virtualCamera.Prioritize();
         }
 
         public void FocusOnEnemyBasket()
         {
-            _virtualCamera.LookAt = _sceneConfig.EnemyBasket;
+            _virtualCamera.LookAt = _sceneConfig.EnemyRing.transform;
         }
 
         public void DeprioritizeCamera() =>
-            _virtualCamera.Priority = NumericConstants.CinemachineDefaultCameraOrder;
-
+            _virtualCamera.Deprioritize();
     }
 }

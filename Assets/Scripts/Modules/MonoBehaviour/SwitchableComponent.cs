@@ -1,7 +1,7 @@
 ﻿namespace Modules.MonoBehaviour
 {
     using MonoBehaviour = UnityEngine.MonoBehaviour;
-    public abstract class SwitchableComponent: MonoBehaviour
+    public abstract class SwitchableComponent: MonoBehaviour, ISwitchable
     {
         public void Enable()
         {

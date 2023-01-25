@@ -1,6 +1,6 @@
 ﻿namespace Infrastructure.ServiceManagement
 {
-    public class Services //TODO: cut all static
+    public class Services
     {
         private static Services _instance;
 

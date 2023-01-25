@@ -14,6 +14,8 @@ namespace Gameplay.Ball.MonoBehavior
         private bool _isGhost;
         public LiveData<Character> OwnerData => _ownerData;
 
+        public float Mass => _rigidBody.mass;
+
         public void SetOwner(Character owner)
         {
             TurnPhysicsOf();
@@ -30,7 +32,7 @@ namespace Gameplay.Ball.MonoBehavior
         {
             RemoveParent();
             TurnPhysicsOn();
-            _rigidBody.AddForce(velocity, ForceMode.Impulse);
+            _rigidBody.AddForce(velocity, ForceMode.VelocityChange);
         }
 
         public void StopRendering()

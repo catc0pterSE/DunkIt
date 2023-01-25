@@ -1,6 +1,6 @@
 ﻿namespace Modules.MonoBehaviour
 {
-    public class SwitchableMonoBehaviour: UnityEngine.MonoBehaviour
+    public class SwitchableMonoBehaviour: UnityEngine.MonoBehaviour, ISwitchable
     {
         public void Enable()
         {

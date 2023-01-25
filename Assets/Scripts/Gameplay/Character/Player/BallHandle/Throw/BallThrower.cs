@@ -1,45 +1,86 @@
-﻿using Infrastructure.Input;
+﻿using System;
+using Infrastructure.Factory;
+using Infrastructure.Input;
+using Infrastructure.Input.InputService;
 using Infrastructure.ServiceManagement;
 using Modules.MonoBehaviour;
 using UnityEngine;
+using Utility.Constants;
 
 namespace Gameplay.Character.Player.BallHandle.Throw
 {
     using Ball.MonoBehavior;
+
     public class BallThrower : SwitchableMonoBehaviour
     {
-        [SerializeField] private TrajectoryDrawer _trajectory;
-         
-        [SerializeField] private float _force = 20;
         [SerializeField] private Transform _ballPosition;
-        [SerializeField] private float _rotateSpeed = 50;
-
-        private Ball _ball;
+        [SerializeField] private TrajectoryDrawer _trajectoryDrawer;
+        [Range(0.1f, 10f)] [SerializeField] private float _flightTime;
+        [Range(0, 1000)] [SerializeField] private float _maxBallSpeed = 21;
+        
+        private Vector3 _destinationPoint;
+        private Camera _camera;
         private IInputService _inputService;
+        private Ball _ball;
 
         private IInputService InputService => _inputService ??= Services.Container.Single<IInputService>();
-        private Vector3 InputDirection => InputService.InputDirection;
 
-        public void SetBall(Ball ball) =>
-            _ball = ball;
-        
         private void Update()
         {
-            Aim();
-            _trajectory.SimulateTrajectory(_ballPosition.position, _ballPosition.forward * _force);
-            Trow();
+            SetDestination();
+            Vector3 launchVelocity = CalculateLaunchVelocity();
+            _trajectoryDrawer.Draw(_ballPosition.position, launchVelocity);
+            Throw(launchVelocity);
         }
 
-        private void Aim()
+        public void Initialize(Ball ball, Camera gameplayCamera)
         {
-            Vector3 rotateDirection = new Vector3(InputDirection.x, InputDirection.y, 0);
-            _ballPosition.transform.Rotate(-rotateDirection * (_rotateSpeed * Time.deltaTime));
+            _ball = ball;
+            _camera = gameplayCamera;
         }
 
-        private void Trow()
+        private void SetDestination()
         {
-            if (InputService.Clicked)
-                _ball.Throw(_ballPosition.forward * _force);
+            Ray ray = _camera.ScreenPointToRay(InputService.PointerPosition);
+
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                _destinationPoint = hit.point;
+            }
+        }
+
+        private Vector3 CalculateLaunchVelocity()
+        {
+            Vector3 toTarget = _destinationPoint - _ballPosition.transform.position;
+            float gSquared = Physics.gravity.sqrMagnitude;
+            float potentialEnergy = _maxBallSpeed * _maxBallSpeed + Vector3.Dot(toTarget, Physics.gravity);
+            float discriminant = potentialEnergy * potentialEnergy - gSquared * toTarget.sqrMagnitude;
+
+            if (discriminant < 0)
+            {
+                return Vector3.zero;
+            }
+
+            float discriminantRoot = Mathf.Sqrt(discriminant);
+            float maxFlightTime = Mathf.Sqrt((potentialEnergy + discriminantRoot) * NumericConstants.Two / gSquared);
+            float minFlightTime = Mathf.Sqrt((potentialEnergy - discriminantRoot) * NumericConstants.Two / gSquared);
+            _flightTime = Mathf.Clamp(_flightTime, minFlightTime, maxFlightTime);
+            
+            Vector3 velocity = toTarget / _flightTime - Physics.gravity * (_flightTime * NumericConstants.Half);
+
+            return velocity;
+        }
+
+        private void Throw(Vector3 velocity)
+        {
+            if (InputService.Clicked == false)
+                return;
+
+            Ball ball = Services.Container.Single<IGameObjectFactory>().CreateBall(); //TODO: this is for tests
+            ball.SetOwner(this.GetComponent<Character>());
+            ball.Throw(velocity);
+
+            // _ball.Throw(_ballPosition.forward * _force);
         }
     }
 }

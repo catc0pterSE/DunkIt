@@ -2,10 +2,11 @@
 using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
-using Gameplay.HUD;
 using Gameplay.StateMachine.States.Gameplay;
 using Infrastructure.Factory;
 using Infrastructure.ServiceManagement;
+using UI.HUD;
+using UI.HUD.Mobile;
 using Utility.Constants;
 
 namespace Gameplay.StateMachine.States.MinigameStates
@@ -27,7 +28,7 @@ namespace Gameplay.StateMachine.States.MinigameStates
             Referee referee,
             Ball ball,
             CinemachineBrain gameplayCamera,
-            GameplayHUD gameplayHUD,
+            IGameplayHUD gameplayHUD,
             GameplayLoopStateMachine gameplayLoopStateMachine
         ) : base
         (

@@ -1,8 +1,9 @@
 ﻿using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Cutscene;
-using Gameplay.HUD;
 using Modules.StateMachine;
+using UI.HUD;
+using UI.HUD.Mobile;
 using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.CutsceneStates
@@ -13,14 +14,14 @@ namespace Gameplay.StateMachine.States.CutsceneStates
     {
         private readonly PlayerFacade[] _playerTeam;
         private readonly EnemyFacade[] _enemyTeam;
-        private readonly GameplayHUD _gameplayHUD;
+        private readonly IGameplayHUD _gameplayHUD;
         private readonly ICutscene _cutscene;
 
         protected CutsceneState
         (
             PlayerFacade[] playerTeam,
             EnemyFacade[] enemyTeam,
-            GameplayHUD gameplayHUD,
+            IGameplayHUD gameplayHUD,
             ICutscene cutscene
         )
         {
