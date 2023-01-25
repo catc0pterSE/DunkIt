@@ -71,9 +71,6 @@ namespace Gameplay.StateMachine.States.Gameplay
                .Map(GiveUpControlOf);
 
             _currentControlledPlayer = player;
-            Debug.Log(_currentControlledPlayer);
-            Debug.Log(_currentControlledPlayer.StateMachine);
-            Debug.Log(_sceneConfig.EnemyRing.transform);
             _currentControlledPlayer.StateMachine.Enter<ControlledAttackState, Transform>(_sceneConfig.EnemyRing.transform);
         }
 
