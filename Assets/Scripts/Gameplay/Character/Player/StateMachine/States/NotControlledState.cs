@@ -5,18 +5,18 @@ namespace Gameplay.Character.Player.StateMachine.States
 {
     public class NotControlledState : IParameterlessState
     {
-        private readonly PlayerFacade _playerFacade;
+        private readonly MonoBehaviour.PlayerFacade _player;
 
-        public NotControlledState(PlayerFacade playerFacade)
+        public NotControlledState(MonoBehaviour.PlayerFacade player)
         {
-            _playerFacade = playerFacade;
+            _player = player;
         }
 
         public void Enter()
         {
-            _playerFacade.DisablePlayerMover();
-            _playerFacade.DisableInputControlledBrain();
-            _playerFacade.DisableAIControlledBrain();
+            _player.DisablePlayerMover();
+            _player.DisableInputControlledBrain();
+            _player.DisableAIControlledBrain();
         }
         
         public void Exit()

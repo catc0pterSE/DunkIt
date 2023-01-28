@@ -1,5 +1,6 @@
 ﻿using Cinemachine;
 using Gameplay.Ball.MonoBehavior;
+using Gameplay.Camera;
 using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
@@ -52,9 +53,9 @@ namespace Infrastructure.StateMachine.States
         {
             IGameplayHUD gameplayHUDView = SpawnHUD();
             SceneConfig sceneConfig = GameObject.FindObjectOfType<SceneConfig>();
-            CinemachineBrain camera = SpawnCamera();
+            CameraFacade camera = SpawnCamera();
             Ball ball = SpawnBall();
-            PlayerFacade[] playerTeam = SpawnPlayerTeam(camera.transform, ball, sceneConfig);
+            PlayerFacade[] playerTeam = SpawnPlayerTeam(camera.Camera, ball, sceneConfig);
             EnemyFacade[] enemyTeam = SpawnEnemyTeam();
             Referee referee = SpawnReferee();
 
@@ -65,7 +66,7 @@ namespace Infrastructure.StateMachine.States
             _gameStateMachine.Enter<GamePlayLoopState, GameplayLoopStateMachine>(gameplayLoopStateMachine);
         }
 
-        private PlayerFacade[] SpawnPlayerTeam(Transform camera, Ball ball, SceneConfig sceneConfig)
+        private PlayerFacade[] SpawnPlayerTeam(Camera camera, Ball ball, SceneConfig sceneConfig)
         {
             PlayerFacade[] playerTeam = new PlayerFacade[NumericConstants.PlayersInTeam];
 
@@ -100,7 +101,7 @@ namespace Infrastructure.StateMachine.States
             return referee;
         }
 
-        private CinemachineBrain SpawnCamera() =>
+        private CameraFacade SpawnCamera() =>
             _gameObjectFactory.CreateCamera();
 
 

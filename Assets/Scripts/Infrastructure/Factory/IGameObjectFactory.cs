@@ -1,5 +1,6 @@
 ﻿using Cinemachine;
 using Gameplay.Ball.MonoBehavior;
+using Gameplay.Camera;
 using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
@@ -18,7 +19,7 @@ namespace Infrastructure.Factory
         public Referee CreateReferee();
         public Ball CreateBall();
         public MobileGameplayHUD CreateMobileHUD();
-        public CinemachineBrain CreateCamera();
+        public CameraFacade CreateCamera();
         public LoadingCurtain CreateLoadingCurtain();
         public StartCutscene CreateStartCutscene();
         public CinemachineVirtualCamera CreateCinemachineVirtualCamera();

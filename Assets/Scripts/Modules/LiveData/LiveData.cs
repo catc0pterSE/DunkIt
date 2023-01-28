@@ -22,13 +22,12 @@ namespace Modules.LiveData
 
         private void OnChanged(T value)
         {
-            //_callbacks.Map(callback => callback(value));
             foreach (Action<T> callback in _callbacks)
             {
                 callback.Invoke(value);
             }
         }
-
+        
         public void Dispose()
         {
             _callbacks = null;

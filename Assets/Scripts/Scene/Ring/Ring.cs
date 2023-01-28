@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace Scene.Ring
 {
-    public class Ring: MonoBehaviour
+    public class Ring : MonoBehaviour
     {
-        [SerializeField] private float _goalTrackingWindowTime = 1f;
+        [SerializeField] private float _goalTrackingWindowTime = 3f;
         [SerializeField] private RingCap _cap;
         [SerializeField] private WinZone _winZone;
         [SerializeField] private CinemachineVirtualCamera _virtualCamera;
@@ -25,18 +25,19 @@ namespace Scene.Ring
 
         private void OnEnable()
         {
-            _cap.Pierced += OnCapPierced;
+            _cap.Entered += OnCapEntered;
         }
 
         private void OnDisable()
         {
-            _cap.Pierced -= OnCapPierced;
+            _cap.Entered -= OnCapEntered;
         }
 
-        private void OnCapPierced()
+        private void OnCapEntered()
         {
-            if (_listeningToWinZone!=null)
+            if (_listeningToWinZone != null)
                 StopCoroutine(_listeningToWinZone);
+            
             StartCoroutine(ListenToWinZone());
         }
 
@@ -49,6 +50,9 @@ namespace Scene.Ring
 
         private void ScoreGoal()
         {
+            if (_listeningToWinZone != null)
+                StopCoroutine(_listeningToWinZone);
+            
             Goal?.Invoke();
         }
     }

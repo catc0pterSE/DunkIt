@@ -20,20 +20,18 @@ namespace Infrastructure.Input.InputService
         public event Action ThrowButtonPressed;
         public event Action PassButtonPressed;
         public event Action DunkButtonPressed;
+        public event Action ChangePlayerButtonPressed;
 
-        public void OnUIThrowButtonClicked()
-        {
+        public void OnUIThrowButtonClicked() =>
             ThrowButtonPressed?.Invoke();
-        }
 
-        public void OnUIPassButtonClicked()
-        {
+        public void OnUIPassButtonClicked() =>
             PassButtonPressed?.Invoke();
-        }
 
-        public void OnUIDunkButtonClicked()
-        {
+        public void OnUIDunkButtonClicked() =>
             DunkButtonPressed?.Invoke();
-        }
+
+        public void OnUIChangePlayerButtonClicked() =>
+            ChangePlayerButtonPressed?.Invoke();
     }
 }

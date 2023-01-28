@@ -8,14 +8,14 @@ namespace Gameplay.Character.Player.StateMachine
 {
     public class PlayerStateMachine : Modules.StateMachine.StateMachine
     {
-        public PlayerStateMachine(PlayerFacade playerFacade)
+        public PlayerStateMachine(PlayerFacade player)
         {
             States = new Dictionary<Type, IState>()
             {
-                [typeof(ControlledAttackState)] = new ControlledAttackState(playerFacade),
-                [typeof(ControlledDefenceState)] = new ControlledDefenceState(playerFacade),
-                [typeof(AIControlledState)] = new AIControlledState(playerFacade), 
-                [typeof(NotControlledState)] = new NotControlledState(playerFacade)
+                [typeof(ControlledAttackState)] = new ControlledAttackState(player),
+                [typeof(ControlledDefenceState)] = new ControlledDefenceState(player),
+                [typeof(AIControlledState)] = new AIControlledState(player), 
+                [typeof(NotControlledState)] = new NotControlledState(player)
             };
         }
     }

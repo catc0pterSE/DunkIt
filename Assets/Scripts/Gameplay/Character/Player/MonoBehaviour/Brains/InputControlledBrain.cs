@@ -31,7 +31,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.Brains
                 _playerMover.Move(GetCameraRelativeDirection());
         }
 
-        public void SetCamera(Transform gameplayCamera)
+        public void Initialize(Transform gameplayCamera)
         {
             _gameplayCamera = gameplayCamera;
         }

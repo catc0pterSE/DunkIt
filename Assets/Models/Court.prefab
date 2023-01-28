@@ -977,22 +977,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerRing
       objectReference: {fileID: 0}
-    - target: {fileID: 3682460246632240745, guid: 275836ae967f7f34493868e1c33e0ad9, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.667748
-      objectReference: {fileID: 0}
-    - target: {fileID: 3682460246632240745, guid: 275836ae967f7f34493868e1c33e0ad9, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.25117284
-      objectReference: {fileID: 0}
-    - target: {fileID: 3682460246632240745, guid: 275836ae967f7f34493868e1c33e0ad9, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.65586746
-      objectReference: {fileID: 0}
-    - target: {fileID: 3682460246632240745, guid: 275836ae967f7f34493868e1c33e0ad9, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.24670398
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 275836ae967f7f34493868e1c33e0ad9, type: 3}
 --- !u!114 &5498443330463483895 stripped

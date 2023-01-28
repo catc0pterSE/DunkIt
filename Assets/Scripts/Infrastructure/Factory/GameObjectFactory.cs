@@ -1,6 +1,7 @@
 ﻿using System;
 using Cinemachine;
 using Gameplay.Ball.MonoBehavior;
+using Gameplay.Camera;
 using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
@@ -62,13 +63,13 @@ namespace Infrastructure.Factory
 
         public MobileGameplayHUD CreateMobileHUD()
         {
-            return _assetProvider.Instantiate(ResourcesPathes.HUDPath).GetComponent<MobileGameplayHUD>()
+            return _assetProvider.Instantiate(ResourcesPathes.MobileHUDPath).GetComponent<MobileGameplayHUD>()
                    ?? throw new NullReferenceException("No GameplayHUD script on GameplayHUD prefab");
         }
 
-        public CinemachineBrain CreateCamera()
+        public CameraFacade CreateCamera()
         {
-            return _assetProvider.Instantiate(ResourcesPathes.CameraPath).GetComponent<CinemachineBrain>()
+            return _assetProvider.Instantiate(ResourcesPathes.CameraPath).GetComponent<CameraFacade>()
                 ??  throw new NullReferenceException("No CameraFacade script on Camera prefab");
         }
 

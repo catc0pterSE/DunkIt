@@ -8,5 +8,6 @@ namespace Infrastructure.Input
         public void OnUIThrowButtonClicked();
         public void OnUIPassButtonClicked();
         public void OnUIDunkButtonClicked();
+        public void OnUIChangePlayerButtonClicked();
     }
 }

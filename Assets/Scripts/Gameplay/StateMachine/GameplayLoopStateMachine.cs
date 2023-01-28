@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Cinemachine;
+using Gameplay.Camera;
 using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
@@ -11,7 +11,6 @@ using Infrastructure.CoroutineRunner;
 using Infrastructure.StateMachine;
 using Scene;
 using UI.HUD;
-using UI.HUD.Mobile;
 
 namespace Gameplay.StateMachine
 {
@@ -23,7 +22,7 @@ namespace Gameplay.StateMachine
         public GameplayLoopStateMachine(PlayerFacade[] playerTeam,
             EnemyFacade[] enemyTeam,
             Referee referee,
-            CinemachineBrain camera,
+            CameraFacade camera,
             IGameplayHUD gameplayHUD,
             Ball ball,
             SceneConfig sceneConfig,
@@ -32,9 +31,9 @@ namespace Gameplay.StateMachine
         {
             States = new Dictionary<Type, IState>
             {
-                [typeof(StartCutsceneState)] = new StartCutsceneState(playerTeam, enemyTeam, referee, camera, ball, gameplayHUD, this),
-                [typeof(JumpBallState)] = new JumpBallState(playerTeam, enemyTeam, referee, ball, camera, gameplayHUD, this),
-                [typeof(GameplayState)] = new GameplayState(playerTeam, ball, gameplayHUD, sceneConfig)
+                [typeof(StartCutsceneState)] = new StartCutsceneState(playerTeam, enemyTeam, referee, camera.CinemachineBrain, ball, gameplayHUD, this),
+                [typeof(JumpBallState)] = new JumpBallState(playerTeam, enemyTeam, referee, ball, camera.CinemachineBrain, gameplayHUD, this),
+                [typeof(GameplayState)] = new GameplayState(playerTeam, ball, gameplayHUD)
             };
         }
 

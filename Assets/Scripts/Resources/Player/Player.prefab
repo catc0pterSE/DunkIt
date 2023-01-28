@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 5250586742983876560}
   - component: {fileID: 4538433228081721433}
   - component: {fileID: 4157564897576991621}
+  - component: {fileID: -8693731189481653844}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -118,6 +119,7 @@ MonoBehaviour:
   _playerMover: {fileID: 3567767349144517149}
   _animator: {fileID: 5437166744856396153}
   _ballThrower: {fileID: 5250586742983876560}
+  _distanceTracker: {fileID: -8693731189481653844}
 --- !u!95 &5437166744856396153
 Animator:
   serializedVersion: 4
@@ -153,7 +155,8 @@ MonoBehaviour:
   _ballPosition: {fileID: 4042918883656718937}
   _trajectoryDrawer: {fileID: 4538433228081721433}
   _flightTime: 0.1
-  _maxBallSpeed: 19
+  _maxBallSpeed: 15
+  _ballLandingEffect: {fileID: 1925459951755429354, guid: b426b8b761f3e4e42a75a3cce32be7b9, type: 3}
 --- !u!114 &4538433228081721433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,6 +282,20 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &-8693731189481653844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919622327166402665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51da209d7df5422aaa9b04b80568ae84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxThrowDistance: 14
+  _maxDunkDistance: 5
 --- !u!1 &4042918882263731115
 GameObject:
   m_ObjectHideFlags: 0

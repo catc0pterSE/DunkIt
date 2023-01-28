@@ -8,7 +8,7 @@
         public const string BallPath = "Essentials/Ball/Ball";
         public const string CameraPath = "Camera/Camera";
         public const string LoadingCurtainPath = "UI/LoadingCurtain/LoadingCurtain";
-        public const string HUDPath = "UI/HUD/HUD";
+        public const string MobileHUDPath = "UI/HUD/MobileHUD";
         public const string StartCutscenePath = "Cutscene/StartCutscene/StartCutscene";
         public const string CinemachineVirtualCamera = "Cinemachine/CinemachineVirtualCamera";
         public const string JumpBallMinigamePath = "UI/Minigames/JumpBall";

@@ -5,25 +5,25 @@ namespace Gameplay.Character.Player.StateMachine.States
 {
     public class AIControlledState : IParameterlessState
     {
-        private readonly PlayerFacade _playerFacade;
+        private readonly MonoBehaviour.PlayerFacade _player;
 
-        public AIControlledState(PlayerFacade playerFacade)
+        public AIControlledState(MonoBehaviour.PlayerFacade player)
         {
-            _playerFacade = playerFacade;
+            _player = player;
         }
 
         public void Enter()
         {
-            _playerFacade.EnableAIControlledBrain();
-            _playerFacade.EnablePlayerMover();
-            _playerFacade.DeprioritizeCamera();
+            _player.EnableAIControlledBrain();
+            _player.EnablePlayerMover();
+            _player.DeprioritizeCamera();
         }
 
 
         public void Exit()
         {
-            _playerFacade.DisableAIControlledBrain();
-            _playerFacade.DisablePlayerMover();
+            _player.DisableAIControlledBrain();
+            _player.DisablePlayerMover();
         }
             
     }

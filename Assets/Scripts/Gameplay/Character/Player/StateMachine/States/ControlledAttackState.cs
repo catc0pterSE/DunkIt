@@ -1,34 +1,30 @@
 ﻿using Gameplay.Character.Player.MonoBehaviour;
 using Modules.StateMachine;
-using UnityEngine;
 
 namespace Gameplay.Character.Player.StateMachine.States
 {
-    public class ControlledAttackState : IParameterState<Transform>
+    public class ControlledAttackState : IParameterlessState
     {
-        private readonly PlayerFacade _playerFacade;
+        private readonly PlayerFacade _player;
 
-        public ControlledAttackState(PlayerFacade playerFacade)
+        public ControlledAttackState(PlayerFacade player)
         {
-            _playerFacade = playerFacade;
+            _player = player;
         }
 
-        public void Enter(Transform lookTarget)
+        public void Enter()
         {
-            _playerFacade.EnableInputControlledBrain();
-            _playerFacade.EnablePlayerMover();
-            _playerFacade.PrioritizeCamera();
-            _playerFacade.FocusOnEnemyBasket();
+            _player.EnableInputControlledBrain();
+            _player.EnablePlayerMover();
+            _player.PrioritizeCamera();
+            _player.FocusOnEnemyBasket();
         }
-
-
+        
         public void Exit()
         {
-            _playerFacade.DisablePlayerMover();
-            _playerFacade.DisableInputControlledBrain();
-            _playerFacade.DeprioritizeCamera();
+            _player.DisablePlayerMover();
+            _player.DisableInputControlledBrain();
+            _player.DeprioritizeCamera();
         }
-            
-        
     }
 }

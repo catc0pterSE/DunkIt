@@ -31,7 +31,7 @@ namespace Modules.StateMachine
             if (state == null)
                 return false;
 
-            if (_currentState == state)
+            if (state is IParameterlessState && _currentState == state)
                 return false;
 
             ExitCurrentState();

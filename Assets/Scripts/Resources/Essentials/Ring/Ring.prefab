@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4133a67badf54fc8b77f99e159e3c56b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _goalTrackingWindowTime: 1
+  _goalTrackingWindowTime: 2
   _cap: {fileID: 1074153103028192562}
   _winZone: {fileID: 5336965914829053661}
   _virtualCamera: {fileID: 9043353667573813656}
@@ -134,7 +134,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5983964723017218757}
-  m_LocalRotation: {x: 0.2511728, y: 0.6558675, z: -0.24670403, w: 0.6677479}
+  m_LocalRotation: {x: 0.25117284, y: 0.65586746, z: -0.24670398, w: 0.667748}
   m_LocalPosition: {x: -5.96, y: 8.92648, z: -0.107}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -287,7 +287,7 @@ GameObject:
   - component: {fileID: 740543712632429666}
   - component: {fileID: 7261331497034369106}
   - component: {fileID: 1074153103028192562}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -317,7 +317,7 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7261331497034369107}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 4
   m_Convex: 1
@@ -335,4 +335,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed76539e6da66ef42bbd031f6c27e4d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _collider: {fileID: 7261331497034369106}

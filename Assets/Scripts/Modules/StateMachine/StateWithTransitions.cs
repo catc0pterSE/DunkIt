@@ -9,15 +9,11 @@
             _transitions = transitions;
         }
 
-        public virtual void Enter()
-        {
+        public virtual void Enter() =>
             EnableTransitions();
-        }
-        
-        public virtual void Exit()
-        {
+
+        public virtual void Exit() =>
             DisableTransitions();
-        }
 
         private void EnableTransitions()
         {

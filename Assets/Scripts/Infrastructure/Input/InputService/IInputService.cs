@@ -16,5 +16,7 @@ namespace Infrastructure.Input.InputService
         public event Action PassButtonPressed;
 
         public event Action DunkButtonPressed;
+        
+        public event Action ChangePlayerButtonPressed;
     }
 }

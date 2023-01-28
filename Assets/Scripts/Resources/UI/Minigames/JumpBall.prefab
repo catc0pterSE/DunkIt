@@ -785,7 +785,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _slider: {fileID: 5633335622611698938}
-  _speed: 1
+  _speed: 0.5
   _handle: {fileID: 5633335621603474270}
 --- !u!1 &5633335622611698884
 GameObject:
