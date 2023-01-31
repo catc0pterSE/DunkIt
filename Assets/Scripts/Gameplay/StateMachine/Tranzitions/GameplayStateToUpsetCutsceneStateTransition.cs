@@ -67,12 +67,6 @@ namespace Gameplay.StateMachine.Tranzitions
         private void UnsubscribeFromEnemies()=>
             _enemyTeam.Map(enemy => enemy.BallThrown -= OnEnemyThrownBall);
 
-        private void SubscribeOnEnemyRing() =>
-            _enemyRing.Goal += OnGoalScored;
-
-        private void UnsubscribeFromEnemyRing()=>
-            _enemyRing.Goal -= OnGoalScored;
-
         private void OnEnemyThrownBall()
         {
             StopGoalTracking();
@@ -86,6 +80,12 @@ namespace Gameplay.StateMachine.Tranzitions
             UnsubscribeFromEnemyRing();
             OnThrowFailed();
         }
+
+        private void SubscribeOnEnemyRing() =>
+            _enemyRing.Goal += OnGoalScored;
+
+        private void UnsubscribeFromEnemyRing()=>
+            _enemyRing.Goal -= OnGoalScored;
 
         private void OnThrowFailed()
         {

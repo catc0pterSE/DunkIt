@@ -11,6 +11,7 @@
         public const string MobileHUDPath = "UI/HUD/MobileHUD";
         public const string StartCutscenePath = "Cutscene/StartCutscene/StartCutscene";
         public const string CinemachineVirtualCamera = "Cinemachine/CinemachineVirtualCamera";
-        public const string JumpBallMinigamePath = "UI/Minigames/JumpBall";
+        public const string JumpBallMinigamePath = "Minigames/JumpBall";
+        public const string ThrowMinigamePath = "Minigames/Throw";
     }
 }

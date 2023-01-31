@@ -6,6 +6,7 @@ using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Cutscene;
 using Gameplay.Minigame.JumpBall;
+using Gameplay.Minigame.Throw;
 using Infrastructure.ServiceManagement;
 using UI;
 using UI.HUD.Mobile;
@@ -24,5 +25,7 @@ namespace Infrastructure.Factory
         public StartCutscene CreateStartCutscene();
         public CinemachineVirtualCamera CreateCinemachineVirtualCamera();
         public JumpBallMinigame CreateJumpBallMinigame();
+
+        public ThrowMinigame CreateThrowMinigame();
     }
 }

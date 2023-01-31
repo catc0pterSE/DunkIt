@@ -3,12 +3,12 @@
     using MonoBehaviour = UnityEngine.MonoBehaviour;
     public abstract class SwitchableComponent: MonoBehaviour, ISwitchable
     {
-        public void Enable()
+        public virtual void Enable()
         {
             enabled = true;
         }
 
-        public void Disable()
+        public virtual void Disable()
         {
             enabled = false;
         }

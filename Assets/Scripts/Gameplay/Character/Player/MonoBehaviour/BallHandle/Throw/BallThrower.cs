@@ -17,7 +17,9 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
         [Range(0.1f, 10f)] [SerializeField] private float _flightTime;
         [Range(0, 1000)] [SerializeField] private float _maxBallSpeed = 14;
         [SerializeField] private BallLandingEffect _ballLandingEffect;
-
+        [SerializeField] private float _curveChangingSpeed = 8;
+        [SerializeField] private LayerMask _raycastTargetLayerMask;
+        
         private Vector3 _destinationPoint;
         private Camera _camera;
         private IInputService _inputService;
@@ -51,6 +53,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
             {
                 EnableLandingEffect();
                 Vector3 launchVelocity = CalculateLaunchVelocity();
+                AdjustFlyingTime();
                 _trajectoryDrawer.Draw(_ballPosition.position, launchVelocity);
                 Throw(launchVelocity);
             }
@@ -66,11 +69,18 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
             _camera = gameplayCamera;
         }
 
+        private void AdjustFlyingTime()
+        {
+            _flightTime += InputService.ThrowCurve*_curveChangingSpeed;
+        }
+
         private bool TrySetDestination()
         {
             Ray ray = _camera.ScreenPointToRay(InputService.PointerPosition);
 
-            if (Physics.Raycast(ray, out RaycastHit hit))
+            bool isOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+            
+            if (Physics.Raycast(ray,  out RaycastHit hit,Single.PositiveInfinity, _raycastTargetLayerMask) && isOverUI == false)
             {
                 _destinationPoint = hit.point;
                 _ballLandingEffect.Settle(hit);

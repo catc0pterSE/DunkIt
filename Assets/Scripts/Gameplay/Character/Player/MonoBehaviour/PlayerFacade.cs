@@ -93,9 +93,6 @@ namespace Gameplay.Character.Player.MonoBehaviour
 
         public void PrioritizeCamera() =>
             _virtualCamera.Prioritize();
-
-        public void DeprioritizeCamera() =>
-            _virtualCamera.Deprioritize();
         
         public void FocusOnEnemyBasket() =>
             _virtualCamera.LookAt = _sceneConfig.EnemyRing.transform;

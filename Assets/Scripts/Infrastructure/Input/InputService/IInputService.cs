@@ -10,6 +10,8 @@ namespace Infrastructure.Input.InputService
         public bool Clicked { get; }
 
         public Vector3 PointerPosition { get; }
+        
+        public float ThrowCurve { get; }
 
         public event Action ThrowButtonPressed;
 

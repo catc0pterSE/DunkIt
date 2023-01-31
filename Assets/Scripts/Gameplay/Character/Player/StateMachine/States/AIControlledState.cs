@@ -16,7 +16,6 @@ namespace Gameplay.Character.Player.StateMachine.States
         {
             _player.EnableAIControlledBrain();
             _player.EnablePlayerMover();
-            _player.DeprioritizeCamera();
         }
 
 

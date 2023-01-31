@@ -12,7 +12,6 @@ namespace Gameplay.StateMachine.States.CutsceneStates
 
         public void Enter()
         {
-            Debug.Log("Celebrate cutscene state");
         }
     }
 }

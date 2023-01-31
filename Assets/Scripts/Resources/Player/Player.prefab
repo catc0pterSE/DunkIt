@@ -159,6 +159,10 @@ MonoBehaviour:
   _flightTime: 0.1
   _maxBallSpeed: 15
   _ballLandingEffect: {fileID: 1925459951755429354, guid: b426b8b761f3e4e42a75a3cce32be7b9, type: 3}
+  _curveChangingSpeed: 8
+  _raycastTargetLayerMask:
+    serializedVersion: 2
+    m_Bits: 96
 --- !u!114 &4538433228081721433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,7 +180,7 @@ MonoBehaviour:
   _maxLineRendererPoints: 1000
   _lineStopperLayerMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 192
 --- !u!120 &4157564897576991621
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -297,7 +301,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxThrowDistance: 14
   _maxDunkDistance: 5
-  _maxPassDistance: 0
+  _maxPassDistance: 8
 --- !u!1 &4042918882263731115
 GameObject:
   m_ObjectHideFlags: 0

@@ -24,7 +24,6 @@ namespace Gameplay.Character.Player.StateMachine.States
         {
             _player.DisablePlayerMover();
             _player.DisableInputControlledBrain();
-            _player.DeprioritizeCamera();
         }
     }
 }

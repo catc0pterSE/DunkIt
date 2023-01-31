@@ -5,17 +5,20 @@ namespace Infrastructure.Input.InputService
 {
     public class MobileInputService : IInputService, IUIInputController
     {
-        private const string Horizontal = "Horizontal";
-        private const string Vertical = "Vertical";
+        private const string HorizontalAxisName = "Horizontal";
+        private const string VerticalAxisName = "Vertical";
+        private const string ThrowCurveAxisName = "ThrowCurve";
 
         public Vector2 InputDirection => new Vector2
         (
-            SimpleInput.GetAxis(Horizontal),
-            SimpleInput.GetAxis(Vertical)
+            SimpleInput.GetAxis(HorizontalAxisName),
+            SimpleInput.GetAxis(VerticalAxisName)
         );
 
         public bool Clicked => SimpleInput.GetMouseButtonDown(0);
         public Vector3 PointerPosition => UnityEngine.Input.mousePosition;
+
+        public float ThrowCurve => SimpleInput.GetAxis(ThrowCurveAxisName);
 
         public event Action ThrowButtonPressed;
         public event Action PassButtonPressed;
