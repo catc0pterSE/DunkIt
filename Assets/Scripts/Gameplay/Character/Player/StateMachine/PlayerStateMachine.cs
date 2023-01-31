@@ -12,10 +12,11 @@ namespace Gameplay.Character.Player.StateMachine
         {
             States = new Dictionary<Type, IState>()
             {
-                [typeof(ControlledAttackState)] = new ControlledAttackState(player),
-                [typeof(ControlledDefenceState)] = new ControlledDefenceState(player),
+                [typeof(InputControlledAttackState)] = new InputControlledAttackState(player),
+                [typeof(InputControlledDefenceState)] = new InputControlledDefenceState(player),
                 [typeof(AIControlledState)] = new AIControlledState(player), 
-                [typeof(NotControlledState)] = new NotControlledState(player)
+                [typeof(NotControlledState)] = new NotControlledState(player),
+                [typeof(ThrowState)] = new ThrowState(player)
             };
         }
     }

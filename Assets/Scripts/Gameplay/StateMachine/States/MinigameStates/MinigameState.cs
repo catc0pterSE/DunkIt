@@ -8,7 +8,7 @@ using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.MinigameStates
 {
-    public abstract class MinigameState : IParameterlessState
+    public abstract class MinigameState 
     {
         private readonly PlayerFacade[] _playerTeam;
         private readonly EnemyFacade[] _enemyTeam;

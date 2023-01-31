@@ -1,4 +1,5 @@
-﻿using Modules.MonoBehaviour;
+﻿using System;
+using Modules.MonoBehaviour;
 using UnityEngine;
 
 namespace Gameplay.Character
@@ -9,14 +10,14 @@ namespace Gameplay.Character
     {
         [SerializeField] private Transform _ballPosition;
 
-        private bool _ownsBall;
+        public bool OwnsBall { get; private set; }
 
         public Transform BallPosition => _ballPosition;
 
-        public void TakeBall() =>
-            _ownsBall = true;
+        public virtual void TakeBall() =>
+            OwnsBall = true;
 
-        public void LoseBall() =>
-            _ownsBall = false;
+        public virtual void LoseBall() =>
+            OwnsBall = false;
     }
 }

@@ -11,5 +11,18 @@ namespace Utility.Extensions
             foreach (var item in array)
                 function(item);
         }
+
+
+        public static T FindFirstOrNull<T>(this IEnumerable<T> array, Func<T, bool> prediction) where T : class
+        {
+            if (array.GetEnumerator().MoveNext() == false)
+                return null;
+
+            foreach (T item in array)
+                if (prediction(item))
+                    return item;
+
+            return null;
+        }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 namespace Scene.Ring
 {
@@ -37,7 +38,7 @@ namespace Scene.Ring
         {
             if (_listeningToWinZone != null)
                 StopCoroutine(_listeningToWinZone);
-            
+
             StartCoroutine(ListenToWinZone());
         }
 
@@ -52,7 +53,7 @@ namespace Scene.Ring
         {
             if (_listeningToWinZone != null)
                 StopCoroutine(_listeningToWinZone);
-            
+
             Goal?.Invoke();
         }
     }

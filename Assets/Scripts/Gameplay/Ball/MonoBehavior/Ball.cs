@@ -1,53 +1,48 @@
-﻿using Modules.LiveData;
+﻿using System;
 using UnityEngine;
+using Utility.Extensions;
 
 namespace Gameplay.Ball.MonoBehavior
 {
-    using Character;
-
     public class Ball : MonoBehaviour
     {
         [SerializeField] private Rigidbody _rigidBody;
-        [SerializeField] private MeshRenderer[] _renderers;
 
-        private readonly MutableLiveData<Character> _ownerData = new MutableLiveData<Character>();
-        private bool _isGhost;
-        public LiveData<Character> OwnerData => _ownerData;
+        private Character.Character _owner;
 
-        public float Mass => _rigidBody.mass;
-
-        public void SetOwner(Character owner)
+        public event Action<Character.Character> OwnerChanged;
+     
+        public void SetOwner(Character.Character owner)
         {
             TurnPhysicsOf();
-
-            if (_ownerData.Value != null)
-                _ownerData.Value.LoseBall();
-            
-            transform.SetParent(owner.BallPosition.transform, false);
+            RemoveOwner();
+            transform.Reset(false);
+            SetParent(owner.BallPosition);
             owner.TakeBall();
-            _ownerData.Value = owner;
+            _owner = owner;
+            OwnerChanged?.Invoke(_owner);
         }
-
+        
         public void Throw(Vector3 velocity)
         {
-            RemoveParent();
+            RemoveOwner();
             TurnPhysicsOn();
             _rigidBody.AddForce(velocity, ForceMode.VelocityChange);
         }
 
-        public void StopRendering()
+        private void SetParent(Transform parent)
         {
-            foreach (MeshRenderer meshRenderer in _renderers)
-                meshRenderer.enabled = false;
+            transform.SetParent(parent, false);
         }
 
-        public void ZeroVelocity() =>
-            _rigidBody.velocity = Vector3.zero;
-
-        private void RemoveParent()
+        private void RemoveOwner()
         {
-            transform.parent = null;
-            _ownerData.Value = null;
+            if (_owner!= null)
+                _owner.LoseBall();
+
+            _owner = null;
+            
+            OwnerChanged?.Invoke(_owner);
         }
 
         private void TurnPhysicsOn() =>

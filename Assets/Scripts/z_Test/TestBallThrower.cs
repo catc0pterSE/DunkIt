@@ -1,6 +1,6 @@
 ﻿using Gameplay.Ball.MonoBehavior;
 using Gameplay.Character;
-using Gameplay.Character.Player.BallHandle.Throw;
+using Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw;
 using Infrastructure.Factory;
 using Infrastructure.Input;
 using Infrastructure.Input.InputService;

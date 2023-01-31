@@ -1,13 +1,17 @@
+using System;
 using System.Collections;
+using Modules.MonoBehaviour;
 using UnityEngine;
+using Utility.Constants;
 
 namespace UI
 {
-    public class LoadingCurtain : MonoBehaviour
+    public class LoadingCurtain : SwitchableMonoBehaviour
     {
         [SerializeField] private CanvasGroup _curtain;
-        
-        private const float FadingStep = 0.005f;
+        [SerializeField] private GameObject _text;
+        [SerializeField] private float _fadingStep = 0.01f;
+
         private float _defaultCurtainAlpha;
         private Coroutine _fadeJob;
 
@@ -17,30 +21,59 @@ namespace UI
             _defaultCurtainAlpha = _curtain.alpha;
         }
 
+        private void OnEnable()
+        {
+            _text.SetActive(true);
+        }
+
         public void Show()
         {
-            gameObject.SetActive(true);
+            Enable();
             _curtain.alpha = _defaultCurtainAlpha;
         }
 
-        public void Hide()
+        public void FadeInFadeOut(Action callback = null, bool withText = false)
         {
-            if (_fadeJob !=null)
-                StopCoroutine(_fadeJob);
+            Enable();
 
-            _fadeJob = StartCoroutine(FadeIn());
-            
+            if (withText == false)
+                _text.SetActive(false);
+
+            callback += FadeOut;
+            FadeIn(callback);
         }
 
-        private IEnumerator FadeIn()
+        public void FadeIn(Action callback=null)
         {
-            while (_curtain.alpha>0)
+            Enable();
+
+            if (_fadeJob != null)
+                StopCoroutine(_fadeJob);
+
+            _fadeJob = StartCoroutine(Fade(0, _defaultCurtainAlpha, callback));
+        }
+
+        public void FadeOut()
+        {
+            Enable();
+
+            if (_fadeJob != null)
+                StopCoroutine(_fadeJob);
+
+            _fadeJob = StartCoroutine(Fade(_defaultCurtainAlpha, 0, Disable));
+        }
+
+        private IEnumerator Fade(float startAlpha, float targetAlpha, Action callback = null)
+        {
+            _curtain.alpha = startAlpha;
+
+            while (Math.Abs(_curtain.alpha - targetAlpha) > NumericConstants.MinimalDelta)
             {
-                _curtain.alpha -= FadingStep;
+                _curtain.alpha = Mathf.MoveTowards(_curtain.alpha, targetAlpha, _fadingStep);
                 yield return null;
             }
-            
-            gameObject.SetActive(false);
+
+            callback?.Invoke();
         }
     }
 }

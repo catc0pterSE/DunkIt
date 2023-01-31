@@ -46,7 +46,7 @@ namespace Infrastructure.StateMachine.States
 
         public void Exit()
         {
-            LoadingCurtain.Hide();
+            LoadingCurtain.FadeOut();
         }
 
         private void OnLoaded()
@@ -60,7 +60,7 @@ namespace Infrastructure.StateMachine.States
             Referee referee = SpawnReferee();
 
             GameplayLoopStateMachine gameplayLoopStateMachine =
-                new GameplayLoopStateMachine(playerTeam, enemyTeam, referee, camera, gameplayHUDView, ball, sceneConfig,
+                new GameplayLoopStateMachine(playerTeam, enemyTeam, referee, camera, gameplayHUDView, ball, sceneConfig, LoadingCurtain,
                     _coroutineRunner, _gameStateMachine);
 
             _gameStateMachine.Enter<GamePlayLoopState, GameplayLoopStateMachine>(gameplayLoopStateMachine);
@@ -68,20 +68,18 @@ namespace Infrastructure.StateMachine.States
 
         private PlayerFacade[] SpawnPlayerTeam(Camera camera, Ball ball, SceneConfig sceneConfig)
         {
+            PlayerFacade primaryPlayer = _gameObjectFactory.CreatePlayer();
+            PlayerFacade secondaryPlayer = _gameObjectFactory.CreatePlayer();
+            primaryPlayer.Initialize(secondaryPlayer, ball, camera, SpawnVirtualCamera(), sceneConfig);
+            secondaryPlayer.Initialize(primaryPlayer, ball, camera, SpawnVirtualCamera(), sceneConfig);
+            
             PlayerFacade[] playerTeam = new PlayerFacade[NumericConstants.PlayersInTeam];
-
-            for (int i = 0; i < playerTeam.Length; i++)
-            {
-                PlayerFacade player = _gameObjectFactory.CreatePlayer().GetComponent<PlayerFacade>();
-                CinemachineVirtualCamera virtualCamera = SpawnVirtualCamera();
-                player.Initialize(ball, camera, virtualCamera, sceneConfig);
-
-                playerTeam[i] = player;
-            }
-
+            playerTeam[NumericConstants.PrimaryTeamMemberIndex] = primaryPlayer;
+            playerTeam[NumericConstants.SecondaryTeamMemberIndex] = secondaryPlayer;
             return playerTeam;
         }
 
+        
         private EnemyFacade[] SpawnEnemyTeam()
         {
             EnemyFacade[] enemyTeam = new EnemyFacade[NumericConstants.PlayersInTeam];

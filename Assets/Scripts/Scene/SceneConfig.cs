@@ -6,10 +6,14 @@ namespace Scene
     {
         [SerializeField] private Ring.Ring _playerRing;
         [SerializeField] private Ring.Ring _enemyRing;
-        
-        public Ring.Ring PlayerBasket => _playerRing;
+        [SerializeField] private Transform _enemyDropBallPoint;
+        [SerializeField] private Transform _playerDropBallPoint;
+
+        public Ring.Ring PlayerRing => _playerRing;
         public Ring.Ring EnemyRing => _enemyRing;
-        
-        
+
+        public Transform EnemyDropBallPoint => _enemyDropBallPoint;
+
+        public Transform PlayerDropBallPoint => _playerDropBallPoint;
     }
 }

@@ -2,6 +2,7 @@
 {
     public static class NumericConstants
     {
+        public const float BallTrackingSeconds = 5;
         public const int PlayersInTeam = 2;
         public const int CinemachineActualCameraOrder = 15;
         public const int CinemachineDefaultCameraOrder = 10;

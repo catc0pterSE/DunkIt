@@ -10,6 +10,7 @@ using Gameplay.StateMachine.States.MinigameStates;
 using Infrastructure.CoroutineRunner;
 using Infrastructure.StateMachine;
 using Scene;
+using UI;
 using UI.HUD;
 
 namespace Gameplay.StateMachine
@@ -26,6 +27,7 @@ namespace Gameplay.StateMachine
             IGameplayHUD gameplayHUD,
             Ball ball,
             SceneConfig sceneConfig,
+            LoadingCurtain loadingCurtain,
             ICoroutineRunner coroutineRunner,
             GameStateMachine gameStateMachine)
         {
@@ -33,7 +35,12 @@ namespace Gameplay.StateMachine
             {
                 [typeof(StartCutsceneState)] = new StartCutsceneState(playerTeam, enemyTeam, referee, camera.CinemachineBrain, ball, gameplayHUD, this),
                 [typeof(JumpBallState)] = new JumpBallState(playerTeam, enemyTeam, referee, ball, camera.CinemachineBrain, gameplayHUD, this),
-                [typeof(GameplayState)] = new GameplayState(playerTeam, ball, gameplayHUD)
+                [typeof(GameplayState)] = new GameplayState(playerTeam, enemyTeam, ball, sceneConfig, gameplayHUD, this, loadingCurtain, coroutineRunner),
+                [typeof(DunkState)] = new DunkState(),
+                [typeof(ThrowState)] = new ThrowState(sceneConfig, this, enemyTeam, ball, coroutineRunner, loadingCurtain),
+                [typeof(BallContestState)] = new BallContestState(),
+                [typeof(CelebrateCutsceneState)] = new CelebrateCutsceneState(),
+                [typeof(UpsetCutsceneState)] = new UpsetCutsceneState()
             };
         }
 

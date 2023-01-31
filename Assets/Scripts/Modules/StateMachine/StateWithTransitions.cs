@@ -1,13 +1,8 @@
 ﻿namespace Modules.StateMachine
 {
-    public abstract class StateWithTransitions : IParameterlessState
+    public abstract class StateWithTransitions
     {
-        private readonly ITransition[] _transitions;
-
-        protected StateWithTransitions(ITransition[] transitions)
-        {
-            _transitions = transitions;
-        }
+        protected ITransition[] Transitions;
 
         public virtual void Enter() =>
             EnableTransitions();
@@ -17,13 +12,13 @@
 
         private void EnableTransitions()
         {
-            foreach (ITransition transition in _transitions)
+            foreach (ITransition transition in Transitions)
                 transition.Enable();
         }
 
         private void DisableTransitions()
         {
-            foreach (ITransition transition in _transitions)
+            foreach (ITransition transition in Transitions)
                 transition.Disable();
         }
     }

@@ -1,36 +1,58 @@
 ﻿using System.Linq;
+using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
-using Gameplay.Character.Player.StateMachine.States;
+using Gameplay.StateMachine.Tranzitions;
+using Infrastructure.CoroutineRunner;
 using Infrastructure.Input.InputService;
 using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
+using Scene;
+using UI;
 using UI.HUD;
 using UI.HUD.StateMachine.States;
 using Utility.Constants;
+using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.Gameplay
 {
-    public class GameplayState : StateWithTransitions
+    using Ball.MonoBehavior;
+
+    public class GameplayState : StateWithTransitions, IParameterlessState
     {
         private readonly PlayerFacade[] _playerTeam;
-        private readonly Ball.MonoBehavior.Ball _ball;
+        private readonly EnemyFacade[] _enemyTeam;
+        private readonly Ball _ball;
         private readonly IGameplayHUD _gameplayHud;
         private PlayerFacade _controlledPlayer;
         private IInputService _inputService;
 
         private IInputService InputService => _inputService ??= Services.Container.Single<IInputService>();
-        private bool ControlledPlayerIsInAttack => _ball.OwnerData.Value == _controlledPlayer;
         private PlayerFacade NotControlledPlayer => _playerTeam.FirstOrDefault(player => player != _controlledPlayer);
 
         public PlayerFacade ControlledPlayer => _controlledPlayer;
 
-        public GameplayState(PlayerFacade[] playerTeam, Ball.MonoBehavior.Ball ball, IGameplayHUD gameplayHud) :
-            base(new ITransition[]
-                {
-                }
-            )
+        public GameplayState
+        (
+            PlayerFacade[] playerTeam,
+            EnemyFacade[] enemyTeam,
+            Ball ball,
+            SceneConfig sceneConfig,
+            IGameplayHUD gameplayHud,
+            GameplayLoopStateMachine gameplayLoopStateMachine,
+            LoadingCurtain loadingCurtain,
+            ICoroutineRunner coroutineRunner
+        )
         {
+            Transitions = new ITransition[]
+            {
+                new GameplayStateToDunkStateTransition(this, gameplayLoopStateMachine),
+                new GameplayStateToThrowStateTransition(this, gameplayLoopStateMachine),
+                new GameplayStateToBallContestStateTransition(ball, gameplayLoopStateMachine),
+                new GameplayStateToUpsetCutsceneStateTransition(playerTeam, enemyTeam, ball, sceneConfig.EnemyRing,
+                    loadingCurtain, gameplayLoopStateMachine, coroutineRunner, sceneConfig)
+            };
             _playerTeam = playerTeam;
+            _enemyTeam = enemyTeam;
             _ball = ball;
             _gameplayHud = gameplayHud;
         }
@@ -38,72 +60,85 @@ namespace Gameplay.StateMachine.States.Gameplay
         public override void Enter()
         {
             base.Enter();
-            _gameplayHud.Enable();
-            ObserveBall();
+            EnableHUD();
             SubscribeOnChangePlayerInput();
+
+            if (_controlledPlayer == null)
+                SetControlledPlayer(_playerTeam[NumericConstants.PrimaryTeamMemberIndex]);
+
+            SubscribeOnBall();
+            SetPlayersStates();
+            SetHUDState();
         }
 
         public override void Exit()
         {
             base.Exit();
-            _gameplayHud.Disable();
-            StopObserveBall();
-            UnsubscribeOnChangePlayerInput();
+            DisableHUD();
+            UnsubscribeOfChangePlayerInput();
+            UnsubscribeFromBall();
         }
 
-        private void ObserveBall() =>
-            _ball.OwnerData.Observe(OnBallOwnerChanged);
+        private void SetEnemiesStates() =>
+            _enemyTeam.Map(enemy =>
+                enemy.StateMachine.Enter<Character.NPC.EnemyPlayer.StateMachine.States.AIControlledState>());
 
+        private void EnableHUD() =>
+            _gameplayHud.Enable();
 
-        private void StopObserveBall() =>
-            _ball.OwnerData.Dispose();
+        private void DisableHUD() =>
+            _gameplayHud.Disable();
+
+        private void SubscribeOnBall() =>
+            _ball.OwnerChanged += OnBallOwnerChanged;
+
+        private void UnsubscribeFromBall() =>
+            _ball.OwnerChanged -= OnBallOwnerChanged;
 
         private void OnBallOwnerChanged(Character.Character newOwner)
         {
             if (newOwner is PlayerFacade player)
-                SetCurrentPlayer(player);
+                SetControlledPlayer(player);
 
-            SetPlayersState();
+            SetPlayersStates();
             SetHUDState();
         }
 
-        private void SetPlayersState()
+        private void SetPlayersStates()
         {
-            if (_controlledPlayer == null)
-                SetCurrentPlayer(_playerTeam[NumericConstants.PrimaryTeamMemberIndex]);
-
-            if (ControlledPlayerIsInAttack)
-                _controlledPlayer.StateMachine.Enter<ControlledAttackState>();
+            if (ControlledPlayer.OwnsBall)
+                _controlledPlayer.StateMachine.Enter<Character.Player.StateMachine.States.InputControlledAttackState>();
             else
-                _controlledPlayer.StateMachine.Enter<ControlledDefenceState>();
+                _controlledPlayer.StateMachine
+                    .Enter<Character.Player.StateMachine.States.InputControlledDefenceState>();
 
-            NotControlledPlayer.StateMachine.Enter<AIControlledState>();
+            NotControlledPlayer.StateMachine.Enter<Character.Player.StateMachine.States.AIControlledState>();
         }
 
         private void SetHUDState()
         {
-            if (ControlledPlayerIsInAttack)
+            if (ControlledPlayer.OwnsBall)
                 _gameplayHud.StateMachine.Enter<AttackState, PlayerFacade>(_controlledPlayer);
             else
                 _gameplayHud.StateMachine.Enter<DefenceState>();
         }
 
-        private void SetCurrentPlayer(PlayerFacade player) =>
+        private void SetControlledPlayer(PlayerFacade player) =>
             _controlledPlayer = player;
 
         private void SubscribeOnChangePlayerInput() =>
             InputService.ChangePlayerButtonPressed += SwapControlledPlayer;
 
-        private void UnsubscribeOnChangePlayerInput() =>
+        private void UnsubscribeOfChangePlayerInput() =>
             InputService.ChangePlayerButtonPressed -= SwapControlledPlayer;
 
         private void SwapControlledPlayer()
         {
-            if (ControlledPlayerIsInAttack)
+            if (ControlledPlayer.OwnsBall)
                 return;
 
-            SetCurrentPlayer(NotControlledPlayer);
-            SetPlayersState();
+            SetControlledPlayer(NotControlledPlayer);
+            SetPlayersStates();
             SetHUDState();
         }
     }

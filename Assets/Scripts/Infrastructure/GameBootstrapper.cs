@@ -4,6 +4,8 @@ using Infrastructure.ServiceManagement;
 using Infrastructure.StateMachine;
 using Infrastructure.StateMachine.States;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using Utility.Constants;
 
 namespace Infrastructure
 {
@@ -13,13 +15,13 @@ namespace Infrastructure
 
         private void Awake()
         {
-           _stateMachine =  new GameStateMachine(
-               new SceneLoader(),
-               Services.Container,
-               this
-           );
-           _stateMachine.Enter<BootstrapState>();
-            
+            _stateMachine = new GameStateMachine(
+                new SceneLoader(),
+                Services.Container,
+                this
+            );
+            _stateMachine.Enter<BootstrapState>();
+
             DontDestroyOnLoad(this);
         }
     }

@@ -19,15 +19,15 @@ namespace z_Test
         private PhysicsScene _physicsScene;
 
 
-        private Ball BallSimulation => _ballSimulation ??= CreateBallSimulation();
+        /*private Ball BallSimulation => _ballSimulation ??= CreateBallSimulation();
 
         public void SetSimulationScene(UnityEngine.SceneManagement.Scene simulationScene)
         {
             _simulationScene = simulationScene;
             _physicsScene = simulationScene.GetPhysicsScene();
-        }
+        }*/
 
-        public void SimulateTrajectory(Vector3 startPosition, Vector3 velocity)
+        /*public void SimulateTrajectory(Vector3 startPosition, Vector3 velocity)
         {
             BallSimulation.ZeroVelocity();
             BallSimulation.transform.position = startPosition;
@@ -49,7 +49,7 @@ namespace z_Test
             SceneManager.MoveGameObjectToScene(ball.gameObject, _simulationScene);
             ball.StopRendering();
             return ball;
-        }
+        }*/
     }
 
     public class SceneConfig: UnityEngine.MonoBehaviour

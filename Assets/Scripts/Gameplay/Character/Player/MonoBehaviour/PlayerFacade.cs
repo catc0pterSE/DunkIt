@@ -1,21 +1,17 @@
 ﻿using System;
 using Cinemachine;
-using Gameplay.Character.Player.BallHandle.Throw;
+using Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw;
 using Gameplay.Character.Player.MonoBehaviour.Brains;
+using Gameplay.Character.Player.MonoBehaviour.Distance;
 using Gameplay.Character.Player.MonoBehaviour.Movement;
 using Gameplay.Character.Player.StateMachine;
+using Scene;
 using UnityEngine;
-using Utility.Constants;
 using Utility.Extensions;
-using z_Test;
-using SceneConfig = Scene.SceneConfig;
 
 namespace Gameplay.Character.Player.MonoBehaviour
 {
-    using Ball.MonoBehavior;
-    using Camera = UnityEngine.Camera;
-
-    public class PlayerFacade : Character
+    public class PlayerFacade : BasketballPlayer
     {
         [SerializeField] private InputControlledBrain _inputControlledBrain;
         [SerializeField] private AIControlledBrain _aiControlledBrain;
@@ -24,13 +20,15 @@ namespace Gameplay.Character.Player.MonoBehaviour
         [SerializeField] private BallThrower _ballThrower;
         [SerializeField] private DistanceTracker _distanceTracker;
 
-        private Ball _ball;
+        private Ball.MonoBehavior.Ball _ball;
         private CinemachineVirtualCamera _virtualCamera;
         private PlayerStateMachine _stateMachine;
         private SceneConfig _sceneConfig;
         
         public PlayerStateMachine StateMachine => _stateMachine ??= new PlayerStateMachine(this); //TODO: methods?
         public Animator Animator => _animator;
+        public bool IsInDunkZone => _distanceTracker.IsInDunkZone;
+        public bool IsInThrowZone => _distanceTracker.InThrowZone;
 
         public event Action<bool> ThrowReached
         {
@@ -42,6 +40,12 @@ namespace Gameplay.Character.Player.MonoBehaviour
         {
             add => _distanceTracker.DunkReached += value;
             remove => _distanceTracker.DunkReached += value;
+        }
+
+        public override event Action BallThrown
+        {
+            add => _ballThrower.BallThrown += value;
+            remove => _ballThrower.BallThrown -= value;
         }
 
         public void EnableInputControlledBrain() =>
@@ -62,12 +66,25 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public void DisablePlayerMover() =>
             _playerMover.Disable();
 
-        public void Initialize(Ball ball, Camera gameplayCamera, CinemachineVirtualCamera virtualCamera,
+        public void EnableBallThrower() =>
+            _ballThrower.Enable();
+
+        public void DisableBallThrower() =>
+            _ballThrower.Disable();
+
+        public void EnableDistanceTracker() =>
+            _distanceTracker.Enable();
+
+        public void DisableDistanceTracker() =>
+            _distanceTracker.Disable();
+        
+
+        public void Initialize(PlayerFacade ally, Ball.MonoBehavior.Ball ball, UnityEngine.Camera gameplayCamera, CinemachineVirtualCamera virtualCamera,
             SceneConfig sceneConfig)
         {
             _ballThrower.Initialize(ball, gameplayCamera);
             _inputControlledBrain.Initialize(gameplayCamera.transform);
-            _distanceTracker.Initialize(sceneConfig.EnemyRing.transform.position);
+            _distanceTracker.Initialize(sceneConfig.EnemyRing.transform.position, ally.transform);
             _ball = ball;
             _virtualCamera = virtualCamera;
             _virtualCamera.Follow = transform;

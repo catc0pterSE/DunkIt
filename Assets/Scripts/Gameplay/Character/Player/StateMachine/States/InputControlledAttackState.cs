@@ -3,11 +3,11 @@ using Modules.StateMachine;
 
 namespace Gameplay.Character.Player.StateMachine.States
 {
-    public class ControlledAttackState : IParameterlessState
+    public class InputControlledAttackState : IParameterlessState
     {
         private readonly PlayerFacade _player;
 
-        public ControlledAttackState(PlayerFacade player)
+        public InputControlledAttackState(PlayerFacade player)
         {
             _player = player;
         }
@@ -18,6 +18,7 @@ namespace Gameplay.Character.Player.StateMachine.States
             _player.EnablePlayerMover();
             _player.PrioritizeCamera();
             _player.FocusOnEnemyBasket();
+            _player.EnableDistanceTracker();
         }
         
         public void Exit()
@@ -25,6 +26,7 @@ namespace Gameplay.Character.Player.StateMachine.States
             _player.DisablePlayerMover();
             _player.DisableInputControlledBrain();
             _player.DeprioritizeCamera();
+            _player.DisableDistanceTracker();
         }
     }
 }

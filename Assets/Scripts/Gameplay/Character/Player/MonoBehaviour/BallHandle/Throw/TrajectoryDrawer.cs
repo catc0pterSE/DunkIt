@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Modules.MonoBehaviour;
 using UnityEngine;
 using Utility.Constants;
 
-namespace Gameplay.Character.Player.BallHandle.Throw
+namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
 {
-    using Ball.MonoBehavior;
-
-    public class TrajectoryDrawer : SwitchableMonoBehaviour
+    public class TrajectoryDrawer : SwitchableComponent
     {
         [SerializeField] private LineRenderer _lineRenderer;
         [Range(0.02f, 1f)]
@@ -19,7 +15,8 @@ namespace Gameplay.Character.Player.BallHandle.Throw
 
         public void Draw(Vector3 startPosition, Vector3 velocity)
         {
-           
+            _lineRenderer.enabled = true;
+            
             List<Vector3> points = new List<Vector3>();
             points.Add(startPosition);
 
@@ -42,6 +39,12 @@ namespace Gameplay.Character.Player.BallHandle.Throw
 
             _lineRenderer.positionCount = points.Count;
             _lineRenderer.SetPositions(points.ToArray());
+        }
+
+        public void StopDrawing()
+        {
+            _lineRenderer.positionCount = 0;
+            _lineRenderer.enabled = false;
         }
     }
 }

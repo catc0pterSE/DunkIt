@@ -3,11 +3,11 @@ using Modules.StateMachine;
 
 namespace Gameplay.Character.Player.StateMachine.States
 {
-    public class ControlledDefenceState: IParameterlessState
+    public class InputControlledDefenceState: IParameterlessState
     {
         private readonly PlayerFacade _player;
 
-        public ControlledDefenceState(PlayerFacade player)
+        public InputControlledDefenceState(PlayerFacade player)
         {
             _player = player;
         }

@@ -4,12 +4,14 @@ namespace Utility.Extensions
 {
     public static class TransformExtensions
     {
-        public static void Reset(this Transform transform)
+        public static void Reset(this Transform transform, bool resetScale = true)
         {
             ResetParent(transform);
             ResetPosition(transform);
             ResetRotation(transform);
-            ResetScale(transform);
+
+            if (resetScale)
+                ResetScale(transform);
         }
 
         public static void CopyValuesFrom(this Transform transform, Transform other)

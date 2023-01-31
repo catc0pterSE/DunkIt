@@ -5,6 +5,7 @@ using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.States.Gameplay;
 using Infrastructure.Factory;
 using Infrastructure.ServiceManagement;
+using Modules.StateMachine;
 using UI.HUD;
 using UI.HUD.Mobile;
 using Utility.Constants;
@@ -13,7 +14,7 @@ namespace Gameplay.StateMachine.States.MinigameStates
 {
     using Ball.MonoBehavior;
 
-    public class JumpBallState : MinigameState
+    public class JumpBallState : MinigameState, IParameterlessState
     {
         private readonly PlayerFacade _player;
         private readonly EnemyFacade _enemy;
