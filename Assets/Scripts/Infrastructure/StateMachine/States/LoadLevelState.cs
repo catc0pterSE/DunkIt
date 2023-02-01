@@ -53,16 +53,16 @@ namespace Infrastructure.StateMachine.States
         {
             IGameplayHUD gameplayHUDView = SpawnHUD();
             SceneConfig sceneConfig = GameObject.FindObjectOfType<SceneConfig>();
-            CameraFacade camera = SpawnCamera();
             Ball ball = SpawnBall();
-            PlayerFacade[] playerTeam = SpawnPlayerTeam(camera.Camera, ball, sceneConfig);
-            EnemyFacade[] enemyTeam = SpawnEnemyTeam();
+           EnemyFacade[] enemyTeam = SpawnEnemyTeam();
             Referee referee = SpawnReferee();
-
+            CameraFacade camera = SpawnCamera();
+            PlayerFacade[] playerTeam = SpawnPlayerTeam(camera.Camera, ball, sceneConfig);
+            
             GameplayLoopStateMachine gameplayLoopStateMachine =
                 new GameplayLoopStateMachine(playerTeam, enemyTeam, referee, camera, gameplayHUDView, ball, sceneConfig, LoadingCurtain,
                     _coroutineRunner, _gameStateMachine);
-
+            
             _gameStateMachine.Enter<GamePlayLoopState, GameplayLoopStateMachine>(gameplayLoopStateMachine);
         }
 

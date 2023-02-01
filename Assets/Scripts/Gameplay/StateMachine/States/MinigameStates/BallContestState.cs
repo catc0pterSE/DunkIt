@@ -9,7 +9,6 @@ namespace Gameplay.StateMachine.States.MinigameStates
     {
         public void Enter((PlayerFacade, EnemyFacade) payLoad)
         {
-            Debug.Log("Entered BallContestState");
         }
 
         public void Exit()

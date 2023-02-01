@@ -19,6 +19,7 @@ namespace Gameplay.Character.Player.StateMachine.States
             _player.PrioritizeCamera();
             _player.FocusOnEnemyBasket();
             _player.EnableDistanceTracker();
+            _player.EnableBallContestTrigger();
         }
         
         public void Exit()
@@ -26,6 +27,7 @@ namespace Gameplay.Character.Player.StateMachine.States
             _player.DisablePlayerMover();
             _player.DisableInputControlledBrain();
             _player.DisableDistanceTracker();
+            _player.DisableBallContestTrigger();
         }
     }
 }

@@ -12,14 +12,16 @@
 
         private void EnableTransitions()
         {
-            foreach (ITransition transition in Transitions)
-                transition.Enable();
+            if (Transitions != null)
+                foreach (ITransition transition in Transitions)
+                    transition.Enable();
         }
 
         private void DisableTransitions()
         {
-            foreach (ITransition transition in Transitions)
-                transition.Disable();
+            if (Transitions != null)
+                foreach (ITransition transition in Transitions)
+                    transition.Disable();
         }
     }
 }

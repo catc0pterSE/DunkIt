@@ -11,6 +11,9 @@ namespace UI
         [SerializeField] private CanvasGroup _curtain;
         [SerializeField] private GameObject _text;
         [SerializeField] private float _fadingStep = 0.01f;
+        [SerializeField] private float _delay = 0.01f;
+
+        private WaitForSeconds _waitForDelay;
 
         private float _defaultCurtainAlpha;
         private Coroutine _fadeJob;
@@ -18,6 +21,7 @@ namespace UI
         private void Awake()
         {
             DontDestroyOnLoad(this);
+            _waitForDelay = new WaitForSeconds(_delay);
             _defaultCurtainAlpha = _curtain.alpha;
         }
 
@@ -65,6 +69,8 @@ namespace UI
 
         private IEnumerator Fade(float startAlpha, float targetAlpha, Action callback = null)
         {
+            yield return _waitForDelay; //TODO: THIS IS COSTYL
+                
             _curtain.alpha = startAlpha;
 
             while (Math.Abs(_curtain.alpha - targetAlpha) > NumericConstants.MinimalDelta)

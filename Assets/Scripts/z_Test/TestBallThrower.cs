@@ -1,5 +1,6 @@
 ﻿using Gameplay.Ball.MonoBehavior;
 using Gameplay.Character;
+using Gameplay.Character.Player.MonoBehaviour.BallHandle;
 using Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw;
 using Infrastructure.Factory;
 using Infrastructure.Input;
@@ -41,7 +42,7 @@ namespace z_Test
 
         private void Throw()
         {
-            if (InputService.Clicked == false)
+            if (InputService.TouchedOnce == false)
                 return;
 
             Ball ball = Services.Container.Single<IGameObjectFactory>().CreateBall(); //TODO: this is for tests

@@ -3,7 +3,7 @@ using Modules.MonoBehaviour;
 using UnityEngine;
 using Utility.Constants;
 
-namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
+namespace Gameplay.Character.Player.MonoBehaviour.BallHandle
 {
     public class TrajectoryDrawer : SwitchableComponent
     {

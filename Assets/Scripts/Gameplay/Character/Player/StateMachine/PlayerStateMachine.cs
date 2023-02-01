@@ -16,7 +16,9 @@ namespace Gameplay.Character.Player.StateMachine
                 [typeof(InputControlledDefenceState)] = new InputControlledDefenceState(player),
                 [typeof(AIControlledState)] = new AIControlledState(player), 
                 [typeof(NotControlledState)] = new NotControlledState(player),
-                [typeof(ThrowState)] = new ThrowState(player)
+                [typeof(ThrowState)] = new ThrowState(player),
+                [typeof(IdleState)] = new IdleState(),
+                [typeof(ContestingBallState)] = new ContestingBallState()
             };
         }
     }

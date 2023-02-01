@@ -7,7 +7,6 @@ using Infrastructure.Factory;
 using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
 using UI.HUD;
-using UI.HUD.Mobile;
 using Utility.Constants;
 
 namespace Gameplay.StateMachine.States.MinigameStates
@@ -16,8 +15,8 @@ namespace Gameplay.StateMachine.States.MinigameStates
 
     public class JumpBallState : MinigameState, IParameterlessState
     {
-        private readonly PlayerFacade _player;
-        private readonly EnemyFacade _enemy;
+        private readonly PlayerFacade[] _playerTeam;
+        private readonly EnemyFacade[] _enemyTeam;
         private readonly Referee _referee;
         private readonly Ball _ball;
         private readonly CinemachineBrain _gameplayCamera;
@@ -34,18 +33,22 @@ namespace Gameplay.StateMachine.States.MinigameStates
             GameplayLoopStateMachine gameplayLoopStateMachine
         ) : base
         (
-            playerTeam,
-            enemyTeam,
+          
             gameplayHUD
         )
         {
-            _player = playerTeam[NumericConstants.PrimaryTeamMemberIndex];
-            _enemy = enemyTeam[NumericConstants.PrimaryTeamMemberIndex];
+            _playerTeam = playerTeam;
+            _enemyTeam = enemyTeam;
             _referee = referee;
             _ball = ball;
             _gameplayCamera = gameplayCamera;
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
         }
+
+        private PlayerFacade PrimaryPlayer => _playerTeam[NumericConstants.PrimaryTeamMemberIndex];
+        private PlayerFacade SecondaryPlayer => _playerTeam[NumericConstants.SecondaryTeamMemberIndex];
+        private EnemyFacade PrimaryEnemy => _enemyTeam[NumericConstants.PrimaryTeamMemberIndex];
+        private EnemyFacade SecondaryEnemy => _enemyTeam[NumericConstants.SecondaryTeamMemberIndex];
 
         public override void Enter()
         {
@@ -54,28 +57,37 @@ namespace Gameplay.StateMachine.States.MinigameStates
             _ball.SetOwner(_referee);
         }
 
-        protected override void InitializeMinigame()
-        {
-            Minigame = Services.Container.Single<IGameObjectFactory>().CreateJumpBallMinigame()
-                .Initialize(_gameplayCamera, _referee, PlayerTeam, EnemyTeam, _ball);
-        }
-
         public override void Exit()
         {
             base.Exit();
             _referee.Disable();
         }
+        
+        protected override void InitializeMinigame()
+        {
+            Minigame = Services.Container.Single<IGameObjectFactory>().CreateJumpBallMinigame()
+                .Initialize(_gameplayCamera, _referee, _playerTeam, _enemyTeam, _ball);
+        }
+
 
         protected override void OnMiniGameWon()
         {
-            _ball.SetOwner(_player);
+            _ball.SetOwner(PrimaryPlayer);
             EnterNextState();
         }
 
         protected override void OnMiniGameLost()
         {
-            _ball.SetOwner(_enemy);
+            _ball.SetOwner(PrimaryEnemy);
             EnterNextState();
+        }
+
+        protected override void SetCharactersStates()
+        {
+            PrimaryPlayer.StateMachine.Enter<Character.Player.StateMachine.States.NotControlledState>();
+            PrimaryEnemy.StateMachine.Enter<Character.NPC.EnemyPlayer.StateMachine.States.NotControlledState>();
+            SecondaryPlayer.StateMachine.Enter<Character.Player.StateMachine.States.IdleState>();
+            SecondaryEnemy.StateMachine.Enter<Character.NPC.EnemyPlayer.StateMachine.States.IdleState>();
         }
 
         private void EnterNextState() =>

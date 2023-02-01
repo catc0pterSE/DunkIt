@@ -43,7 +43,7 @@ namespace UI.HUD.Mobile
 
         public void SetChangePlayerAvailability(bool isAvailable) =>
             _changePlayerButton.gameObject.SetActive(isAvailable);
-
+        
         private void SubscribeUIInputControllerOnButtons()
         {
             _throwButton.onClick.AddListener(UIInputController.OnUIThrowButtonClicked);

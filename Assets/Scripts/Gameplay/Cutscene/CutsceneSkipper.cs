@@ -17,7 +17,7 @@ namespace Gameplay.Cutscene
 
         private void Update()
         {
-            if (InputService.Clicked) 
+            if (InputService.TouchedOnce) 
                 _director.Stop();
         }
     }

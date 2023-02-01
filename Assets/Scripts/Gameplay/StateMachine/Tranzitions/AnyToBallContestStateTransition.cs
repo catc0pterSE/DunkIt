@@ -8,13 +8,13 @@ namespace Gameplay.StateMachine.Tranzitions
     using Ball.MonoBehavior;
     using Character;
 
-    public class GameplayStateToBallContestStateTransition : ITransition
+    public class AnyToBallContestStateTransition : ITransition
     {
         private readonly Ball _ball;
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
         private BasketballPlayer _currentBallOwner;
 
-        public GameplayStateToBallContestStateTransition(Ball ball, GameplayLoopStateMachine gameplayLoopStateMachine)
+        public AnyToBallContestStateTransition(Ball ball, GameplayLoopStateMachine gameplayLoopStateMachine)
         {
             _ball = ball;
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
@@ -23,26 +23,28 @@ namespace Gameplay.StateMachine.Tranzitions
         public void Enable()
         {
             SubscribeOnBall();
+            OnBallOwnerChanged(_ball.Owner);
         }
 
         public void Disable()
         {
             UnsubscribeFromBall();
+            UnsubscribeFromCurrentBallOwner();
         }
 
         private void SubscribeOnBall() =>
-            _ball.OwnerChanged+=OnBallOwnerChanged;
+            _ball.OwnerChanged += OnBallOwnerChanged;
 
         private void UnsubscribeFromBall() =>
             _ball.OwnerChanged -= OnBallOwnerChanged;
 
         private void OnBallOwnerChanged(Character newOwner)
         {
+            if (_currentBallOwner != null)
+                UnsubscribeFromCurrentBallOwner();
+
             if (newOwner is not BasketballPlayer basketballPlayer)
                 return;
-
-            if (_currentBallOwner != null)
-                UnsubscribeOnCurrentBallOwner();
 
             _currentBallOwner = basketballPlayer;
             SubscribeOnCurrentBallOwner();
@@ -51,7 +53,7 @@ namespace Gameplay.StateMachine.Tranzitions
         private void SubscribeOnCurrentBallOwner() =>
             _currentBallOwner.BallContestStarted += MoveToBallContestState;
 
-        private void UnsubscribeOnCurrentBallOwner() =>
+        private void UnsubscribeFromCurrentBallOwner() =>
             _currentBallOwner.BallContestStarted -= MoveToBallContestState;
 
         private void MoveToBallContestState(PlayerFacade player, EnemyFacade enemy)

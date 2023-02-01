@@ -10,14 +10,10 @@ namespace Gameplay.Character
     {
         [SerializeField] private Transform _ballPosition;
 
-        public bool OwnsBall { get; private set; }
+        protected Ball Ball;
+
+        public bool OwnsBall => Ball.Owner == this;
 
         public Transform BallPosition => _ballPosition;
-
-        public virtual void TakeBall() =>
-            OwnsBall = true;
-
-        public virtual void LoseBall() =>
-            OwnsBall = false;
     }
 }

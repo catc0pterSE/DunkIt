@@ -25,22 +25,10 @@ namespace Gameplay.Character
             _ballContestTriggerZone.Entered -= OnBallContestTriggerZoneEntered;
         }
 
-        public override void TakeBall()
-        {
-            base.TakeBall();
-            EnableBallContestTrigger();
-        }
-
-        public override void LoseBall()
-        {
-            base.LoseBall();
-            DisableBallContestTrigger();
-        }
-
-        private void EnableBallContestTrigger() =>
+        public void EnableBallContestTrigger() =>
             _ballContestTriggerZone.Enable();
 
-        private void DisableBallContestTrigger() =>
+        public void DisableBallContestTrigger() =>
             _ballContestTriggerZone.Disable();
 
         private void OnBallContestTriggerZoneEntered(BasketballPlayer basketballPlayer)

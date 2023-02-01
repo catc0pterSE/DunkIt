@@ -15,15 +15,18 @@ namespace Infrastructure.Input.InputService
             SimpleInput.GetAxis(VerticalAxisName)
         );
 
-        public bool Clicked => SimpleInput.GetMouseButtonDown(0);
+        public bool TouchedOnce => SimpleInput.GetMouseButtonDown(0);
+        public bool TouchHeld => SimpleInput.GetMouseButton(0);
+
         public Vector3 PointerPosition => UnityEngine.Input.mousePosition;
 
         public float ThrowCurve => SimpleInput.GetAxis(ThrowCurveAxisName);
 
         public event Action ThrowButtonPressed;
-        public event Action PassButtonPressed;
         public event Action DunkButtonPressed;
         public event Action ChangePlayerButtonPressed;
+        public event Action PassButtonPressed;
+        public event Action PassButtonRelease;
 
         public void OnUIThrowButtonClicked() =>
             ThrowButtonPressed?.Invoke();

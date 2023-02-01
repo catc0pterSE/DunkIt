@@ -47,7 +47,7 @@ namespace Gameplay.StateMachine.States.Gameplay
             {
                 new GameplayStateToDunkStateTransition(this, gameplayLoopStateMachine),
                 new GameplayStateToThrowStateTransition(this, gameplayLoopStateMachine),
-                new GameplayStateToBallContestStateTransition(ball, gameplayLoopStateMachine),
+                new AnyToBallContestStateTransition(ball, gameplayLoopStateMachine),
                 new GameplayStateToUpsetCutsceneStateTransition(playerTeam, enemyTeam, ball, sceneConfig.EnemyRing,
                     loadingCurtain, gameplayLoopStateMachine, coroutineRunner, sceneConfig)
             };
@@ -64,10 +64,15 @@ namespace Gameplay.StateMachine.States.Gameplay
             SubscribeOnChangePlayerInput();
 
             if (_controlledPlayer == null)
-                SetControlledPlayer(_playerTeam[NumericConstants.PrimaryTeamMemberIndex]);
+                SetControlledPlayer
+                (
+                    _playerTeam.FindFirstOrNull(player => player.OwnsBall)
+                    ?? _playerTeam[NumericConstants.PrimaryTeamMemberIndex]
+                );
 
             SubscribeOnBall();
             SetPlayersStates();
+            SetEnemiesStates();
             SetHUDState();
         }
 

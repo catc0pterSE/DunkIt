@@ -1,5 +1,6 @@
 ﻿using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.States.Gameplay;
+using Gameplay.StateMachine.States.MinigameStates;
 using Infrastructure.Input.InputService;
 using Infrastructure.ServiceManagement;
 using Modules.StateMachine;

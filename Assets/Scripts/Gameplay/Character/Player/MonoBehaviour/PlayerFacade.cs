@@ -20,13 +20,14 @@ namespace Gameplay.Character.Player.MonoBehaviour
         [SerializeField] private BallThrower _ballThrower;
         [SerializeField] private DistanceTracker _distanceTracker;
 
-        private Ball.MonoBehavior.Ball _ball;
         private CinemachineVirtualCamera _virtualCamera;
         private PlayerStateMachine _stateMachine;
         private SceneConfig _sceneConfig;
         
         public PlayerStateMachine StateMachine => _stateMachine ??= new PlayerStateMachine(this); //TODO: methods?
         public Animator Animator => _animator;
+
+        public bool IsPassPossible => _distanceTracker.IsPassPossible;
         public bool IsInDunkZone => _distanceTracker.IsInDunkZone;
         public bool IsInThrowZone => _distanceTracker.InThrowZone;
 
@@ -40,6 +41,12 @@ namespace Gameplay.Character.Player.MonoBehaviour
         {
             add => _distanceTracker.DunkReached += value;
             remove => _distanceTracker.DunkReached += value;
+        }
+        
+        public event Action<bool> PassReached
+        {
+            add => _distanceTracker.PassReached += value;
+            remove => _distanceTracker.PassReached += value;
         }
 
         public override event Action BallThrown
@@ -77,7 +84,6 @@ namespace Gameplay.Character.Player.MonoBehaviour
 
         public void DisableDistanceTracker() =>
             _distanceTracker.Disable();
-        
 
         public void Initialize(PlayerFacade ally, Ball.MonoBehavior.Ball ball, UnityEngine.Camera gameplayCamera, CinemachineVirtualCamera virtualCamera,
             SceneConfig sceneConfig)
@@ -85,7 +91,7 @@ namespace Gameplay.Character.Player.MonoBehaviour
             _ballThrower.Initialize(ball, gameplayCamera);
             _inputControlledBrain.Initialize(gameplayCamera.transform);
             _distanceTracker.Initialize(sceneConfig.EnemyRing.transform.position, ally.transform);
-            _ball = ball;
+            Ball = ball;
             _virtualCamera = virtualCamera;
             _virtualCamera.Follow = transform;
             _sceneConfig = sceneConfig;
@@ -98,6 +104,9 @@ namespace Gameplay.Character.Player.MonoBehaviour
             _virtualCamera.LookAt = _sceneConfig.EnemyRing.transform;
 
         public void FocusOnBall() =>
-            _virtualCamera.LookAt = _ball.transform;
+            _virtualCamera.LookAt = Ball.transform;
+        
+        public void FocusOnBallOwner() =>
+            _virtualCamera.LookAt = Ball.Owner.transform;
     }
 }

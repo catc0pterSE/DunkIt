@@ -1,20 +1,19 @@
 ﻿using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.States.CutsceneStates;
-using Gameplay.StateMachine.States.MinigameStates;
-using Infrastructure.CoroutineRunner;
+using Gameplay.StateMachine.States.Gameplay;
+using Gameplay.StateMachine.Tranzitions;
 using Infrastructure.Factory;
 using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
 using Scene;
 using UI;
 using UI.HUD;
-using UnityEngine;
 using Utility.Constants;
 
-namespace Gameplay.StateMachine.States.Gameplay
+namespace Gameplay.StateMachine.States.MinigameStates
 {
-    public class ThrowState : MinigameState, IParameterState<PlayerFacade>
+    public class ThrowState : MinigameState,  IParameterState<PlayerFacade>
     {
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
         private readonly Ball.MonoBehavior.Ball _ball;
@@ -27,30 +26,26 @@ namespace Gameplay.StateMachine.States.Gameplay
 
 
         public ThrowState(
-            PlayerFacade[] playerTeam,
             IGameplayHUD gameplayHUD,
             SceneConfig sceneConfig,
             GameplayLoopStateMachine gameplayLoopStateMachine,
             EnemyFacade[] enemyTeam,
             Ball.MonoBehavior.Ball ball,
-            LoadingCurtain loadingCurtain) : base(playerTeam, enemyTeam, gameplayHUD)
+            LoadingCurtain loadingCurtain) : base(gameplayHUD)
         {
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
             _ball = ball;
             _loadingCurtain = loadingCurtain;
             _enemyTeam = enemyTeam;
             _sceneConfig = sceneConfig;
+            Transitions = new ITransition[] { new AnyToBallContestStateTransition(ball, gameplayLoopStateMachine) };
         }
 
         public void Enter(PlayerFacade player)
         {
             SetThrowingPlayer(player);
             base.Enter();
-            SetThrowingPlayerState();
         }
-
-        private void SetThrowingPlayerState() =>
-            _throwingPlayer.StateMachine.Enter<Character.Player.StateMachine.States.ThrowState>();
 
         private void SetThrowingPlayer(PlayerFacade player) =>
             _throwingPlayer = player;
@@ -75,6 +70,11 @@ namespace Gameplay.StateMachine.States.Gameplay
         protected override void OnMiniGameLost()
         {
             MoveToGameplayState();
+        }
+
+        protected override void SetCharactersStates()
+        {
+            _throwingPlayer.StateMachine.Enter<Character.Player.StateMachine.States.ThrowState>();
         }
 
         private void MoveToCelebrateCutsceneState() =>

@@ -13,7 +13,9 @@ namespace Gameplay.Character.NPC.EnemyPlayer.StateMachine
             States = new Dictionary<Type, IState>()
             {
                 [typeof(NotControlledState)] = new NotControlledState(enemyFacade),
-                [typeof(AIControlledState)] = new AIControlledState()
+                [typeof(AIControlledState)] = new AIControlledState(),
+                [typeof(IdleState)] = new IdleState(),
+                [typeof(ContestingBallState)] = new ContestingBallState()
             };
         }
     }

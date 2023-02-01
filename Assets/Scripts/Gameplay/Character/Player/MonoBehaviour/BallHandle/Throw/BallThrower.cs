@@ -19,11 +19,12 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
         [SerializeField] private BallLandingEffect _ballLandingEffect;
         [SerializeField] private float _curveChangingSpeed = 8;
         [SerializeField] private LayerMask _raycastTargetLayerMask;
-        
+
         private Vector3 _destinationPoint;
         private Camera _camera;
         private IInputService _inputService;
         private Ball.MonoBehavior.Ball _ball;
+        private Vector3 _launchVelocity;
 
         public event Action BallThrown;
 
@@ -31,36 +32,40 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
 
         private void OnEnable()
         {
+            Time.timeScale = 0.3f;
             _trajectoryDrawer.Enable();
+            InputService.ThrowButtonPressed += Throw;
         }
 
         private void OnDisable()
         {
+            Time.timeScale = 1f;
             _trajectoryDrawer.StopDrawing();
             _trajectoryDrawer.Disable();
             DisableLandingEffect();
+            InputService.ThrowButtonPressed -= Throw;
         }
 
         private void Awake()
         {
-            _ballLandingEffect = Instantiate(_ballLandingEffect);
+            _ballLandingEffect = Instantiate(_ballLandingEffect); //TODO: to gameobj factory
             _ballLandingEffect.Disable();
         }
 
         private void Update()
         {
-            if (TrySetDestination())
+            if (InputService.TouchHeld)
             {
+                SetDestination();
                 EnableLandingEffect();
-                Vector3 launchVelocity = CalculateLaunchVelocity();
-                AdjustFlyingTime();
-                _trajectoryDrawer.Draw(_ballPosition.position, launchVelocity);
-                Throw(launchVelocity);
             }
-            else
-            {
-                _trajectoryDrawer.StopDrawing();
-            }
+
+            CalculateLaunchVelocity();
+
+            if (_destinationPoint != Vector3.zero)
+                _trajectoryDrawer.Draw(_ballPosition.position, _launchVelocity);
+
+            AdjustFlyingTime();
         }
 
         public void Initialize(Ball.MonoBehavior.Ball ball, Camera gameplayCamera)
@@ -71,33 +76,30 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
 
         private void AdjustFlyingTime()
         {
-            _flightTime += InputService.ThrowCurve*_curveChangingSpeed;
+            _flightTime += InputService.ThrowCurve * _curveChangingSpeed;
         }
 
-        private bool TrySetDestination()
+        private void SetDestination()
         {
             Ray ray = _camera.ScreenPointToRay(InputService.PointerPosition);
 
             bool isOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
-            
-            if (Physics.Raycast(ray,  out RaycastHit hit,Single.PositiveInfinity, _raycastTargetLayerMask) && isOverUI == false)
+
+            if (Physics.Raycast(ray, out RaycastHit hit, Single.PositiveInfinity, _raycastTargetLayerMask) &&
+                isOverUI == false)
             {
                 _destinationPoint = hit.point;
                 _ballLandingEffect.Settle(hit);
-                return true;
             }
-            
-            _ballLandingEffect.Disable();
-            return false;
         }
 
         private void EnableLandingEffect() =>
             _ballLandingEffect.Enable();
-        
+
         private void DisableLandingEffect() =>
             _ballLandingEffect.Disable();
-        
-        private Vector3 CalculateLaunchVelocity()
+
+        private void CalculateLaunchVelocity()
         {
             Vector3 toTarget = _destinationPoint - _ballPosition.transform.position;
             float gSquared = Physics.gravity.sqrMagnitude;
@@ -106,7 +108,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
 
             if (discriminant < 0)
             {
-                return Vector3.zero;
+                _launchVelocity = Vector3.zero;
             }
 
             float discriminantRoot = Mathf.Sqrt(discriminant);
@@ -117,18 +119,18 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
 
             Vector3 velocity = toTarget / _flightTime - Physics.gravity * (_flightTime * NumericConstants.Half);
 
-            return velocity;
+            _launchVelocity = velocity;
         }
 
-        private void Throw(Vector3 velocity)
+        private void Throw()
         {
-            if (InputService.Clicked == false)
-                return;
-            
             if (_ball == null)
                 return;
 
-            _ball.Throw(velocity);
+            if (_launchVelocity == Vector3.zero)
+                return;
+
+            _ball.Throw(_launchVelocity);
             BallThrown?.Invoke();
         }
     }

@@ -129,7 +129,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _curtain: {fileID: 4693593820407906538}
   _text: {fileID: 1785037146957400096}
-  _fadingSpeed: 5
+  _fadingStep: 0.01
+  _delay: 0.05
 --- !u!1 &1646428517592075461
 GameObject:
   m_ObjectHideFlags: 0

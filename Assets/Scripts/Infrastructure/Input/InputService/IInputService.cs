@@ -7,7 +7,9 @@ namespace Infrastructure.Input.InputService
     public interface IInputService : IService
     {
         public Vector2 InputDirection { get; }
-        public bool Clicked { get; }
+        public bool TouchedOnce { get; }
+        
+        public bool TouchHeld { get; }
 
         public Vector3 PointerPosition { get; }
         

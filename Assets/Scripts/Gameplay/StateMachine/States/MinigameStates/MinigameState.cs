@@ -1,31 +1,29 @@
 ﻿using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Minigame;
+using Modules.StateMachine;
 using UI.HUD;
 using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.MinigameStates
 {
-    public abstract class MinigameState 
+    public abstract class MinigameState : StateWithTransitions
     {
         private readonly IGameplayHUD _gameplayHUD;
-        
-        protected PlayerFacade[] PlayerTeam;
-        protected  EnemyFacade[] EnemyTeam;
         protected IMinigame Minigame;
 
-        public MinigameState(PlayerFacade[] playerTeam, EnemyFacade[] enemyTeam, IGameplayHUD gameplayHUD)
+        public MinigameState(IGameplayHUD gameplayHUD)
         {
-            PlayerTeam = playerTeam;
-            EnemyTeam = enemyTeam;
+            
             _gameplayHUD = gameplayHUD;
         }
 
-        public virtual void Enter()
+        public override void Enter()
         {
+            base.Enter();
+            SetCharactersStates();
             InitializeMinigame();
             DisableGameplayHUD();
-            SetCharactersStates();
             SubscribeOnMinigame();
             EnableMinigame();
             LaunchMinigame();
@@ -37,8 +35,9 @@ namespace Gameplay.StateMachine.States.MinigameStates
             _gameplayHUD.Disable();
 
 
-        public virtual void Exit()
+        public override void Exit()
         {
+            base.Exit();
             UnsubscribeFromMinigame();
             DisableMinigame();
         }
@@ -46,14 +45,8 @@ namespace Gameplay.StateMachine.States.MinigameStates
         protected abstract void OnMiniGameWon();
         protected abstract void OnMiniGameLost();
 
-        private void SetCharactersStates()
-        {
-            PlayerTeam.Map(player =>
-                player.StateMachine.Enter<Character.Player.StateMachine.States.NotControlledState>());
-            EnemyTeam.Map(enemy =>
-                enemy.StateMachine.Enter<Character.NPC.EnemyPlayer.StateMachine.States.NotControlledState>());
-        }
-
+        protected abstract void SetCharactersStates();
+        
         private void SubscribeOnMinigame()
         {
             Minigame.Won += OnMiniGameWon;

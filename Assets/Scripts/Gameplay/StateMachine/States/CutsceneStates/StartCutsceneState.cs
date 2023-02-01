@@ -5,13 +5,14 @@ using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.States.MinigameStates;
 using Infrastructure.Factory;
 using Infrastructure.ServiceManagement;
+using Modules.StateMachine;
 using UI.HUD;
 using UI.HUD.Mobile;
 
 namespace Gameplay.StateMachine.States.CutsceneStates
 {
     using Ball.MonoBehavior;
-    public class StartCutsceneState : CutsceneState
+    public class StartCutsceneState : CutsceneState, IParameterlessState
     {
         private readonly Referee _referee;
         private readonly Ball _ball;

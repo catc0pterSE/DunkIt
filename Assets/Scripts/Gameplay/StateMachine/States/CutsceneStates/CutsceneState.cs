@@ -10,7 +10,7 @@ namespace Gameplay.StateMachine.States.CutsceneStates
 {
     using Ball.MonoBehavior;
 
-    public abstract class CutsceneState : IParameterlessState
+    public abstract class CutsceneState : StateWithTransitions
     {
         private readonly PlayerFacade[] _playerTeam;
         private readonly EnemyFacade[] _enemyTeam;
@@ -32,8 +32,9 @@ namespace Gameplay.StateMachine.States.CutsceneStates
         }
 
 
-        public virtual void Enter()
+        public override void Enter()
         {
+            base.Enter();
             DisableGameplayHUD();
             SetCharactersStates();
             SubscribeOnCutscene();
@@ -43,12 +44,16 @@ namespace Gameplay.StateMachine.States.CutsceneStates
 
         private void DisableGameplayHUD()
         {
-            UnsubscribeOnCutscene();
             _gameplayHUD.Disable();
         }
 
-        public virtual void Exit() =>
+        public override void Exit()
+        {
+            base.Enter();
             DisableCutscene();
+            UnsubscribeFromCutscene();
+        }
+           
 
 
         protected abstract void EnterNextState();
@@ -64,12 +69,11 @@ namespace Gameplay.StateMachine.States.CutsceneStates
         private void SubscribeOnCutscene() =>
             _cutscene.Finished += EnterNextState;
 
-        private void UnsubscribeOnCutscene() =>
+        private void UnsubscribeFromCutscene() =>
             _cutscene.Finished -= EnterNextState;
 
         private void LaunchCutscene() =>
             _cutscene.Run();
-
 
         private void EnableCutscene() =>
             _cutscene.Enable();

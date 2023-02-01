@@ -50,7 +50,7 @@ namespace Gameplay.Minigame.JumpBall
             {
                 _slider.value = Mathf.MoveTowards(_slider.value, _slider.maxValue, _speed * Time.deltaTime);
 
-                if (InputService.Clicked)
+                if (InputService.TouchedOnce)
                     Finish();
 
                 yield return null;

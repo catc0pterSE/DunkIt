@@ -1,9 +1,8 @@
 ﻿using Modules.StateMachine;
-using UnityEngine;
 
-namespace Gameplay.StateMachine.States.CutsceneStates
+namespace Gameplay.Character.NPC.EnemyPlayer.StateMachine.States
 {
-    public class DunkState : IParameterlessState
+    public class ContestingBallState : IParameterlessState
     {
         public void Exit()
         {

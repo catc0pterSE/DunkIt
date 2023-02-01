@@ -63,6 +63,7 @@ namespace Gameplay.Minigame.Throw
 
         private void OnBallThrown()
         {
+            _interface.Disable();
             _throwingPlayer.PrioritizeCamera();
             _throwingPlayer.DisableBallThrower();
             StartGoalTracking();
@@ -123,7 +124,6 @@ namespace Gameplay.Minigame.Throw
         {
             StopBallTracking();
             UnsubscribeFromThrowingPlayer();
-            _interface.Disable();
         }
     }
 }

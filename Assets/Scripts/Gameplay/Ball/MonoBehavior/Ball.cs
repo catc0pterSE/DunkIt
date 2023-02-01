@@ -10,6 +10,8 @@ namespace Gameplay.Ball.MonoBehavior
 
         private Character.Character _owner;
 
+        public Character.Character Owner => _owner;
+
         public event Action<Character.Character> OwnerChanged;
      
         public void SetOwner(Character.Character owner)
@@ -18,7 +20,6 @@ namespace Gameplay.Ball.MonoBehavior
             RemoveOwner();
             transform.Reset(false);
             SetParent(owner.BallPosition);
-            owner.TakeBall();
             _owner = owner;
             OwnerChanged?.Invoke(_owner);
         }
@@ -37,9 +38,6 @@ namespace Gameplay.Ball.MonoBehavior
 
         private void RemoveOwner()
         {
-            if (_owner!= null)
-                _owner.LoseBall();
-
             _owner = null;
             
             OwnerChanged?.Invoke(_owner);
