@@ -8,17 +8,26 @@ using UnityEngine.Playables;
 
 namespace Gameplay.Cutscene
 {
-    public class CutsceneSkipper: SwitchableMonoBehaviour
+    public class CutsceneSkipper : SwitchableMonoBehaviour
     {
         [SerializeField] private PlayableDirector _director;
         private IInputService _inputService;
 
         private IInputService InputService => _inputService ?? Services.Container.Single<IInputService>();
 
-        private void Update()
+        private void OnEnable()
         {
-            if (InputService.TouchedOnce) 
-                _director.Stop();
+            InputService.TouchDown += SkipCutscene;
+        }
+
+        private void OnDisable()
+        {
+            InputService.TouchDown -= SkipCutscene;
+        }
+
+        private void SkipCutscene()
+        {
+            _director.Stop();
         }
     }
 }

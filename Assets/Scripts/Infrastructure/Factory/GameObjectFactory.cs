@@ -9,6 +9,7 @@ using Gameplay.Cutscene;
 using Gameplay.Minigame;
 using Gameplay.Minigame.JumpBall;
 using Gameplay.Minigame.Throw;
+using Infrastructure.Input.InputService;
 using Infrastructure.Provider;
 using UI;
 using UI.HUD;
@@ -90,6 +91,12 @@ namespace Infrastructure.Factory
         {
             return _assetProvider.Instantiate(ResourcesPathes.ThrowMinigamePath).GetComponent<ThrowMinigame>()
                    ??  throw new NullReferenceException("No ThrowMinigame component on ThrowMinigame prefab");
+        }
+
+        public MobileInputService CreateMobileInputService()
+        {
+            return _assetProvider.Instantiate(ResourcesPathes.MobileInputService).GetComponent<MobileInputService>()
+                   ??  throw new NullReferenceException("No MobileInputService component on MobileInputService prefab");
         }
     }
 }

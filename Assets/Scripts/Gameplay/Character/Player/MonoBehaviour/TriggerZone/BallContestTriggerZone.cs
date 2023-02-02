@@ -12,7 +12,6 @@ namespace Gameplay.Character.Player.MonoBehaviour.TriggerZone
 
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log(other.name);
             if (other.gameObject.TryGetComponent<BasketballPlayer>(out BasketballPlayer basketballPlayer) == false)
                 return;
 

@@ -38,10 +38,10 @@ namespace Infrastructure.StateMachine.States
 
         private void RegisterServices()
         {
-            RegisterInputService();
             _services.RegisterSingle<IAssetProvider>(new AssetProvider());
             _services.RegisterSingle<IGameObjectFactory>(
                 new GameObjectFactory(Services.Container.Single<IAssetProvider>()));
+            RegisterInputService();
         }
 
         private void RegisterInputService() //TODO: for different platforms
@@ -51,7 +51,7 @@ namespace Infrastructure.StateMachine.States
 
         private void RegisterMobileInputService()
         {
-            MobileInputService mobileInputService = new MobileInputService();
+            MobileInputService mobileInputService = _services.Single<IGameObjectFactory>().CreateMobileInputService();
             _services.RegisterSingle<IInputService>(mobileInputService);
             _services.RegisterSingle<IUIInputController>(mobileInputService);
         }

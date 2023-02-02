@@ -1,15 +1,14 @@
-﻿using System;
-using Infrastructure.Input;
+﻿using Infrastructure.Input;
 using Infrastructure.ServiceManagement;
 using Modules.MonoBehaviour;
+using UI.HUD.Mobile;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Gameplay.Minigame.Throw
 {
     public class ThrowUI : SwitchableMonoBehaviour
     {
-        [SerializeField] private Button _throwButton;
+        [SerializeField] private ButtonSimulation _throwButton;
 
         private IUIInputController _uiInputController;
 
@@ -18,18 +17,14 @@ namespace Gameplay.Minigame.Throw
 
         private void OnEnable()
         {
-            SubscribeUIInputControllerOnThrowButton();
+            _throwButton.Down += UIInputController.OnUIThrowButtonDown;
+            _throwButton.Up += UIInputController.OnUIThrowButtonUp;
         }
 
         private void OnDisable()
         {
-            UnsubscribeUIInputControllerFromThrowButton();
+            _throwButton.Down -= UIInputController.OnUIThrowButtonDown;
+            _throwButton.Up -= UIInputController.OnUIThrowButtonUp;
         }
-
-        private void SubscribeUIInputControllerOnThrowButton() =>
-            _throwButton.onClick.AddListener(UIInputController.OnUIThrowButtonClicked);
-
-        private void UnsubscribeUIInputControllerFromThrowButton() =>
-            _throwButton.onClick.RemoveListener(UIInputController.OnUIThrowButtonClicked);
     }
 }

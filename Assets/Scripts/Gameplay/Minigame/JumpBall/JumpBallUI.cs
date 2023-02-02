@@ -46,12 +46,10 @@ namespace Gameplay.Minigame.JumpBall
 
         private IEnumerator Run()
         {
+            SubscribeOnTouch();
             while (_slider.value < _slider.maxValue)
             {
                 _slider.value = Mathf.MoveTowards(_slider.value, _slider.maxValue, _speed * Time.deltaTime);
-
-                if (InputService.TouchedOnce)
-                    Finish();
 
                 yield return null;
             }
@@ -59,17 +57,28 @@ namespace Gameplay.Minigame.JumpBall
             Finish();
         }
 
+        private void SubscribeOnTouch()
+        {
+            InputService.TouchDown += Finish;
+        }
+        
+        private void UnsubscribeFromTouch()
+        {
+            InputService.TouchDown -= Finish;
+        }
+        
+
         private void Reset() =>
             _slider.value = _slider.minValue;
 
         private void Finish()
         {
+            UnsubscribeFromTouch();
+            
             if (_handle.IsInZone)
                 Won?.Invoke();
             else
                 Lost?.Invoke();
-            
-            Disable();
         }  
     }
 }

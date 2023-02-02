@@ -13,5 +13,6 @@
         public const string CinemachineVirtualCamera = "Cinemachine/CinemachineVirtualCamera";
         public const string JumpBallMinigamePath = "Minigames/JumpBall";
         public const string ThrowMinigamePath = "Minigames/Throw";
+        public const string MobileInputService = "Controls/MobileInputService";
     }
 }

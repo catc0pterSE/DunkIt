@@ -34,7 +34,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
         {
             Time.timeScale = 0.3f;
             _trajectoryDrawer.Enable();
-            InputService.ThrowButtonPressed += Throw;
+            InputService.ThrowButtonDown += Throw;
         }
 
         private void OnDisable()
@@ -43,7 +43,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
             _trajectoryDrawer.StopDrawing();
             _trajectoryDrawer.Disable();
             DisableLandingEffect();
-            InputService.ThrowButtonPressed -= Throw;
+            InputService.ThrowButtonDown -= Throw;
         }
 
         private void Awake()
@@ -54,7 +54,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
 
         private void Update()
         {
-            if (InputService.TouchHeld)
+            if (InputService.TouchHeldDown)
             {
                 SetDestination();
                 EnableLandingEffect();
@@ -101,6 +101,12 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
 
         private void CalculateLaunchVelocity()
         {
+            if (_destinationPoint == Vector3.zero)
+            {
+                _launchVelocity = Vector3.zero;
+                return;
+            }
+
             Vector3 toTarget = _destinationPoint - _ballPosition.transform.position;
             float gSquared = Physics.gravity.sqrMagnitude;
             float potentialEnergy = _maxBallSpeed * _maxBallSpeed + Vector3.Dot(toTarget, Physics.gravity);
@@ -109,6 +115,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
             if (discriminant < 0)
             {
                 _launchVelocity = Vector3.zero;
+                return;
             }
 
             float discriminantRoot = Mathf.Sqrt(discriminant);

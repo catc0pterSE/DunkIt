@@ -27,12 +27,12 @@ namespace Gameplay.StateMachine.Tranzitions
 
         public void Enable()
         {
-            InputService.DunkButtonPressed += MoveToDunkState;
+            InputService.DunkButtonDown += MoveToDunkState;
         }
 
         public void Disable()
         {
-            InputService.DunkButtonPressed -= MoveToDunkState;
+            InputService.DunkButtonDown -= MoveToDunkState;
         }
 
         private void MoveToDunkState()

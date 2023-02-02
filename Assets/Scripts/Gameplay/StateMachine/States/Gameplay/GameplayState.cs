@@ -132,10 +132,10 @@ namespace Gameplay.StateMachine.States.Gameplay
             _controlledPlayer = player;
 
         private void SubscribeOnChangePlayerInput() =>
-            InputService.ChangePlayerButtonPressed += SwapControlledPlayer;
+            InputService.ChangePlayerButtonDown += SwapControlledPlayer;
 
         private void UnsubscribeOfChangePlayerInput() =>
-            InputService.ChangePlayerButtonPressed -= SwapControlledPlayer;
+            InputService.ChangePlayerButtonDown -= SwapControlledPlayer;
 
         private void SwapControlledPlayer()
         {

@@ -7,6 +7,7 @@ using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Cutscene;
 using Gameplay.Minigame.JumpBall;
 using Gameplay.Minigame.Throw;
+using Infrastructure.Input.InputService;
 using Infrastructure.ServiceManagement;
 using UI;
 using UI.HUD.Mobile;
@@ -27,5 +28,7 @@ namespace Infrastructure.Factory
         public JumpBallMinigame CreateJumpBallMinigame();
 
         public ThrowMinigame CreateThrowMinigame();
+
+        public MobileInputService CreateMobileInputService();
     }
 }
