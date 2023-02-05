@@ -131,9 +131,6 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
 
         private void Throw()
         {
-            if (_ball == null)
-                return;
-
             if (_launchVelocity == Vector3.zero)
                 return;
 

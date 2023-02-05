@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 4538433228081721433}
   - component: {fileID: 4157564897576991621}
   - component: {fileID: -8693731189481653844}
+  - component: {fileID: -2012806606389975634}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -75,7 +76,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _characterController: {fileID: 4871018274306801538}
   _movementSpeed: 4
-  _rotationSpeed: 400
+  _rotationSpeed: 800
   _gravityModifier: 1
 --- !u!114 &9116447531277526744
 MonoBehaviour:
@@ -122,6 +123,8 @@ MonoBehaviour:
   _animator: {fileID: 5437166744856396153}
   _ballThrower: {fileID: 5250586742983876560}
   _distanceTracker: {fileID: -8693731189481653844}
+  _passer: {fileID: -2012806606389975634}
+  _catcher: {fileID: 1497494343019081299}
 --- !u!95 &5437166744856396153
 Animator:
   serializedVersion: 4
@@ -301,7 +304,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxThrowDistance: 14
   _maxDunkDistance: 5
-  _maxPassDistance: 8
+  _maxPassDistance: 14
+--- !u!114 &-2012806606389975634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919622327166402665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b1297fc9a1b47819167b43163199913, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ballPosition: {fileID: 4042918883656718937}
 --- !u!1 &4042918882263731115
 GameObject:
   m_ObjectHideFlags: 0
@@ -526,10 +542,71 @@ Transform:
   m_LocalPosition: {x: -0, y: 0.62, z: 1.457}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6686152275885002867}
   m_Father: {fileID: 4042918882263731118}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7789709571627010022
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6686152275885002867}
+  - component: {fileID: 670492884037608625}
+  - component: {fileID: 1497494343019081299}
+  m_Layer: 0
+  m_Name: BallCatchTriggerZone
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &6686152275885002867
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7789709571627010022}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.051, y: 0, z: -0.982}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4042918883656718937}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &670492884037608625
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7789709571627010022}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 1.21
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1497494343019081299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7789709571627010022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3c1737b6ec0448ea15efb660607e1da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _host: {fileID: 5054484669908984701}
 --- !u!1 &8939039133351713092
 GameObject:
   m_ObjectHideFlags: 0

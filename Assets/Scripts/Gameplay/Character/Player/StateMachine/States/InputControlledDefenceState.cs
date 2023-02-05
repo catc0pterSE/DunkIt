@@ -5,9 +5,9 @@ namespace Gameplay.Character.Player.StateMachine.States
 {
     public class InputControlledDefenceState: IParameterlessState
     {
-        private readonly PlayerFacade _player;
+        private readonly MonoBehaviour.PlayerFacade _player;
 
-        public InputControlledDefenceState(PlayerFacade player)
+        public InputControlledDefenceState(MonoBehaviour.PlayerFacade player)
         {
             _player = player;
         }

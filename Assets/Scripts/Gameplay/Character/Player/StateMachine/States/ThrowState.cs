@@ -1,22 +1,29 @@
-﻿using Gameplay.Character.Player.MonoBehaviour;
+﻿
+using Gameplay.Character.Player.MonoBehaviour;
 using Modules.StateMachine;
+using UnityEngine;
 
 namespace Gameplay.Character.Player.StateMachine.States
 {
-    public class ThrowState : IParameterlessState
+    public class ThrowState : IParameterState<Vector3>
     {
-        private readonly PlayerFacade _player;
+        private readonly MonoBehaviour.PlayerFacade _player;
 
-        public ThrowState(PlayerFacade player)
+        public ThrowState(MonoBehaviour.PlayerFacade player)
         {
             _player = player;
         }
 
-        public void Enter()
+        public void Enter(Vector3 ringPosition)
         {
-            _player.DisablePlayerMover();
             _player.DisableInputControlledBrain();
             _player.DisableAIControlledBrain();
+            _player.RotateTowards(ringPosition, StartThrow);
+        }
+
+        private void StartThrow()
+        {
+            _player.DisablePlayerMover();
             _player.EnableBallThrower();
             SubscribeOnBallThrown();
         }

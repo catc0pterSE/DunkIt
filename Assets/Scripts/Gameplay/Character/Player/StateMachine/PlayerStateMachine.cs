@@ -8,7 +8,7 @@ namespace Gameplay.Character.Player.StateMachine
 {
     public class PlayerStateMachine : Modules.StateMachine.StateMachine
     {
-        public PlayerStateMachine(PlayerFacade player)
+        public PlayerStateMachine(MonoBehaviour.PlayerFacade player)
         {
             States = new Dictionary<Type, IState>()
             {
@@ -18,6 +18,8 @@ namespace Gameplay.Character.Player.StateMachine
                 [typeof(NotControlledState)] = new NotControlledState(player),
                 [typeof(ThrowState)] = new ThrowState(player),
                 [typeof(IdleState)] = new IdleState(),
+                [typeof(PassState)] = new PassState(player),
+                [typeof(CatchState)] = new CatchState(player),
                 [typeof(ContestingBallState)] = new ContestingBallState()
             };
         }

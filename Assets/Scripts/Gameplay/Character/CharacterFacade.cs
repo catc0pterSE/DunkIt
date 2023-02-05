@@ -6,7 +6,7 @@ namespace Gameplay.Character
 {
     using Ball.MonoBehavior;
 
-    public abstract class Character : SwitchableMonoBehaviour
+    public abstract class CharacterFacade : SwitchableMonoBehaviour
     {
         [SerializeField] private Transform _ballPosition;
 

@@ -1,6 +1,9 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Modules.MonoBehaviour;
 using UnityEngine;
+using Utility.Constants;
 
 namespace Gameplay.Character.Player.MonoBehaviour.Movement
 {
@@ -11,7 +14,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.Movement
         [SerializeField] private float _rotationSpeed = 400;
         [SerializeField] private float _gravityModifier = 1;
 
-        private Coroutine _rotatingToPoint;
+        private Coroutine _rotating;
         private Coroutine _movingToPoint;
 
         private Action Reached;
@@ -40,12 +43,27 @@ namespace Gameplay.Character.Player.MonoBehaviour.Movement
                 Quaternion.RotateTowards(transform.rotation, toRotation, _rotationSpeed * Time.deltaTime);
         }
 
-        public void RotateTo(Vector3 position)
+        public void RotateTo(Vector3 position, Action callback = null)
         {
+            Vector3 positionProjection = new Vector3(position.x, transform.position.y, position.z);
+            
+            if (_rotating!=null)
+                StopCoroutine(_rotating);
+
+            _rotating = StartCoroutine(RotateToPosition(positionProjection, callback));
         }
 
-        public void MoveToTo(Vector3 position)
+        private IEnumerator RotateToPosition(Vector3 position, Action callback = null)
         {
+            Vector3 direction = position - transform.position;
+
+            while (Vector3.Angle(transform.forward, direction) > NumericConstants.MinimalDelta)
+            {
+                Rotate(direction);
+                yield return null;
+            }
+            
+            callback?.Invoke();
         }
     }
 }

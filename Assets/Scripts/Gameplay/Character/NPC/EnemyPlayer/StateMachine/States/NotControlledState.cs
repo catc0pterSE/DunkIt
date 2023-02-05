@@ -5,11 +5,11 @@ namespace Gameplay.Character.NPC.EnemyPlayer.StateMachine.States
 {
     public class NotControlledState : IParameterlessState
     {
-        private readonly EnemyFacade _enemyFacade;
+        private readonly EnemyFacade _enemy;
 
-        public NotControlledState(EnemyFacade enemyFacade)
+        public NotControlledState(EnemyFacade enemy)
         {
-            _enemyFacade = enemyFacade;
+            _enemy = enemy;
         }
 
 

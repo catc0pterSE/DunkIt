@@ -20,16 +20,17 @@ namespace Infrastructure.Input.InputService
         public bool PassButtonHeldDown { get; private set; }
         public bool DunkButtonHeldDown { get; private set; }
         public bool ChangePlayerButtonHeldDown { get; private set; }
-   
+
         public Vector3 PointerPosition => UnityEngine.Input.mousePosition;
         public float ThrowCurve => SimpleInput.GetAxis(ThrowCurveAxisName);
 
         public event Action TouchDown;
-        public event Action TouchUp;
         public event Action ThrowButtonDown;
         public event Action DunkButtonDown;
         public event Action ChangePlayerButtonDown;
         public event Action PassButtonDown;
+
+        public event Action TouchUp;
         public event Action ThrowButtonUp;
         public event Action DunkButtonUp;
         public event Action ChangePlayerButtonUp;
@@ -44,8 +45,8 @@ namespace Infrastructure.Input.InputService
         {
             if (SimpleInput.GetMouseButtonDown(0))
                 TouchDown?.Invoke();
-            
-            if(SimpleInput.GetMouseButtonUp(0))
+
+            if (SimpleInput.GetMouseButtonUp(0))
                 TouchUp?.Invoke();
         }
 
@@ -63,8 +64,8 @@ namespace Infrastructure.Input.InputService
 
         public void OnUIDunkButtonDown()
         {
-           DunkButtonDown?.Invoke();
-           DunkButtonHeldDown = true;
+            DunkButtonDown?.Invoke();
+            DunkButtonHeldDown = true;
         }
 
         public void OnUIChangePlayerButtonDown()

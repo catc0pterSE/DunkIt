@@ -4,11 +4,17 @@ namespace Gameplay.Character.Player.StateMachine.States
 {
     public class IdleState: IParameterlessState
     {
-        public void Exit()
+        public IdleState()
         {
+            
+        }
+        
+        public void Enter()
+        {
+            
         }
 
-        public void Enter()
+        public void Exit()
         {
         }
     }

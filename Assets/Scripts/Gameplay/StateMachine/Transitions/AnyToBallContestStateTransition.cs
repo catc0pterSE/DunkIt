@@ -3,7 +3,7 @@ using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.States.MinigameStates;
 using Modules.StateMachine;
 
-namespace Gameplay.StateMachine.Tranzitions
+namespace Gameplay.StateMachine.Transitions
 {
     using Ball.MonoBehavior;
     using Character;
@@ -12,7 +12,7 @@ namespace Gameplay.StateMachine.Tranzitions
     {
         private readonly Ball _ball;
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
-        private BasketballPlayer _currentBallOwner;
+        private BasketballPlayerFacade _currentBallOwner;
 
         public AnyToBallContestStateTransition(Ball ball, GameplayLoopStateMachine gameplayLoopStateMachine)
         {
@@ -38,12 +38,12 @@ namespace Gameplay.StateMachine.Tranzitions
         private void UnsubscribeFromBall() =>
             _ball.OwnerChanged -= OnBallOwnerChanged;
 
-        private void OnBallOwnerChanged(Character newOwner)
+        private void OnBallOwnerChanged(CharacterFacade newOwner)
         {
             if (_currentBallOwner != null)
                 UnsubscribeFromCurrentBallOwner();
 
-            if (newOwner is not BasketballPlayer basketballPlayer)
+            if (newOwner is not BasketballPlayerFacade basketballPlayer)
                 return;
 
             _currentBallOwner = basketballPlayer;

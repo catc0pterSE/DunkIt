@@ -8,13 +8,13 @@ namespace Gameplay.Ball.MonoBehavior
     {
         [SerializeField] private Rigidbody _rigidBody;
 
-        private Character.Character _owner;
+        private Character.CharacterFacade _owner;
 
-        public Character.Character Owner => _owner;
+        public Character.CharacterFacade Owner => _owner;
 
-        public event Action<Character.Character> OwnerChanged;
+        public event Action<Character.CharacterFacade> OwnerChanged;
      
-        public void SetOwner(Character.Character owner)
+        public void SetOwner(Character.CharacterFacade owner)
         {
             TurnPhysicsOf();
             RemoveOwner();

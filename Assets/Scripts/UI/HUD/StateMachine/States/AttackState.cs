@@ -33,12 +33,14 @@ namespace UI.HUD.StateMachine.States
         {
             _player.ThrowReached += _gameplayHUD.SetThrowAvailability;
             _player.DunkReached += _gameplayHUD.SetDunkAvailability;
+            _player.PassReached += _gameplayHUD.SetPassAvailability;
         }
 
         private void UnsubscribeHudOnCurrentPlayer()
         {
             _player.ThrowReached -= _gameplayHUD.SetThrowAvailability;
             _player.DunkReached -= _gameplayHUD.SetDunkAvailability;
+            _player.PassReached -= _gameplayHUD.SetPassAvailability;
         }
     }
 }

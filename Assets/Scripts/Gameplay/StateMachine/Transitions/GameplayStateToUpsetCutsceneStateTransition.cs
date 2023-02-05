@@ -12,7 +12,7 @@ using UnityEngine;
 using Utility.Constants;
 using Utility.Extensions;
 
-namespace Gameplay.StateMachine.Tranzitions
+namespace Gameplay.StateMachine.Transitions
 {
     using Ball.MonoBehavior;
     public class GameplayStateToUpsetCutsceneStateTransition: ITransition

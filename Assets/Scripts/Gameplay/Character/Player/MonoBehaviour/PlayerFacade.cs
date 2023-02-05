@@ -1,9 +1,12 @@
 ﻿using System;
 using Cinemachine;
+using Gameplay.Character.Player.MonoBehaviour.BallHandle;
+using Gameplay.Character.Player.MonoBehaviour.BallHandle.Pass;
 using Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw;
 using Gameplay.Character.Player.MonoBehaviour.Brains;
 using Gameplay.Character.Player.MonoBehaviour.Distance;
 using Gameplay.Character.Player.MonoBehaviour.Movement;
+using Gameplay.Character.Player.MonoBehaviour.TriggerZone;
 using Gameplay.Character.Player.StateMachine;
 using Scene;
 using UnityEngine;
@@ -11,7 +14,7 @@ using Utility.Extensions;
 
 namespace Gameplay.Character.Player.MonoBehaviour
 {
-    public class PlayerFacade : BasketballPlayer
+    public class PlayerFacade : BasketballPlayerFacade
     {
         [SerializeField] private InputControlledBrain _inputControlledBrain;
         [SerializeField] private AIControlledBrain _aiControlledBrain;
@@ -19,17 +22,20 @@ namespace Gameplay.Character.Player.MonoBehaviour
         [SerializeField] private Animator _animator;
         [SerializeField] private BallThrower _ballThrower;
         [SerializeField] private DistanceTracker _distanceTracker;
+        [SerializeField] private Passer _passer;
+        [SerializeField] private Catcher _catcher;
 
         private CinemachineVirtualCamera _virtualCamera;
         private PlayerStateMachine _stateMachine;
         private SceneConfig _sceneConfig;
+        private PlayerFacade _ally;
         
         public PlayerStateMachine StateMachine => _stateMachine ??= new PlayerStateMachine(this); //TODO: methods?
         public Animator Animator => _animator;
 
-        public bool IsPassPossible => _distanceTracker.IsPassPossible;
-        public bool IsInDunkZone => _distanceTracker.IsInDunkZone;
-        public bool IsInThrowZone => _distanceTracker.InThrowZone;
+        public bool IsPassPossible => _distanceTracker.IsPassPossible && OwnsBall;
+        public bool IsInDunkZone => _distanceTracker.IsInDunkZone && OwnsBall;
+        public bool IsInThrowZone => _distanceTracker.InThrowZone && OwnsBall;
 
         public event Action<bool> ThrowReached
         {
@@ -49,10 +55,22 @@ namespace Gameplay.Character.Player.MonoBehaviour
             remove => _distanceTracker.PassReached += value;
         }
 
-        public override event Action BallThrown
+        public event Action BallThrown
         {
             add => _ballThrower.BallThrown += value;
             remove => _ballThrower.BallThrown -= value;
+        }
+        
+        public event Action PassedBall
+        {
+            add => _passer.PassedBall += value;
+            remove => _passer.PassedBall -= value;
+        }
+        
+        public event Action CaughtBall
+        {
+            add => _catcher.CaughtBall += value;
+            remove => _catcher.CaughtBall -= value;
         }
 
         public void EnableInputControlledBrain() =>
@@ -85,9 +103,22 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public void DisableDistanceTracker() =>
             _distanceTracker.Disable();
 
+        public void EnablePasser() =>
+            _passer.Enable();
+
+        public void DisablePasser() =>
+            _passer.Disable();
+        
+        public void EnableCatcher() =>
+            _catcher.Enable();
+
+        public void DisableCatcher() =>
+            _catcher.Disable();
+
         public void Initialize(PlayerFacade ally, Ball.MonoBehavior.Ball ball, UnityEngine.Camera gameplayCamera, CinemachineVirtualCamera virtualCamera,
             SceneConfig sceneConfig)
         {
+            _ally = ally;
             _ballThrower.Initialize(ball, gameplayCamera);
             _inputControlledBrain.Initialize(gameplayCamera.transform);
             _distanceTracker.Initialize(sceneConfig.EnemyRing.transform.position, ally.transform);
@@ -95,6 +126,7 @@ namespace Gameplay.Character.Player.MonoBehaviour
             _virtualCamera = virtualCamera;
             _virtualCamera.Follow = transform;
             _sceneConfig = sceneConfig;
+            _passer.Initialize(ball, _ally);
         }
 
         public void PrioritizeCamera() =>
@@ -106,7 +138,19 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public void FocusOnBall() =>
             _virtualCamera.LookAt = Ball.transform;
         
+        public void FocusOnAlly() =>
+            _virtualCamera.LookAt = _ally.transform;
+        
         public void FocusOnBallOwner() =>
             _virtualCamera.LookAt = Ball.Owner.transform;
+
+        public void RotateTowards(Vector3 position, Action callback = null) =>
+            _playerMover.RotateTo(position, callback);
+        
+        public void RotateToAlly( Action callback = null) =>
+            _playerMover.RotateTo(_ally.transform.position, callback);
+
+        public void Pass() =>
+            _passer.Pass();
     }
 }

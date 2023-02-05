@@ -4,7 +4,7 @@ using Infrastructure.Input.InputService;
 using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
 
-namespace Gameplay.StateMachine.Tranzitions
+namespace Gameplay.StateMachine.Transitions
 {
     public class GameplayStateToDunkStateTransition : ITransition
     {

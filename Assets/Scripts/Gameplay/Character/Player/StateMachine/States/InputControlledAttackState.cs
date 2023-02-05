@@ -5,9 +5,9 @@ namespace Gameplay.Character.Player.StateMachine.States
 {
     public class InputControlledAttackState : IParameterlessState
     {
-        private readonly PlayerFacade _player;
+        private readonly MonoBehaviour.PlayerFacade _player;
 
-        public InputControlledAttackState(PlayerFacade player)
+        public InputControlledAttackState(MonoBehaviour.PlayerFacade player)
         {
             _player = player;
         }
@@ -19,7 +19,7 @@ namespace Gameplay.Character.Player.StateMachine.States
             _player.PrioritizeCamera();
             _player.FocusOnEnemyBasket();
             _player.EnableDistanceTracker();
-            _player.EnableBallContestTrigger();
+            _player.EnableBallContestTriggerZone();
         }
         
         public void Exit()
@@ -27,7 +27,7 @@ namespace Gameplay.Character.Player.StateMachine.States
             _player.DisablePlayerMover();
             _player.DisableInputControlledBrain();
             _player.DisableDistanceTracker();
-            _player.DisableBallContestTrigger();
+            _player.DisableBallContestTriggerZone();
         }
     }
 }

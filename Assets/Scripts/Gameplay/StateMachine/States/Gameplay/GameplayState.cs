@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
-using Gameplay.StateMachine.Tranzitions;
+using Gameplay.StateMachine.Transitions;
 using Infrastructure.CoroutineRunner;
 using Infrastructure.Input.InputService;
 using Infrastructure.ServiceManagement;
@@ -27,8 +27,7 @@ namespace Gameplay.StateMachine.States.Gameplay
         private IInputService _inputService;
 
         private IInputService InputService => _inputService ??= Services.Container.Single<IInputService>();
-        private PlayerFacade NotControlledPlayer => _playerTeam.FirstOrDefault(player => player != _controlledPlayer);
-
+        private PlayerFacade NotControlledPlayer => _playerTeam.FindFirstOrNull(player => player != _controlledPlayer);
         public PlayerFacade ControlledPlayer => _controlledPlayer;
 
         public GameplayState
@@ -49,7 +48,8 @@ namespace Gameplay.StateMachine.States.Gameplay
                 new GameplayStateToThrowStateTransition(this, gameplayLoopStateMachine),
                 new AnyToBallContestStateTransition(ball, gameplayLoopStateMachine),
                 new GameplayStateToUpsetCutsceneStateTransition(playerTeam, enemyTeam, ball, sceneConfig.EnemyRing,
-                    loadingCurtain, gameplayLoopStateMachine, coroutineRunner, sceneConfig)
+                    loadingCurtain, gameplayLoopStateMachine, coroutineRunner, sceneConfig),
+                new GameplayStateToPassTransition(this, gameplayLoopStateMachine)
             };
             _playerTeam = playerTeam;
             _enemyTeam = enemyTeam;
@@ -62,14 +62,11 @@ namespace Gameplay.StateMachine.States.Gameplay
             base.Enter();
             EnableHUD();
             SubscribeOnChangePlayerInput();
-
-            if (_controlledPlayer == null)
-                SetControlledPlayer
+            SetControlledPlayer
                 (
                     _playerTeam.FindFirstOrNull(player => player.OwnsBall)
                     ?? _playerTeam[NumericConstants.PrimaryTeamMemberIndex]
                 );
-
             SubscribeOnBall();
             SetPlayersStates();
             SetEnemiesStates();
@@ -100,7 +97,7 @@ namespace Gameplay.StateMachine.States.Gameplay
         private void UnsubscribeFromBall() =>
             _ball.OwnerChanged -= OnBallOwnerChanged;
 
-        private void OnBallOwnerChanged(Character.Character newOwner)
+        private void OnBallOwnerChanged(Character.CharacterFacade newOwner)
         {
             if (newOwner is PlayerFacade player)
                 SetControlledPlayer(player);

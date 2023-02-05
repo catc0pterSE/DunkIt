@@ -2,13 +2,14 @@
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.States.CutsceneStates;
 using Gameplay.StateMachine.States.Gameplay;
-using Gameplay.StateMachine.Tranzitions;
+using Gameplay.StateMachine.Transitions;
 using Infrastructure.Factory;
 using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
 using Scene;
 using UI;
 using UI.HUD;
+using UnityEngine;
 using Utility.Constants;
 
 namespace Gameplay.StateMachine.States.MinigameStates
@@ -74,7 +75,7 @@ namespace Gameplay.StateMachine.States.MinigameStates
 
         protected override void SetCharactersStates()
         {
-            _throwingPlayer.StateMachine.Enter<Character.Player.StateMachine.States.ThrowState>();
+            _throwingPlayer.StateMachine.Enter<Character.Player.StateMachine.States.ThrowState, Vector3>(_sceneConfig.EnemyRing.transform.position);
         }
 
         private void MoveToCelebrateCutsceneState() =>
