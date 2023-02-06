@@ -13,7 +13,7 @@ namespace Gameplay.Ball.MonoBehavior
         public Character.CharacterFacade Owner => _owner;
 
         public event Action<Character.CharacterFacade> OwnerChanged;
-     
+
         public void SetOwner(Character.CharacterFacade owner)
         {
             TurnPhysicsOf();
@@ -23,7 +23,7 @@ namespace Gameplay.Ball.MonoBehavior
             _owner = owner;
             OwnerChanged?.Invoke(_owner);
         }
-        
+
         public void Throw(Vector3 velocity)
         {
             RemoveOwner();
@@ -31,17 +31,15 @@ namespace Gameplay.Ball.MonoBehavior
             _rigidBody.AddForce(velocity, ForceMode.VelocityChange);
         }
 
-        private void SetParent(Transform parent)
+        public void RemoveOwner()
         {
-            transform.SetParent(parent, false);
-        }
-
-        private void RemoveOwner()
-        {
+            transform.parent = null;
             _owner = null;
-            
             OwnerChanged?.Invoke(_owner);
         }
+
+        private void SetParent(Transform parent) =>
+            transform.SetParent(parent, false);
 
         private void TurnPhysicsOn() =>
             _rigidBody.isKinematic = false;

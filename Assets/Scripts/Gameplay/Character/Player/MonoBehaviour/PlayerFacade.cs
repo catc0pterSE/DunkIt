@@ -1,6 +1,7 @@
 ﻿using System;
 using Cinemachine;
 using Gameplay.Character.Player.MonoBehaviour.BallHandle;
+using Gameplay.Character.Player.MonoBehaviour.BallHandle.Dunk;
 using Gameplay.Character.Player.MonoBehaviour.BallHandle.Pass;
 using Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw;
 using Gameplay.Character.Player.MonoBehaviour.Brains;
@@ -9,6 +10,7 @@ using Gameplay.Character.Player.MonoBehaviour.Movement;
 using Gameplay.Character.Player.MonoBehaviour.TriggerZone;
 using Gameplay.Character.Player.StateMachine;
 using Scene;
+using Scene.Ring;
 using UnityEngine;
 using Utility.Extensions;
 
@@ -24,6 +26,7 @@ namespace Gameplay.Character.Player.MonoBehaviour
         [SerializeField] private DistanceTracker _distanceTracker;
         [SerializeField] private Passer _passer;
         [SerializeField] private Catcher _catcher;
+        [SerializeField] private Dunker _dunker;
 
         private CinemachineVirtualCamera _virtualCamera;
         private PlayerStateMachine _stateMachine;
@@ -72,6 +75,12 @@ namespace Gameplay.Character.Player.MonoBehaviour
             add => _catcher.CaughtBall += value;
             remove => _catcher.CaughtBall -= value;
         }
+        
+        public event Action DunkPointReached
+        {
+            add => _dunker.DunkPointReached += value;
+            remove => _dunker.DunkPointReached -= value;
+        }
 
         public void EnableInputControlledBrain() =>
             _inputControlledBrain.Enable();
@@ -115,6 +124,12 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public void DisableCatcher() =>
             _catcher.Disable();
 
+        public void EnableDunker() =>
+            _dunker.Enable();
+        
+        public void DisableDunker() =>
+            _dunker.Disable();
+
         public void Initialize(PlayerFacade ally, Ball.MonoBehavior.Ball ball, UnityEngine.Camera gameplayCamera, CinemachineVirtualCamera virtualCamera,
             SceneConfig sceneConfig)
         {
@@ -144,8 +159,11 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public void FocusOnBallOwner() =>
             _virtualCamera.LookAt = Ball.Owner.transform;
 
-        public void RotateTowards(Vector3 position, Action callback = null) =>
+        public void RotateTo(Vector3 position, Action callback = null) =>
             _playerMover.RotateTo(position, callback);
+        
+        public void Dunk(Ring ring) =>
+            _dunker.Dunk(ring);
         
         public void RotateToAlly( Action callback = null) =>
             _playerMover.RotateTo(_ally.transform.position, callback);

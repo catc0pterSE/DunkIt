@@ -6,7 +6,7 @@ using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.Gameplay
 {
-    public class PassState : IParameterlessState
+    public class PassState : IParameterState<PlayerFacade>
     {
         private readonly PlayerFacade[] _playerTeam;
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
@@ -20,10 +20,9 @@ namespace Gameplay.StateMachine.States.Gameplay
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
         }
 
-        public void Enter()
+        public void Enter(PlayerFacade passingPlayer)
         {
-            _passingPlayer = _playerTeam.FindFirstOrNull(player => player.OwnsBall)
-                             ?? throw new NullReferenceException("No players owns ball");
+            _passingPlayer = passingPlayer;
             _catchingPlayer = _playerTeam.FindFirstOrNull(player => player != _passingPlayer);
             SetPlayersStates();
             _catchingPlayer.CaughtBall += MoveToGameplayState;

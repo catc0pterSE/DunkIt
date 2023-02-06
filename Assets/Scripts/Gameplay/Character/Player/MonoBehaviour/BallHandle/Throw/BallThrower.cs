@@ -119,8 +119,8 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
             }
 
             float discriminantRoot = Mathf.Sqrt(discriminant);
-            float maxFlightTime = Mathf.Sqrt((potentialEnergy + discriminantRoot) * NumericConstants.Two / gSquared);
-            float minFlightTime = Mathf.Sqrt((potentialEnergy - discriminantRoot) * NumericConstants.Two / gSquared);
+            float maxFlightTime = Mathf.Sqrt((potentialEnergy + discriminantRoot) * NumericConstants.Double / gSquared);
+            float minFlightTime = Mathf.Sqrt((potentialEnergy - discriminantRoot) * NumericConstants.Double / gSquared);
 
             _flightTime = Mathf.Clamp(_flightTime, minFlightTime, maxFlightTime);
 

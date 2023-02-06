@@ -17,6 +17,20 @@ namespace Utility.Extensions
             return positions;
         }
         
+        public static Transform FindClosest(this Transform[] transforms, Vector3 position)
+        {
+           float minDistance = Single.PositiveInfinity;
+           Transform closestTransform = null;
+
+           foreach (Transform transform in transforms)
+           {
+               if (Vector3.Distance(transform.position, position) < minDistance)
+                   closestTransform = transform;
+           }
+           
+           return closestTransform;
+        }
+        
         public static Transform[] GetTransforms(this MonoBehaviour[] monoBehaviours)
         {
             Transform[] transforms = new Transform[monoBehaviours.Length];

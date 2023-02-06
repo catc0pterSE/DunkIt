@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using Cinemachine;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
+using Random = UnityEngine.Random;
 
 namespace Scene.Ring
 {
@@ -12,12 +13,22 @@ namespace Scene.Ring
         [SerializeField] private RingCap _cap;
         [SerializeField] private WinZone _winZone;
         [SerializeField] private CinemachineVirtualCamera _virtualCamera;
-
+        [SerializeField] private Transform[] _dunkPoints;
+        [SerializeField] private Transform _ballDunkTarget;
+        [SerializeField] private CinemachineVirtualCamera[] _dunkVirtualCameras;
+        
         private Coroutine _listeningToWinZone;
         private WaitForSeconds _goalTrackingWindowWait;
         public event Action Goal;
 
+        public Transform[] DunkPoints => _dunkPoints.ToArray();
+
+        public Transform BallDunkTarget => _ballDunkTarget;
+
         public CinemachineVirtualCamera VirtualCamera => _virtualCamera;
+
+        public CinemachineVirtualCamera DunkVirtualCamera =>
+            _dunkVirtualCameras[Random.Range(0, _dunkVirtualCameras.Length)];
 
         private void Awake()
         {

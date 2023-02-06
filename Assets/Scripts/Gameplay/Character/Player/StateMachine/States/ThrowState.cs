@@ -18,7 +18,7 @@ namespace Gameplay.Character.Player.StateMachine.States
         {
             _player.DisableInputControlledBrain();
             _player.DisableAIControlledBrain();
-            _player.RotateTowards(ringPosition, StartThrow);
+            _player.RotateTo(ringPosition, StartThrow);
         }
 
         private void StartThrow()

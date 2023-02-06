@@ -1,4 +1,5 @@
-﻿using Gameplay.StateMachine.States.Gameplay;
+﻿using Gameplay.Character.Player.MonoBehaviour;
+using Gameplay.StateMachine.States.Gameplay;
 using Infrastructure.Input.InputService;
 using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
@@ -36,7 +37,7 @@ namespace Gameplay.StateMachine.Transitions
             if (_gameplayState.ControlledPlayer.IsPassPossible == false)
                 return;
 
-            _gameplayLoopStateMachine.Enter<PassState>();
+            _gameplayLoopStateMachine.Enter<PassState, PlayerFacade>(_gameplayState.ControlledPlayer);
         }
     }
 }

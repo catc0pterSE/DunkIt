@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 4157564897576991621}
   - component: {fileID: -8693731189481653844}
   - component: {fileID: -2012806606389975634}
+  - component: {fileID: 4617063359223777939}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -125,6 +126,7 @@ MonoBehaviour:
   _distanceTracker: {fileID: -8693731189481653844}
   _passer: {fileID: -2012806606389975634}
   _catcher: {fileID: 1497494343019081299}
+  _dunker: {fileID: 4617063359223777939}
 --- !u!95 &5437166744856396153
 Animator:
   serializedVersion: 4
@@ -318,6 +320,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ballPosition: {fileID: 4042918883656718937}
+--- !u!114 &4617063359223777939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919622327166402665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10ec4b00bfd44b93b66e5f837bee64ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mover: {fileID: 3567767349144517149}
+  _jumpSpeed: 12
 --- !u!1 &4042918882263731115
 GameObject:
   m_ObjectHideFlags: 0

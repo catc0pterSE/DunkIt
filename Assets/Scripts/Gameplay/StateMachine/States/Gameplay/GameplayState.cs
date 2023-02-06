@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
+﻿using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.Transitions;
 using Infrastructure.CoroutineRunner;

@@ -20,6 +20,7 @@ namespace Gameplay.Character.Player.StateMachine
                 [typeof(IdleState)] = new IdleState(),
                 [typeof(PassState)] = new PassState(player),
                 [typeof(CatchState)] = new CatchState(player),
+                [typeof(DunkState)] = new DunkState(player),
                 [typeof(ContestingBallState)] = new ContestingBallState()
             };
         }

@@ -10,7 +10,8 @@
         public const int SecondaryTeamMemberIndex = 1;
         public const float Half = 0.5f;
         public const float MinimalDelta = 0.02f;
-        public const int Two = 2;
-        public const int Four = 4;
+        public const int Double = 2;
+        public const int LowEnergyParabolicFlightTimeCoefficient = 4;
+        public const int DunkThrowForce = 5;
     }
 }

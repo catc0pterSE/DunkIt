@@ -31,7 +31,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Pass
         {
             Vector3 toTarget = _ally.BallPosition.position  - _ballPosition.position;
             float gSquared = Physics.gravity.sqrMagnitude;
-            float flightTime = Mathf.Sqrt(Mathf.Sqrt(toTarget.sqrMagnitude * NumericConstants.Four / gSquared));
+            float flightTime = Mathf.Sqrt(Mathf.Sqrt(toTarget.sqrMagnitude * NumericConstants.LowEnergyParabolicFlightTimeCoefficient / gSquared));
             Vector3 velocity = toTarget / flightTime - Physics.gravity * (flightTime * NumericConstants.Half);
             return velocity;
         }

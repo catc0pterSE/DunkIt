@@ -17,13 +17,13 @@ namespace Gameplay.Character.Player.StateMachine.States
             _player.EnableInputControlledBrain();
             _player.EnablePlayerMover();
             _player.PrioritizeCamera();
-            _player.FocusOnBall();
+            _player.FocusOnBallOwner();
         }
         
         public void Exit()
         {
             _player.DisablePlayerMover();
-            _player.DisableInputControlledBrain();
+            _player.DisableInputControlledBrain();  
         }
     }
 }
