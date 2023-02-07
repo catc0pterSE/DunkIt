@@ -1,5 +1,4 @@
-﻿using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
-using Gameplay.Character.Player.MonoBehaviour;
+﻿using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.States.CutsceneStates;
 using Gameplay.StateMachine.States.Gameplay;
 using Gameplay.StateMachine.Transitions;
@@ -9,7 +8,6 @@ using Modules.StateMachine;
 using Scene;
 using UI;
 using UI.HUD;
-using UnityEngine;
 using Utility.Constants;
 
 namespace Gameplay.StateMachine.States.MinigameStates
@@ -19,7 +17,7 @@ namespace Gameplay.StateMachine.States.MinigameStates
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
         private readonly Ball.MonoBehavior.Ball _ball;
         private readonly LoadingCurtain _loadingCurtain;
-        private readonly EnemyFacade[] _enemyTeam;
+        private readonly PlayerFacade[] _enemyTeam;
         private readonly SceneConfig _sceneConfig;
 
 
@@ -30,7 +28,7 @@ namespace Gameplay.StateMachine.States.MinigameStates
             IGameplayHUD gameplayHUD,
             SceneConfig sceneConfig,
             GameplayLoopStateMachine gameplayLoopStateMachine,
-            EnemyFacade[] enemyTeam,
+            PlayerFacade[] enemyTeam,
             Ball.MonoBehavior.Ball ball,
             LoadingCurtain loadingCurtain) : base(gameplayHUD)
         {

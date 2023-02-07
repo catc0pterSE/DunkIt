@@ -2,17 +2,14 @@
 using Cinemachine;
 using Gameplay.Ball.MonoBehavior;
 using Gameplay.Camera;
-using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Cutscene;
-using Gameplay.Minigame;
 using Gameplay.Minigame.JumpBall;
 using Gameplay.Minigame.Throw;
 using Infrastructure.Input.InputService;
 using Infrastructure.Provider;
 using UI;
-using UI.HUD;
 using UI.HUD.Mobile;
 using Utility.Constants;
 
@@ -43,12 +40,6 @@ namespace Infrastructure.Factory
         {
             return _assetProvider.Instantiate(ResourcesPathes.PlayerPath).GetComponent<PlayerFacade>()
                 ?? throw new NullReferenceException("No PlayerFacade script on Player prefab");
-        }
-
-        public EnemyFacade CreateEnemy()
-        {
-            return _assetProvider.Instantiate(ResourcesPathes.EnemyPath).GetComponent<EnemyFacade>()
-                   ?? throw new NullReferenceException("No EnemyFacade script on Enemy prefab");
         }
 
         public Referee CreateReferee()

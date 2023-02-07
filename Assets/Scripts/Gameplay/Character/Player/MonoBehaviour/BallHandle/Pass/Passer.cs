@@ -10,7 +10,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Pass
     {
         [SerializeField] private Transform _ballPosition;
         
-        private BasketballPlayerFacade _ally;
+        private PlayerFacade _ally;
         private Ball _ball;
 
         public event Action PassedBall;

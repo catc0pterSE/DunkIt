@@ -16,7 +16,7 @@ using Utility.Extensions;
 
 namespace Gameplay.Character.Player.MonoBehaviour
 {
-    public class PlayerFacade : BasketballPlayerFacade
+    public class PlayerFacade : CharacterFacade
     {
         [SerializeField] private InputControlledBrain _inputControlledBrain;
         [SerializeField] private AIControlledBrain _aiControlledBrain;
@@ -27,18 +27,21 @@ namespace Gameplay.Character.Player.MonoBehaviour
         [SerializeField] private Passer _passer;
         [SerializeField] private Catcher _catcher;
         [SerializeField] private Dunker _dunker;
+        [SerializeField] private BallContestTriggerZone _ballContestTriggerZone;
 
         private CinemachineVirtualCamera _virtualCamera;
         private PlayerStateMachine _stateMachine;
         private SceneConfig _sceneConfig;
         private PlayerFacade _ally;
-        
-        private PlayerStateMachine StateMachine => _stateMachine ??= new PlayerStateMachine(this); //TODO: methods?
+
+        private PlayerStateMachine StateMachine => _stateMachine ??= new PlayerStateMachine(this);
         public Animator Animator => _animator;
-        
+
         public bool IsPassPossible => _distanceTracker.IsPassPossible && OwnsBall;
         public bool IsInDunkZone => _distanceTracker.IsInDunkZone && OwnsBall;
         public bool IsInThrowZone => _distanceTracker.InThrowZone && OwnsBall;
+
+        public bool IsPlayable { get; private set; }
 
         public event Action<bool> ThrowReached
         {
@@ -51,7 +54,7 @@ namespace Gameplay.Character.Player.MonoBehaviour
             add => _distanceTracker.DunkReached += value;
             remove => _distanceTracker.DunkReached += value;
         }
-        
+
         public event Action<bool> PassReached
         {
             add => _distanceTracker.PassReached += value;
@@ -63,28 +66,36 @@ namespace Gameplay.Character.Player.MonoBehaviour
             add => _ballThrower.BallThrown += value;
             remove => _ballThrower.BallThrown -= value;
         }
-        
+
         public event Action PassedBall
         {
             add => _passer.PassedBall += value;
             remove => _passer.PassedBall -= value;
         }
-        
+
         public event Action CaughtBall
         {
             add => _catcher.CaughtBall += value;
             remove => _catcher.CaughtBall -= value;
         }
-        
+
         public event Action DunkPointReached
         {
             add => _dunker.DunkPointReached += value;
             remove => _dunker.DunkPointReached -= value;
         }
-        
-        public void Initialize(PlayerFacade ally, Ball.MonoBehavior.Ball ball, UnityEngine.Camera gameplayCamera, CinemachineVirtualCamera virtualCamera,
+
+        public event Action<PlayerFacade, PlayerFacade> BallContestStarted
+        {
+            add => _ballContestTriggerZone.BallContestStarted += value;
+            remove => _ballContestTriggerZone.BallContestStarted -= value;
+        }
+
+        public PlayerFacade Initialize(bool isPlayable, PlayerFacade ally, Ball.MonoBehavior.Ball ball,
+            UnityEngine.Camera gameplayCamera, CinemachineVirtualCamera virtualCamera,
             SceneConfig sceneConfig)
         {
+            IsPlayable = isPlayable;
             _dunker.Initialize(ball);
             _ally = ally;
             _ballThrower.Initialize(ball, gameplayCamera);
@@ -95,35 +106,37 @@ namespace Gameplay.Character.Player.MonoBehaviour
             _virtualCamera.Follow = transform;
             _sceneConfig = sceneConfig;
             _passer.Initialize(ball, _ally);
+
+            return this;
         }
 
         public void EnterInputControlledAttackState() =>
             StateMachine.Enter<InputControlledAttackState>();
-        
+
         public void EnterInputControlledDefenceState() =>
             StateMachine.Enter<InputControlledDefenceState>();
-        
+
         public void EnterAIControlledState() =>
             StateMachine.Enter<AIControlledState>();
-        
+
         public void EnterNotControlledState() =>
             StateMachine.Enter<NotControlledState>();
-        
+
         public void EnterThrowState(Vector3 ringPosition) =>
             StateMachine.Enter<ThrowState, Vector3>(ringPosition);
-        
+
         public void EnterIdleState() =>
             StateMachine.Enter<IdleState>();
-        
+
         public void EnterPassState() =>
             StateMachine.Enter<PassState>();
-        
+
         public void EnterCatchState() =>
             StateMachine.Enter<CatchState>();
-        
+
         public void EnterDunkState(Ring ring) =>
             StateMachine.Enter<DunkState, Ring>(ring);
-        
+
         public void EnterContestingBallState() =>
             StateMachine.Enter<ContestingBallState>();
 
@@ -162,7 +175,7 @@ namespace Gameplay.Character.Player.MonoBehaviour
 
         public void DisablePasser() =>
             _passer.Disable();
-        
+
         public void EnableCatcher() =>
             _catcher.Enable();
 
@@ -171,35 +184,44 @@ namespace Gameplay.Character.Player.MonoBehaviour
 
         public void EnableDunker() =>
             _dunker.Enable();
-        
+
         public void DisableDunker() =>
             _dunker.Disable();
 
+        public void EnableBallContestTriggerZone() =>
+            _ballContestTriggerZone.Enable();
+
+        public void DisableBallContestTriggerZone() =>
+            _ballContestTriggerZone.Disable();
+
         public void PrioritizeCamera() =>
             _virtualCamera.Prioritize();
-        
+
         public void FocusOnEnemyBasket() =>
             _virtualCamera.LookAt = _sceneConfig.EnemyRing.transform;
 
         public void FocusOnBall() =>
             _virtualCamera.LookAt = Ball.transform;
-        
+
         public void FocusOnAlly() =>
             _virtualCamera.LookAt = _ally.transform;
-        
+
         public void FocusOnBallOwner() =>
             _virtualCamera.LookAt = Ball.Owner.transform;
 
         public void RotateTo(Vector3 position, Action callback = null) =>
             _playerMover.RotateTo(position, callback);
-        
+
         public void Dunk(Ring ring) =>
             _dunker.Dunk(ring);
-        
-        public void RotateToAlly( Action callback = null) =>
+
+        public void RotateToAlly(Action callback = null) =>
             _playerMover.RotateTo(_ally.transform.position, callback);
 
         public void Pass() =>
             _passer.Pass();
+
+        public void RotateToBallOwner(Action callback = null) =>
+            _playerMover.RotateTo(Ball.Owner.transform.position, callback);
     }
 }

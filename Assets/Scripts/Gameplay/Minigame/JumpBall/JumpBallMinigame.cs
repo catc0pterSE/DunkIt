@@ -1,6 +1,5 @@
 ﻿using System;
 using Cinemachine;
-using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Modules.MonoBehaviour;
@@ -39,12 +38,12 @@ namespace Gameplay.Minigame.JumpBall
             CinemachineBrain gameplayCamera,
             Referee referee,
             PlayerFacade[] playerTeam,
-            EnemyFacade[] enemyTeam,
+            PlayerFacade[] enemyTeam,
             Ball.MonoBehavior.Ball ball
         )
         {
             PlayerFacade player = playerTeam[NumericConstants.PrimaryTeamMemberIndex];
-            EnemyFacade enemy = enemyTeam[NumericConstants.PrimaryTeamMemberIndex];
+            PlayerFacade enemy = enemyTeam[NumericConstants.PrimaryTeamMemberIndex];
 
             _ballCamera.LookAt = ball.transform;
             _refereeCamera.LookAt = referee.transform;

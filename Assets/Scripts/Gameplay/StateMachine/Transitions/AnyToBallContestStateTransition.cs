@@ -1,20 +1,17 @@
-﻿using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
+﻿using Gameplay.Character;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.States.MinigameStates;
 using Modules.StateMachine;
 
 namespace Gameplay.StateMachine.Transitions
 {
-    using Ball.MonoBehavior;
-    using Character;
-
     public class AnyToBallContestStateTransition : ITransition
     {
-        private readonly Ball _ball;
+        private readonly Ball.MonoBehavior.Ball _ball;
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
-        private BasketballPlayerFacade _currentBallOwner;
+        private PlayerFacade _currentBallOwner;
 
-        public AnyToBallContestStateTransition(Ball ball, GameplayLoopStateMachine gameplayLoopStateMachine)
+        public AnyToBallContestStateTransition(Ball.MonoBehavior.Ball ball, GameplayLoopStateMachine gameplayLoopStateMachine)
         {
             _ball = ball;
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
@@ -43,7 +40,7 @@ namespace Gameplay.StateMachine.Transitions
             if (_currentBallOwner != null)
                 UnsubscribeFromCurrentBallOwner();
 
-            if (newOwner is not BasketballPlayerFacade basketballPlayer)
+            if (newOwner is not PlayerFacade basketballPlayer)
                 return;
 
             _currentBallOwner = basketballPlayer;
@@ -56,9 +53,9 @@ namespace Gameplay.StateMachine.Transitions
         private void UnsubscribeFromCurrentBallOwner() =>
             _currentBallOwner.BallContestStarted -= MoveToBallContestState;
 
-        private void MoveToBallContestState(PlayerFacade player, EnemyFacade enemy)
+        private void MoveToBallContestState(PlayerFacade player, PlayerFacade enemy)
         {
-            _gameplayLoopStateMachine.Enter<BallContestState, (PlayerFacade, EnemyFacade)>((player, enemy));
+            _gameplayLoopStateMachine.Enter<BallContestState, (PlayerFacade, PlayerFacade)>((player, enemy));
         }
     }
 }

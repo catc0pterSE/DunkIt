@@ -1,13 +1,11 @@
-﻿using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
-using Gameplay.Character.Player.MonoBehaviour;
+﻿using Gameplay.Character.Player.MonoBehaviour;
 using Modules.StateMachine;
-using UnityEngine;
 
 namespace Gameplay.StateMachine.States.MinigameStates
 {
-    public class BallContestState: IParameterState<(PlayerFacade, EnemyFacade)>
+    public class BallContestState: IParameterState<(PlayerFacade, PlayerFacade)>
     {
-        public void Enter((PlayerFacade, EnemyFacade) payLoad)
+        public void Enter((PlayerFacade, PlayerFacade) payLoad)
         {
         }
 

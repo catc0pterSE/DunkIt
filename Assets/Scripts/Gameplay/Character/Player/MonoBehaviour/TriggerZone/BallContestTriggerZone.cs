@@ -1,5 +1,4 @@
 ﻿using System;
-using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Modules.MonoBehaviour;
 using UnityEngine;
 using Utility.Extensions;
@@ -8,35 +7,35 @@ namespace Gameplay.Character.Player.MonoBehaviour.TriggerZone
 {
     public class BallContestTriggerZone : SwitchableMonoBehaviour
     {
-        [SerializeField] private BasketballPlayerFacade _host;
+        [SerializeField] private PlayerFacade _host;
 
-        public event Action<PlayerFacade, EnemyFacade> BallContestStarted;
+        public event Action<PlayerFacade, PlayerFacade> BallContestStarted;
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.TryGetComponent<BasketballPlayerFacade>(out BasketballPlayerFacade basketballPlayer) ==
+            if (other.gameObject.TryGetComponent(out PlayerFacade basketballPlayer) ==
                 false)
                 return;
 
             if (_host.GetType() == basketballPlayer.GetType())
                 return;
 
-            BasketballPlayerFacade[] participants = new BasketballPlayerFacade[]
+            PlayerFacade[] participants = new PlayerFacade[]
             {
                 _host,
                 basketballPlayer
             };
 
             PlayerFacade player =
-                participants.FindFirstOrNull(participant => participant is PlayerFacade) as PlayerFacade;
+                participants.FindFirstOrNull(participant => participant.IsPlayable ) ;
 
-            EnemyFacade enemy =
-                participants.FindFirstOrNull(participant => participant is EnemyFacade) as EnemyFacade;
+            PlayerFacade enemy =
+                participants.FindFirstOrNull(participant => participant.IsPlayable == false) ;
 
-            if (player != null & enemy != null)
+            if (player != null && enemy != null)
                 BallContestStarted?.Invoke(player, enemy);
             else
-                throw new NullReferenceException("there is no Player or Enemy in BallContest participants");
+                throw new NullReferenceException("there is no playable or not playable characters in BallContest participants");
         }
     }
 }

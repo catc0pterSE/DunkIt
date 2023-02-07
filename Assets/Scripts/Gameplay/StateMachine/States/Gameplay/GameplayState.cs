@@ -1,4 +1,4 @@
-﻿using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
+﻿using Gameplay.Character;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.Transitions;
 using Infrastructure.CoroutineRunner;
@@ -14,13 +14,11 @@ using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.Gameplay
 {
-    using Ball.MonoBehavior;
-
     public class GameplayState : StateWithTransitions, IParameterlessState
     {
         private readonly PlayerFacade[] _playerTeam;
-        private readonly EnemyFacade[] _enemyTeam;
-        private readonly Ball _ball;
+        private readonly PlayerFacade[] _enemyTeam;
+        private readonly Ball.MonoBehavior.Ball _ball;
         private readonly IGameplayHUD _gameplayHud;
         private PlayerFacade _controlledPlayer;
         private IInputService _inputService;
@@ -32,8 +30,8 @@ namespace Gameplay.StateMachine.States.Gameplay
         public GameplayState
         (
             PlayerFacade[] playerTeam,
-            EnemyFacade[] enemyTeam,
-            Ball ball,
+            PlayerFacade[] enemyTeam,
+            Ball.MonoBehavior.Ball ball,
             SceneConfig sceneConfig,
             IGameplayHUD gameplayHud,
             GameplayLoopStateMachine gameplayLoopStateMachine,
@@ -96,7 +94,7 @@ namespace Gameplay.StateMachine.States.Gameplay
         private void UnsubscribeFromBall() =>
             _ball.OwnerChanged -= OnBallOwnerChanged;
 
-        private void OnBallOwnerChanged(Character.CharacterFacade newOwner)
+        private void OnBallOwnerChanged(CharacterFacade newOwner)
         {
             if (newOwner is PlayerFacade player)
                 SetControlledPlayer(player);

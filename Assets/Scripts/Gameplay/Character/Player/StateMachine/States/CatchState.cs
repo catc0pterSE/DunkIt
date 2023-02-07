@@ -1,6 +1,5 @@
 ﻿using Gameplay.Character.Player.MonoBehaviour;
 using Modules.StateMachine;
-using UnityEngine;
 
 namespace Gameplay.Character.Player.StateMachine.States
 {
@@ -17,8 +16,8 @@ namespace Gameplay.Character.Player.StateMachine.States
         {
             _player.DisableAIControlledBrain();
             _player.DisableInputControlledBrain();
-            _player.FocusOnAlly();
-            _player.RotateToAlly();
+            _player.FocusOnBallOwner();
+            _player.RotateToBallOwner();
             _player.EnableCatcher();
         }
 

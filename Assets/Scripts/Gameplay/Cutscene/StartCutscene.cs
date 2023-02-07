@@ -1,6 +1,5 @@
 ﻿using System;
 using Cinemachine;
-using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Modules.MonoBehaviour;
@@ -34,14 +33,14 @@ namespace Gameplay.Cutscene
         (
             CinemachineBrain gameplayCamera,
             PlayerFacade[] playerTeam,
-            EnemyFacade[] enemyTeam,
+            PlayerFacade[] enemyTeam,
             Referee referee
         )
         {
             PlayerFacade player1 = playerTeam[NumericConstants.PrimaryTeamMemberIndex];
             PlayerFacade player2 = playerTeam[NumericConstants.SecondaryTeamMemberIndex];
-            EnemyFacade enemy1 = enemyTeam[NumericConstants.PrimaryTeamMemberIndex];
-            EnemyFacade enemy2 = enemyTeam[NumericConstants.SecondaryTeamMemberIndex];
+            PlayerFacade enemy1 = enemyTeam[NumericConstants.PrimaryTeamMemberIndex];
+            PlayerFacade enemy2 = enemyTeam[NumericConstants.SecondaryTeamMemberIndex];
 
             _refereeCamera.LookAt = referee.transform;
             _playerTeamTargetGroup.m_Targets[NumericConstants.PrimaryTeamMemberIndex].target = player1.transform;

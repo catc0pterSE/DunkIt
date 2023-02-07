@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Modules.MonoBehaviour;
 using Scene;
@@ -11,8 +10,6 @@ using Utility.Extensions;
 
 namespace Gameplay.Minigame.Throw
 {
-    using Ball.MonoBehavior;
-
     public class ThrowMinigame : SwitchableMonoBehaviour, IMinigame
     {
         [SerializeField] private ThrowUI _interface;
@@ -21,9 +18,9 @@ namespace Gameplay.Minigame.Throw
             new WaitForSeconds(NumericConstants.BallTrackingSeconds);
         
         private PlayerFacade _throwingPlayer;
-        private EnemyFacade _primaryEnemy;
+        private PlayerFacade _primaryEnemy;
         private SceneConfig _sceneConfig;
-        private Ball _ball;
+        private Ball.MonoBehavior.Ball _ball;
         private LoadingCurtain _loadingCurtain;
         private Coroutine _trackingGoal;
 
@@ -33,9 +30,9 @@ namespace Gameplay.Minigame.Throw
         public IMinigame Initialize
         (
             PlayerFacade throwingPlayer,
-            EnemyFacade primaryEnemy,
+            PlayerFacade primaryEnemy,
             SceneConfig sceneConfig,
-            Ball ball,
+            Ball.MonoBehavior.Ball ball,
             LoadingCurtain loadingCurtain
         )
         {

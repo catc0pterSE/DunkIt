@@ -1,6 +1,4 @@
-﻿using System;
-using Cinemachine;
-using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
+﻿using Cinemachine;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.States.Gameplay;
@@ -12,23 +10,21 @@ using Utility.Constants;
 
 namespace Gameplay.StateMachine.States.MinigameStates
 {
-    using Ball.MonoBehavior;
-
     public class JumpBallState : MinigameState, IParameterlessState
     {
         private readonly PlayerFacade[] _playerTeam;
-        private readonly EnemyFacade[] _enemyTeam;
+        private readonly PlayerFacade[] _enemyTeam;
         private readonly Referee _referee;
-        private readonly Ball _ball;
+        private readonly Ball.MonoBehavior.Ball _ball;
         private readonly CinemachineBrain _gameplayCamera;
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
 
         public JumpBallState
         (
             PlayerFacade[] playerTeam,
-            EnemyFacade[] enemyTeam,
+            PlayerFacade[] enemyTeam,
             Referee referee,
-            Ball ball,
+            Ball.MonoBehavior.Ball ball,
             CinemachineBrain gameplayCamera,
             IGameplayHUD gameplayHUD,
             GameplayLoopStateMachine gameplayLoopStateMachine
@@ -47,8 +43,8 @@ namespace Gameplay.StateMachine.States.MinigameStates
 
         private PlayerFacade PrimaryPlayer => _playerTeam[NumericConstants.PrimaryTeamMemberIndex];
         private PlayerFacade SecondaryPlayer => _playerTeam[NumericConstants.SecondaryTeamMemberIndex];
-        private EnemyFacade PrimaryEnemy => _enemyTeam[NumericConstants.PrimaryTeamMemberIndex];
-        private EnemyFacade SecondaryEnemy => _enemyTeam[NumericConstants.SecondaryTeamMemberIndex];
+        private PlayerFacade PrimaryEnemy => _enemyTeam[NumericConstants.PrimaryTeamMemberIndex];
+        private PlayerFacade SecondaryEnemy => _enemyTeam[NumericConstants.SecondaryTeamMemberIndex];
 
         public override void Enter()
         {

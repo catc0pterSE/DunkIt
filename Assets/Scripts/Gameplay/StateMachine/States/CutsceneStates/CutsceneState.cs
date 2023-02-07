@@ -1,26 +1,22 @@
-﻿using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
-using Gameplay.Character.Player.MonoBehaviour;
+﻿using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Cutscene;
 using Modules.StateMachine;
 using UI.HUD;
-using UI.HUD.Mobile;
 using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.CutsceneStates
 {
-    using Ball.MonoBehavior;
-
     public abstract class CutsceneState : StateWithTransitions
     {
         private readonly PlayerFacade[] _playerTeam;
-        private readonly EnemyFacade[] _enemyTeam;
+        private readonly PlayerFacade[] _enemyTeam;
         private readonly IGameplayHUD _gameplayHUD;
         private readonly ICutscene _cutscene;
 
         protected CutsceneState
         (
             PlayerFacade[] playerTeam,
-            EnemyFacade[] enemyTeam,
+            PlayerFacade[] enemyTeam,
             IGameplayHUD gameplayHUD,
             ICutscene cutscene
         )
@@ -53,8 +49,6 @@ namespace Gameplay.StateMachine.States.CutsceneStates
             DisableCutscene();
             UnsubscribeFromCutscene();
         }
-           
-
 
         protected abstract void EnterNextState();
 
