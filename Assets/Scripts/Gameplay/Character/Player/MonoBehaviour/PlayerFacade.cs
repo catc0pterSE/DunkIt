@@ -1,6 +1,5 @@
 ﻿using System;
 using Cinemachine;
-using Gameplay.Character.Player.MonoBehaviour.BallHandle;
 using Gameplay.Character.Player.MonoBehaviour.BallHandle.Dunk;
 using Gameplay.Character.Player.MonoBehaviour.BallHandle.Pass;
 using Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw;
@@ -9,6 +8,7 @@ using Gameplay.Character.Player.MonoBehaviour.Distance;
 using Gameplay.Character.Player.MonoBehaviour.Movement;
 using Gameplay.Character.Player.MonoBehaviour.TriggerZone;
 using Gameplay.Character.Player.StateMachine;
+using Gameplay.Character.Player.StateMachine.States;
 using Scene;
 using Scene.Ring;
 using UnityEngine;
@@ -33,9 +33,9 @@ namespace Gameplay.Character.Player.MonoBehaviour
         private SceneConfig _sceneConfig;
         private PlayerFacade _ally;
         
-        public PlayerStateMachine StateMachine => _stateMachine ??= new PlayerStateMachine(this); //TODO: methods?
+        private PlayerStateMachine StateMachine => _stateMachine ??= new PlayerStateMachine(this); //TODO: methods?
         public Animator Animator => _animator;
-
+        
         public bool IsPassPossible => _distanceTracker.IsPassPossible && OwnsBall;
         public bool IsInDunkZone => _distanceTracker.IsInDunkZone && OwnsBall;
         public bool IsInThrowZone => _distanceTracker.InThrowZone && OwnsBall;
@@ -81,6 +81,51 @@ namespace Gameplay.Character.Player.MonoBehaviour
             add => _dunker.DunkPointReached += value;
             remove => _dunker.DunkPointReached -= value;
         }
+        
+        public void Initialize(PlayerFacade ally, Ball.MonoBehavior.Ball ball, UnityEngine.Camera gameplayCamera, CinemachineVirtualCamera virtualCamera,
+            SceneConfig sceneConfig)
+        {
+            _dunker.Initialize(ball);
+            _ally = ally;
+            _ballThrower.Initialize(ball, gameplayCamera);
+            _inputControlledBrain.Initialize(gameplayCamera.transform);
+            _distanceTracker.Initialize(sceneConfig.EnemyRing.transform.position, ally.transform);
+            Ball = ball;
+            _virtualCamera = virtualCamera;
+            _virtualCamera.Follow = transform;
+            _sceneConfig = sceneConfig;
+            _passer.Initialize(ball, _ally);
+        }
+
+        public void EnterInputControlledAttackState() =>
+            StateMachine.Enter<InputControlledAttackState>();
+        
+        public void EnterInputControlledDefenceState() =>
+            StateMachine.Enter<InputControlledDefenceState>();
+        
+        public void EnterAIControlledState() =>
+            StateMachine.Enter<AIControlledState>();
+        
+        public void EnterNotControlledState() =>
+            StateMachine.Enter<NotControlledState>();
+        
+        public void EnterThrowState(Vector3 ringPosition) =>
+            StateMachine.Enter<ThrowState, Vector3>(ringPosition);
+        
+        public void EnterIdleState() =>
+            StateMachine.Enter<IdleState>();
+        
+        public void EnterPassState() =>
+            StateMachine.Enter<PassState>();
+        
+        public void EnterCatchState() =>
+            StateMachine.Enter<CatchState>();
+        
+        public void EnterDunkState(Ring ring) =>
+            StateMachine.Enter<DunkState, Ring>(ring);
+        
+        public void EnterContestingBallState() =>
+            StateMachine.Enter<ContestingBallState>();
 
         public void EnableInputControlledBrain() =>
             _inputControlledBrain.Enable();
@@ -129,20 +174,6 @@ namespace Gameplay.Character.Player.MonoBehaviour
         
         public void DisableDunker() =>
             _dunker.Disable();
-
-        public void Initialize(PlayerFacade ally, Ball.MonoBehavior.Ball ball, UnityEngine.Camera gameplayCamera, CinemachineVirtualCamera virtualCamera,
-            SceneConfig sceneConfig)
-        {
-            _ally = ally;
-            _ballThrower.Initialize(ball, gameplayCamera);
-            _inputControlledBrain.Initialize(gameplayCamera.transform);
-            _distanceTracker.Initialize(sceneConfig.EnemyRing.transform.position, ally.transform);
-            Ball = ball;
-            _virtualCamera = virtualCamera;
-            _virtualCamera.Follow = transform;
-            _sceneConfig = sceneConfig;
-            _passer.Initialize(ball, _ally);
-        }
 
         public void PrioritizeCamera() =>
             _virtualCamera.Prioritize();

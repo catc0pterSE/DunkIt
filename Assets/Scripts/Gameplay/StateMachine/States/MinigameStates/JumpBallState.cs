@@ -84,10 +84,10 @@ namespace Gameplay.StateMachine.States.MinigameStates
 
         protected override void SetCharactersStates()
         {
-            PrimaryPlayer.StateMachine.Enter<Character.Player.StateMachine.States.NotControlledState>();
-            PrimaryEnemy.StateMachine.Enter<Character.NPC.EnemyPlayer.StateMachine.States.NotControlledState>();
-            SecondaryPlayer.StateMachine.Enter<Character.Player.StateMachine.States.IdleState>();
-            SecondaryEnemy.StateMachine.Enter<Character.NPC.EnemyPlayer.StateMachine.States.IdleState>();
+            PrimaryPlayer.EnterNotControlledState();
+            PrimaryEnemy.EnterNotControlledState();
+            SecondaryPlayer.EnterIdleState();
+            SecondaryEnemy.EnterIdleState();
         }
 
         private void EnterNextState() =>

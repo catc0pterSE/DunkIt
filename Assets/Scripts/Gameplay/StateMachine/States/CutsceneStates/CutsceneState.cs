@@ -61,9 +61,9 @@ namespace Gameplay.StateMachine.States.CutsceneStates
         private void SetCharactersStates()
         {
             _playerTeam.Map(player =>
-                player.StateMachine.Enter<Character.Player.StateMachine.States.NotControlledState>());
+                player.EnterNotControlledState());
             _enemyTeam.Map(enemy =>
-                enemy.StateMachine.Enter<Character.NPC.EnemyPlayer.StateMachine.States.NotControlledState>());
+                enemy.EnterNotControlledState());
         }
 
         private void SubscribeOnCutscene() =>

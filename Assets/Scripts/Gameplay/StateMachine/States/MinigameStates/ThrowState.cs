@@ -75,7 +75,7 @@ namespace Gameplay.StateMachine.States.MinigameStates
 
         protected override void SetCharactersStates()
         {
-            _throwingPlayer.StateMachine.Enter<Character.Player.StateMachine.States.ThrowState, Vector3>(_sceneConfig.EnemyRing.transform.position);
+            _throwingPlayer.EnterThrowState(_sceneConfig.EnemyRing.transform.position);
         }
 
         private void MoveToCelebrateCutsceneState() =>

@@ -14,7 +14,7 @@ namespace Scene.Ring
         [SerializeField] private WinZone _winZone;
         [SerializeField] private CinemachineVirtualCamera _virtualCamera;
         [SerializeField] private Transform[] _dunkPoints;
-        [SerializeField] private Transform _ballDunkTarget;
+        [SerializeField] private Transform _ballDunkPoint;
         [SerializeField] private CinemachineVirtualCamera[] _dunkVirtualCameras;
         
         private Coroutine _listeningToWinZone;
@@ -23,7 +23,7 @@ namespace Scene.Ring
 
         public Transform[] DunkPoints => _dunkPoints.ToArray();
 
-        public Transform BallDunkTarget => _ballDunkTarget;
+        public Transform BallDunkPoint => _ballDunkPoint;
 
         public CinemachineVirtualCamera VirtualCamera => _virtualCamera;
 

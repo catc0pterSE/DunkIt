@@ -30,8 +30,8 @@ namespace Gameplay.StateMachine.States.Gameplay
 
         private void SetPlayersStates()
         {
-            _passingPlayer.StateMachine.Enter<Character.Player.StateMachine.States.PassState>();
-            _catchingPlayer.StateMachine.Enter<Character.Player.StateMachine.States.CatchState>();
+            _passingPlayer.EnterPassState();
+            _catchingPlayer.EnterCatchState();
         }
 
         private void MoveToGameplayState()

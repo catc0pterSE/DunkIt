@@ -82,7 +82,7 @@ namespace Gameplay.StateMachine.States.Gameplay
 
         private void SetEnemiesStates() =>
             _enemyTeam.Map(enemy =>
-                enemy.StateMachine.Enter<Character.NPC.EnemyPlayer.StateMachine.States.AIControlledState>());
+                enemy.EnterAIControlledState());
 
         private void EnableHUD() =>
             _gameplayHud.Enable();
@@ -108,12 +108,11 @@ namespace Gameplay.StateMachine.States.Gameplay
         private void SetPlayersStates()
         {
             if (ControlledPlayer.OwnsBall)
-                _controlledPlayer.StateMachine.Enter<Character.Player.StateMachine.States.InputControlledAttackState>();
+                _controlledPlayer.EnterInputControlledAttackState();
             else
-                _controlledPlayer.StateMachine
-                    .Enter<Character.Player.StateMachine.States.InputControlledDefenceState>();
+                _controlledPlayer.EnterInputControlledDefenceState();
 
-            NotControlledPlayer.StateMachine.Enter<Character.Player.StateMachine.States.AIControlledState>();
+            NotControlledPlayer.EnterAIControlledState();
         }
 
         private void SetHUDState()

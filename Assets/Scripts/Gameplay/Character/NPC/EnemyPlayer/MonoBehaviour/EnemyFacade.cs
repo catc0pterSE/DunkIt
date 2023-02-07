@@ -1,5 +1,6 @@
 ﻿using System;
 using Gameplay.Character.NPC.EnemyPlayer.StateMachine;
+using Gameplay.Character.NPC.EnemyPlayer.StateMachine.States;
 using UnityEngine;
 
 namespace Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour
@@ -13,7 +14,20 @@ namespace Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour
         
         public event Action BallThrown;
         
-        public EnemyStateMachine StateMachine => _stateMachine ??= new EnemyStateMachine(this);
+        private EnemyStateMachine StateMachine => _stateMachine ??= new EnemyStateMachine(this);
+        
+        public void EnterNotControlledState() =>
+            StateMachine.Enter<NotControlledState>();
+        
+        public void EnterAIControlledState() =>
+            StateMachine.Enter<AIControlledState>();
+        
+        public void EnterIdleState() =>
+            StateMachine.Enter<IdleState>();
+        
+        public void EnterContestingBallState() =>
+            StateMachine.Enter<ContestingBallState>();
+        
         public Animator Animator => _animator;
         
     }

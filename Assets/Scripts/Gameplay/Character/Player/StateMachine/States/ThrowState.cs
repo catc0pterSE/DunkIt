@@ -1,5 +1,4 @@
-﻿
-using Gameplay.Character.Player.MonoBehaviour;
+﻿using Gameplay.Character.Player.MonoBehaviour;
 using Modules.StateMachine;
 using UnityEngine;
 
@@ -7,9 +6,9 @@ namespace Gameplay.Character.Player.StateMachine.States
 {
     public class ThrowState : IParameterState<Vector3>
     {
-        private readonly MonoBehaviour.PlayerFacade _player;
+        private readonly PlayerFacade _player;
 
-        public ThrowState(MonoBehaviour.PlayerFacade player)
+        public ThrowState(PlayerFacade player)
         {
             _player = player;
         }

@@ -77,17 +77,14 @@ namespace Gameplay.StateMachine.States.Gameplay
         private void OnDunkPointReached()
         {
             SubscribeOnGoalScored();
-           
         }
 
         private void SetCharactersStates()
         {
             PlayerFacade otherPlayer = _playerTeam.FindFirstOrNull(player => player != _jumpingPlayer);
-            otherPlayer.StateMachine.Enter<IdleState>();
-            _enemyTeam.Map(enemy =>
-                enemy.StateMachine.Enter<Character.NPC.EnemyPlayer.StateMachine.States.IdleState>());
-            _jumpingPlayer.StateMachine.Enter<Character.Player.StateMachine.States.DunkState, Ring>(_sceneConfig
-                .EnemyRing);
+            otherPlayer.EnterIdleState();
+            _enemyTeam.Map(enemy => enemy.EnterIdleState());
+            _jumpingPlayer.EnterDunkState(_sceneConfig.EnemyRing);
         }
     }
 }

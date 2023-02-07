@@ -41,7 +41,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.Movement
             return Physics.gravity * _gravityModifier;
         }
 
-        private void Rotate(Vector3 direction)
+       private void Rotate(Vector3 direction)
         {
             if (direction == Vector3.zero)
                 return;
