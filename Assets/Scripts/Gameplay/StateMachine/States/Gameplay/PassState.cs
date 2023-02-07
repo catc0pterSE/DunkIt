@@ -1,7 +1,5 @@
-﻿using System;
-using Gameplay.Character.Player.MonoBehaviour;
+﻿using Gameplay.Character.Player.MonoBehaviour;
 using Modules.StateMachine;
-using UnityEngine;
 using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.Gameplay

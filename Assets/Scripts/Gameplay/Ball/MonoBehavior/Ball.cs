@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using Palmmedia.ReportGenerator.Core.Parser.Analysis;
 using UnityEngine;
 using Utility.Extensions;
 
@@ -6,9 +8,11 @@ namespace Gameplay.Ball.MonoBehavior
 {
     public class Ball : MonoBehaviour
     {
+        [SerializeField] private float _transferSpeed = 2f;
         [SerializeField] private Rigidbody _rigidBody;
 
         private Character.CharacterFacade _owner;
+        private Coroutine _moving;
 
         public Character.CharacterFacade Owner => _owner;
 
@@ -36,6 +40,28 @@ namespace Gameplay.Ball.MonoBehavior
             transform.parent = null;
             _owner = null;
             OwnerChanged?.Invoke(_owner);
+        }
+
+        public void MoveTo(Vector3 targetPosition, Action callback=null)
+        {
+            RemoveOwner();
+            TurnPhysicsOf();
+            
+            if (_moving != null)
+                StopCoroutine(_moving);
+
+            _moving = StartCoroutine(MoveRoutine(targetPosition, callback));
+        }
+
+        private IEnumerator MoveRoutine(Vector3 targetPosition, Action callback=null)
+        {
+            while (transform.position != targetPosition)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, targetPosition, _transferSpeed * Time.deltaTime);
+                yield return null;
+            }
+            
+            callback?.Invoke();
         }
 
         private void SetParent(Transform parent) =>

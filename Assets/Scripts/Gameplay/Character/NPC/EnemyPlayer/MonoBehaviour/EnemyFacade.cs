@@ -11,6 +11,7 @@ namespace Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour
         [SerializeField] private Animator _animator;
 
         private EnemyStateMachine _stateMachine;
+        public Animator Animator => _animator;
         
         public event Action BallThrown;
         
@@ -27,8 +28,6 @@ namespace Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour
         
         public void EnterContestingBallState() =>
             StateMachine.Enter<ContestingBallState>();
-        
-        public Animator Animator => _animator;
-        
+
     }
 }

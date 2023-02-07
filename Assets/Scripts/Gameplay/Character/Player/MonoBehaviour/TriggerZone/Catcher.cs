@@ -9,15 +9,24 @@ namespace Gameplay.Character.Player.MonoBehaviour.TriggerZone
     {
         [SerializeField] private CharacterFacade _host;
 
+        private Ball _ball;
+        
         public event Action CaughtBall;
         
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.TryGetComponent(out Ball ball) == false)
                 return;
+            _ball = ball;
             
-            ball.SetOwner(_host);
-            CaughtBall?.Invoke();
+
+            void GetBall()
+            {
+                _ball.SetOwner(_host);
+                CaughtBall?.Invoke();
+            }
+            
+            _ball.MoveTo(_host.BallPosition.position, GetBall);
         }
     }
 }

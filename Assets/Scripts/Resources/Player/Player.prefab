@@ -305,8 +305,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxThrowDistance: 14
-  _maxDunkDistance: 5
-  _maxPassDistance: 14
+  _maxDunkDistance: 6
+  _maxPassDistance: 18
 --- !u!114 &-2012806606389975634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -333,7 +333,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mover: {fileID: 3567767349144517149}
-  _jumpSpeed: 12
+  _jumpTime: 1
+  _timeToDunk: 0.75
+  _highestPoint: 1
+  _timeToHighestPoint: 0.5
 --- !u!1 &4042918882263731115
 GameObject:
   m_ObjectHideFlags: 0

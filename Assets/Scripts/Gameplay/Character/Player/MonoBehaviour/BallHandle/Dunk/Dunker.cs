@@ -88,18 +88,20 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Dunk
 
         private void ThrowBall(Vector3 ballThrowPoint)
         {
-            _ball.RemoveOwner();
-            _ball.transform.position = ballThrowPoint;
-            Vector3 throwDirection =
-                new Vector3
-                (
-                    Vector3.down.x + Random.Range(0, NumericConstants.Half),    
-                    Vector3.down.y,
-                    Vector3.down.z + Random.Range(0, NumericConstants.Half)
-                ) *
-                NumericConstants.DunkThrowForce;
+            void ReleaseBall()
+            {
+                Vector3 throwDirection =
+                    new Vector3
+                    (
+                        Vector3.down.x + Random.Range(0, NumericConstants.Half),
+                        Vector3.down.y,
+                        Vector3.down.z + Random.Range(0, NumericConstants.Half)
+                    ) *
+                    NumericConstants.DunkThrowForce;
+                _ball.Throw(throwDirection);
+            }
             
-            _ball.Throw(throwDirection);
+            _ball.MoveTo(ballThrowPoint, ReleaseBall);
         }
     }
 }

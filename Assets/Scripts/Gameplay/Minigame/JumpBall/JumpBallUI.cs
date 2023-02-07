@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace Gameplay.Minigame.JumpBall
 {
-    public class JumpBallUI: SwitchableMonoBehaviour
+    public class JumpBallUI : SwitchableMonoBehaviour
     {
         [SerializeField] private Slider _slider;
         [SerializeField] private float _speed;
@@ -36,7 +36,7 @@ namespace Gameplay.Minigame.JumpBall
             if (_running != null)
                 StopCoroutine(_running);
 
-            StartCoroutine(Run());
+            _running = StartCoroutine(Run());
         }
 
         private void Start()
@@ -61,12 +61,12 @@ namespace Gameplay.Minigame.JumpBall
         {
             InputService.TouchDown += Finish;
         }
-        
+
         private void UnsubscribeFromTouch()
         {
             InputService.TouchDown -= Finish;
         }
-        
+
 
         private void Reset() =>
             _slider.value = _slider.minValue;
@@ -74,11 +74,13 @@ namespace Gameplay.Minigame.JumpBall
         private void Finish()
         {
             UnsubscribeFromTouch();
-            
+
             if (_handle.IsInZone)
                 Won?.Invoke();
             else
                 Lost?.Invoke();
-        }  
+
+            StopCoroutine(_running);
+        }
     }
 }

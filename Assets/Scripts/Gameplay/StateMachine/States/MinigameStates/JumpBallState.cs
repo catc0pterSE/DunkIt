@@ -1,4 +1,5 @@
-﻿using Cinemachine;
+﻿using System;
+using Cinemachine;
 using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
@@ -33,7 +34,6 @@ namespace Gameplay.StateMachine.States.MinigameStates
             GameplayLoopStateMachine gameplayLoopStateMachine
         ) : base
         (
-          
             gameplayHUD
         )
         {
@@ -62,7 +62,7 @@ namespace Gameplay.StateMachine.States.MinigameStates
             base.Exit();
             _referee.Disable();
         }
-        
+
         protected override void InitializeMinigame()
         {
             Minigame = Services.Container.Single<IGameObjectFactory>().CreateJumpBallMinigame()
@@ -72,14 +72,24 @@ namespace Gameplay.StateMachine.States.MinigameStates
 
         protected override void OnMiniGameWon()
         {
-            _ball.SetOwner(PrimaryPlayer);
-            EnterNextState();
+            void AfterBallReached()
+            {
+                _ball.SetOwner(PrimaryPlayer);
+                EnterNextState();
+            }
+            
+            _ball.MoveTo(PrimaryPlayer.BallPosition.position, AfterBallReached);
         }
 
         protected override void OnMiniGameLost()
         {
-            _ball.SetOwner(PrimaryEnemy);
-            EnterNextState();
+            void AfterBallReached()
+            {
+                _ball.SetOwner(PrimaryEnemy);
+                EnterNextState();
+            }
+
+            _ball.MoveTo(PrimaryEnemy.BallPosition.position, AfterBallReached);
         }
 
         protected override void SetCharactersStates()

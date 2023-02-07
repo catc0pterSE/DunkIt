@@ -74,6 +74,7 @@ namespace Gameplay.Minigame.JumpBall
         private void End() =>
             _director.Stop();
 
+
         public void Launch() =>
             _director.Play();
     }
