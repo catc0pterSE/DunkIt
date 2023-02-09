@@ -1,4 +1,5 @@
-﻿using Cinemachine;
+﻿using System.Linq;
+using Cinemachine;
 using Gameplay.Ball.MonoBehavior;
 using Gameplay.Camera;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
@@ -7,12 +8,13 @@ using Gameplay.StateMachine;
 using Infrastructure.CoroutineRunner;
 using Infrastructure.Factory;
 using Modules.StateMachine;
-using Scene;
 using UI;
 using UI.HUD;
 using UI.HUD.Mobile;
 using UnityEngine;
 using Utility.Constants;
+using z_Test;
+using SceneConfig = Scene.SceneConfig;
 
 namespace Infrastructure.StateMachine.States
 {
@@ -50,13 +52,13 @@ namespace Infrastructure.StateMachine.States
 
         private void OnLoaded()
         {
-            IGameplayHUD gameplayHUDView = SpawnHUD();
             SceneConfig sceneConfig = GameObject.FindObjectOfType<SceneConfig>();
             Ball ball = SpawnBall();
             Referee referee = SpawnReferee();
             CameraFacade camera = SpawnCamera();
             PlayerFacade[] playerTeam = SpawnPlayerTeam(camera.Camera, ball, sceneConfig, true);
             PlayerFacade[] enemyTeam = SpawnPlayerTeam(camera.Camera, ball, sceneConfig, false);
+            IGameplayHUD gameplayHUDView = SpawnHUD().Initialize(playerTeam.Union(enemyTeam).ToArray(), camera.Camera);
 
             GameplayLoopStateMachine gameplayLoopStateMachine =
                 new GameplayLoopStateMachine(playerTeam, enemyTeam, referee, camera, gameplayHUDView, ball, sceneConfig,
@@ -75,8 +77,10 @@ namespace Infrastructure.StateMachine.States
 
             if (isPlayable == false) //TODO: remove. for test
             {
-                primaryPlayer.GetComponentInChildren<MeshRenderer>().material = ball.GetComponentInChildren<MeshRenderer>().material;
-                secondaryPlayer.GetComponentInChildren<MeshRenderer>().material = ball.GetComponentInChildren<MeshRenderer>().material;
+                primaryPlayer.GetComponentInChildren<MeshRenderer>().material =
+                    ball.GetComponentInChildren<MeshRenderer>().material;
+                secondaryPlayer.GetComponentInChildren<MeshRenderer>().material =
+                    ball.GetComponentInChildren<MeshRenderer>().material;
             }
 
             playerTeam[NumericConstants.PrimaryTeamMemberIndex] = primaryPlayer.Initialize(isPlayable, secondaryPlayer,

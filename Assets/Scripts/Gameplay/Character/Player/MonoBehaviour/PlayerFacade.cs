@@ -9,10 +9,10 @@ using Gameplay.Character.Player.MonoBehaviour.Movement;
 using Gameplay.Character.Player.MonoBehaviour.TriggerZone;
 using Gameplay.Character.Player.StateMachine;
 using Gameplay.Character.Player.StateMachine.States;
-using Scene;
 using Scene.Ring;
 using UnityEngine;
 using Utility.Extensions;
+using SceneConfig = Scene.SceneConfig;
 
 namespace Gameplay.Character.Player.MonoBehaviour
 {
@@ -34,14 +34,18 @@ namespace Gameplay.Character.Player.MonoBehaviour
         private SceneConfig _sceneConfig;
         private PlayerFacade _ally;
 
+        public bool IsAlly => IsPlayable;
+        
         private PlayerStateMachine StateMachine => _stateMachine ??= new PlayerStateMachine(this);
         public Animator Animator => _animator;
-
         public bool IsPassPossible => _distanceTracker.IsPassPossible && OwnsBall;
         public bool IsInDunkZone => _distanceTracker.IsInDunkZone && OwnsBall;
         public bool IsInThrowZone => _distanceTracker.InThrowZone && OwnsBall;
-
         public bool IsPlayable { get; private set; }
+        private Type CurrentState => StateMachine.CurrentState;
+
+        public bool IsControlled => CurrentState == typeof(InputControlledAttackState) ||
+                                    CurrentState == typeof(InputControlledDefenceState);
 
         public event Action<bool> ThrowReached
         {

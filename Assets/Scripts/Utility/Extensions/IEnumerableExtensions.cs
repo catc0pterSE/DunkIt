@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Utility.Extensions
 {
@@ -23,6 +24,23 @@ namespace Utility.Extensions
                     return item;
 
             return null;
+        }
+        
+        public static bool FindFirstInactive<T>(this IEnumerable<T> array, out T component) where T : MonoBehaviour
+        {
+            component = null;
+
+            if (array == null || array.Any() == false)
+                return false;
+
+            foreach (T item in array)
+                if (item.gameObject.activeSelf == false)
+                {
+                    component = item;
+                    return true;
+                }
+
+            return false;
         }
     }
 }

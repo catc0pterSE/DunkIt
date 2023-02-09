@@ -12,6 +12,7 @@ using Infrastructure.Provider;
 using UI;
 using UI.HUD.Mobile;
 using Utility.Constants;
+using z_Test;
 
 namespace Infrastructure.Factory
 {
@@ -86,7 +87,7 @@ namespace Infrastructure.Factory
 
         public MobileInputService CreateMobileInputService()
         {
-            return _assetProvider.Instantiate(ResourcesPathes.MobileInputService).GetComponent<MobileInputService>()
+            return _assetProvider.Instantiate(ResourcesPathes.MobileInputServicePath).GetComponent<MobileInputService>()
                    ??  throw new NullReferenceException("No MobileInputService component on MobileInputService prefab");
         }
     }

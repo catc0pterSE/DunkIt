@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Gameplay.Character.Player.MonoBehaviour;
 using Infrastructure.Input;
 using Infrastructure.ServiceManagement;
 using Modules.MonoBehaviour;
 using UI.HUD.StateMachine;
+using UI.Indication;
 using UnityEngine;
 using z_Test;
 
@@ -14,6 +15,7 @@ namespace UI.HUD.Mobile
         [SerializeField] private ButtonSimulation _dunkButton;
         [SerializeField] private ButtonSimulation _passButton;
         [SerializeField] private ButtonSimulation _changePlayerButton;
+        [SerializeField] private OffScreenIndicationRenderer _offScreenIndicationRenderer;
 
         private IUIInputController _uiInputController;
         private GameplayHUDStateMachine _stateMachine;
@@ -32,7 +34,13 @@ namespace UI.HUD.Mobile
         {
             UnsubscribeUIInputControllerFromButtons();
         }
-        
+
+        public IGameplayHUD Initialize(PlayerFacade[] indicationTargets, Camera gameplayCamera)
+        {
+            _offScreenIndicationRenderer.Initialize(indicationTargets, gameplayCamera);
+            return this;
+        }
+
         public void SetThrowAvailability(bool isAvailable) =>
             _throwButton.gameObject.SetActive(isAvailable);
 
@@ -49,33 +57,30 @@ namespace UI.HUD.Mobile
         {
             _throwButton.Down += UIInputController.OnUIThrowButtonDown;
             _throwButton.Up += UIInputController.OnUIThrowButtonUp;
-            
+
             _dunkButton.Down += UIInputController.OnUIDunkButtonDown;
             _dunkButton.Up += UIInputController.OnUIDunkButtonUp;
-            
+
             _passButton.Down += UIInputController.OnUIPassButtonDown;
             _passButton.Up += UIInputController.OnUIPassButtonUp;
-            
+
             _changePlayerButton.Down += UIInputController.OnUIChangePlayerButtonDown;
             _changePlayerButton.Up += UIInputController.OnUIChangePlayerButtonUp;
         }
-        
+
         private void UnsubscribeUIInputControllerFromButtons()
         {
             _throwButton.Down -= UIInputController.OnUIThrowButtonDown;
             _throwButton.Up -= UIInputController.OnUIThrowButtonUp;
-            
+
             _dunkButton.Down -= UIInputController.OnUIDunkButtonDown;
             _dunkButton.Up -= UIInputController.OnUIDunkButtonUp;
-            
+
             _passButton.Down -= UIInputController.OnUIPassButtonDown;
             _passButton.Up -= UIInputController.OnUIPassButtonUp;
-            
+
             _changePlayerButton.Down -= UIInputController.OnUIChangePlayerButtonDown;
             _changePlayerButton.Up -= UIInputController.OnUIChangePlayerButtonUp;
         }
-
-        
-
     }
 }

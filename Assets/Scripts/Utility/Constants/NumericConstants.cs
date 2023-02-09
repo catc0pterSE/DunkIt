@@ -13,5 +13,8 @@
         public const int Double = 2;
         public const int LowEnergyParabolicFlightTimeCoefficient = 4;
         public const int DunkThrowForce = 5;
+        public const float RightAngle = 90;
+        public const float StraightAngle = 180;
+        public const float Zero = 0;
     }
 }

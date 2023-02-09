@@ -12,6 +12,8 @@ using Modules.StateMachine;
 using Scene;
 using UI;
 using UI.HUD;
+using z_Test;
+using SceneConfig = Scene.SceneConfig;
 
 namespace Gameplay.StateMachine
 {

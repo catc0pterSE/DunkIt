@@ -10,6 +10,7 @@ using Infrastructure.Input.InputService;
 using Infrastructure.ServiceManagement;
 using UI;
 using UI.HUD.Mobile;
+using z_Test;
 
 namespace Infrastructure.Factory
 {
@@ -24,9 +25,7 @@ namespace Infrastructure.Factory
         public StartCutscene CreateStartCutscene();
         public CinemachineVirtualCamera CreateCinemachineVirtualCamera();
         public JumpBallMinigame CreateJumpBallMinigame();
-
         public ThrowMinigame CreateThrowMinigame();
-
         public MobileInputService CreateMobileInputService();
     }
 }
