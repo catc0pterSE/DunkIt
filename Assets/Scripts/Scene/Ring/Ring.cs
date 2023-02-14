@@ -16,11 +16,14 @@ namespace Scene.Ring
         [SerializeField] private Transform[] _dunkPoints;
         [SerializeField] private Transform _ballDunkPoint;
         [SerializeField] private CinemachineVirtualCamera[] _dunkVirtualCameras;
-        
+        [SerializeField] private CinemachineTargetGroup _ringTargetGroup;
+
         private Coroutine _listeningToWinZone;
         private WaitForSeconds _goalTrackingWindowWait;
         public event Action Goal;
 
+        public CinemachineTargetGroup RingTargetGroup => _ringTargetGroup;
+        
         public Transform[] DunkPoints => _dunkPoints.ToArray();
 
         public Transform BallDunkPoint => _ballDunkPoint;

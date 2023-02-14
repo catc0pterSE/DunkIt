@@ -48,6 +48,8 @@ namespace Gameplay.StateMachine.States.MinigameStates
         public void Enter(PlayerFacade player)
         {
             SetThrowingPlayer(player);
+            _sceneConfig.EnemyRing.RingTargetGroup.m_Targets[1].target = _throwingPlayer.transform;
+            // _sceneConfig.EnemyRing.VirtualCamera.Follow = _throwingPlayer.transform; TODO: remove. test
             base.Enter();
         }
 
@@ -68,20 +70,14 @@ namespace Gameplay.StateMachine.States.MinigameStates
             );
         }
 
-        protected override void OnMiniGameWon()
-        {
+        protected override void OnMiniGameWon() =>
             MoveToCelebrateCutsceneState();
-        }
 
-        protected override void OnMiniGameLost()
-        {
+        protected override void OnMiniGameLost() =>
             MoveToGameplayState();
-        }
 
-        protected override void SetCharactersStates()
-        {
+        protected override void SetCharactersStates() =>
             _throwingPlayer.EnterThrowState(_sceneConfig.EnemyRing.transform.position);
-        }
 
         private void MoveToCelebrateCutsceneState() =>
             _gameplayLoopStateMachine.Enter<CelebrateCutsceneState>();

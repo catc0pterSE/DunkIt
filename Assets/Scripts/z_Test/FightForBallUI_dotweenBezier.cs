@@ -31,21 +31,32 @@ namespace Gameplay.Minigame.FightForBall.UI
         private void Launch()
         {
             InitializePath();
-            _ball.transform.DOPath(_path, _minigameTime, PathType.CubicBezier, PathMode.Sidescroller2D, 100);
+            _ball.transform.DOPath(_path, _minigameTime, PathType.CubicBezier, PathMode.Sidescroller2D);
         }
 
         private void InitializePath()
         {
-            _path = new Vector3[_pointsNumber*3];  
+            _path = new Vector3[_pointsNumber * 3];
 
             for (int i = 0; i < _path.Length; i++)
             {
-                _path[i] = /*i == 0 /*|| i == _path.Length - 3#1#
+                _path[i] = i == 0 /*|| i == _path.Length - 3*/
                     ? _ball.transform.position
-                    : */i > 0 && i % 3 == 0
-                    ? CalculateTargetPosition(_path[i - 3])
-                    : GetRandomVector();
+                    : i > 0 && i % 3 == 0
+                        ? CalculateTargetPosition(_path[i - 3])
+                        : (i + 1) % 3 == 0
+                            ? GetNormal(i)
+                            : GetRandomVector();
             }
+        }
+
+
+        private Vector3 GetNormal(int index)
+        {
+            Vector3 vector1 = _path[index - 2];
+            Vector3 vector2 = _path[index - 1];
+
+            return vector2 + vector1;
         }
 
         private Vector3 CalculateTargetPosition(Vector3 startPosition)
@@ -58,7 +69,7 @@ namespace Gameplay.Minigame.FightForBall.UI
                 Mathf.Clamp(roughPosition.y, _ball.Offset, Screen.height - _ball.Offset),
                 0
             );
-            
+
             return clampedPosition;
 
             /*Vector3 point = GetRandomVector();
