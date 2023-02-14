@@ -99,7 +99,7 @@ namespace Gameplay.Character.Player.MonoBehaviour
             IsPlayable = isPlayable;
             _dunker.Initialize(ball);
             _ally = ally;
-            _ballThrower.Initialize(ball);
+            _ballThrower.Initialize(ball, gameplayCamera);
             _inputControlledBrain.Initialize(gameplayCamera.transform);
             _distanceTracker.Initialize(enemyRing.transform.position, ally.transform);
             Ball = ball;

@@ -37,11 +37,14 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
 
                 points.Add(newPosition);
 
-                Vector3 directionToPreviousPoint = points[i] - newPosition;
+                if (newPosition.y < points[i].y)
+                    break;
+
+                /*Vector3 directionToPreviousPoint = points[i] - newPosition;
                 float distanceTuPreviousPoint = directionToPreviousPoint.magnitude;
                 
                 if (Physics.Raycast(newPosition, directionToPreviousPoint, distanceTuPreviousPoint, _lineStopperLayerMask))
-                    break;
+                    break;*/
             }
 
             _lineRenderer.positionCount = points.Count;

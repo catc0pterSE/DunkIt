@@ -27,12 +27,12 @@ namespace Gameplay.StateMachine.Transitions
 
         public void Enable()
         {
-           InputService.ThrowButtonDown += MoveToThrowState;
+           InputService.ThrowButtonUp += MoveToThrowState;
         }
 
         public void Disable()
         {
-            InputService.ThrowButtonDown -= MoveToThrowState;
+            InputService.ThrowButtonUp -= MoveToThrowState;
         }
 
         private void MoveToThrowState()

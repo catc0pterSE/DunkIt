@@ -2,8 +2,6 @@
 using Infrastructure.Input.InputService;
 using Infrastructure.ServiceManagement;
 using Modules.MonoBehaviour;
-using Scene.Ring;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
@@ -14,18 +12,20 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
     {
         [SerializeField] private Transform _ballPosition;
         [SerializeField] private TrajectoryDrawer _trajectoryDrawer;
+        [SerializeField] private float _launchVelocityXSense = 80;
+        [SerializeField] private float _launchVelocityYSense = 80;
         
         private IInputService _inputService;
         private Ball _ball;
         private Vector3 _launchVelocity;
-
+        private UnityEngine.Camera _camera;
         public event Action BallThrown;
 
         private IInputService InputService => _inputService ??= Services.Container.Single<IInputService>();
+        private float CameraPositionMultiplier => _camera.transform.position.z < transform.position.z ? 1 : -1;
 
         private void OnEnable()
         {
-            _ball.Disable();
             InputService.PointerUp += Throw;
             _trajectoryDrawer.Enable();
             _launchVelocity = Vector3.zero;
@@ -41,8 +41,10 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
         {
             if (InputService.PointerHeldDown)
             {
-                _launchVelocity.x -= InputService.PointerMovement.x;
-                _launchVelocity.y += InputService.PointerMovement.y;
+                Vector3 normalizedPointerMovement = InputService.PointerMovement;
+                
+                _launchVelocity.x += normalizedPointerMovement.x*Time.deltaTime*_launchVelocityXSense*CameraPositionMultiplier;
+                _launchVelocity.y += normalizedPointerMovement.y*Time.deltaTime*_launchVelocityYSense;
 
                 _launchVelocity = Vector3.ProjectOnPlane(_launchVelocity, _ballPosition.right);
 
@@ -55,17 +57,16 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
             }
         }
 
-        public void Initialize(Ball ball)
+        public void Initialize(Ball ball, UnityEngine.Camera gameplayCamera)
         {
+            _camera = gameplayCamera;
             _ball = ball;
         }
 
         private void Throw()
         {
-            Ball cloneBall = Instantiate(_ball, _ballPosition);
-            cloneBall.Enable();
-            cloneBall.Throw(_launchVelocity);
-            //BallThrown?.Invoke();
+            _ball.Throw(_launchVelocity);
+            BallThrown?.Invoke();
         }
     }
 }
