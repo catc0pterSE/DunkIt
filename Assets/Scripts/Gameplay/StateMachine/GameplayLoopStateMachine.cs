@@ -9,14 +9,13 @@ using Gameplay.StateMachine.States.MinigameStates;
 using Infrastructure.CoroutineRunner;
 using Infrastructure.StateMachine;
 using Modules.StateMachine;
-using Scene;
 using UI;
 using UI.HUD;
-using z_Test;
 using SceneConfig = Scene.SceneConfig;
 
 namespace Gameplay.StateMachine
 {
+    using Ball.MonoBehavior;
     public class GameplayLoopStateMachine : Modules.StateMachine.StateMachine
     {
         public GameplayLoopStateMachine(PlayerFacade[] playerTeam,
@@ -24,7 +23,7 @@ namespace Gameplay.StateMachine
             Referee referee,
             CameraFacade camera,
             IGameplayHUD gameplayHUD,
-            Ball.MonoBehavior.Ball ball,
+            Ball ball,
             SceneConfig sceneConfig,
             LoadingCurtain loadingCurtain,
             ICoroutineRunner coroutineRunner,
@@ -37,8 +36,8 @@ namespace Gameplay.StateMachine
                 [typeof(GameplayState)] = new GameplayState(playerTeam, enemyTeam, ball, sceneConfig, gameplayHUD, this, loadingCurtain, coroutineRunner),
                 [typeof(PassState)] = new PassState(playerTeam, enemyTeam, this),
                 [typeof(DunkState)] = new DunkState(playerTeam, enemyTeam, ball, sceneConfig, this),
-                [typeof(ThrowState)] = new ThrowState(gameplayHUD, sceneConfig, this, enemyTeam, ball, loadingCurtain),
-                [typeof(BallContestState)] = new BallContestState(),
+                [typeof(ThrowState)] = new ThrowState(gameplayHUD, sceneConfig, this, enemyTeam, ball, loadingCurtain, coroutineRunner),
+                [typeof(BallContestState)] = new BallContestState(ball, gameplayHUD),
                 [typeof(CelebrateCutsceneState)] = new CelebrateCutsceneState(),
                 [typeof(UpsetCutsceneState)] = new UpsetCutsceneState()
             };

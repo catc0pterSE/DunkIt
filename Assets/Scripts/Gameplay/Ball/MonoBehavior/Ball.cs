@@ -34,7 +34,7 @@ namespace Gameplay.Ball.MonoBehavior
             _rigidBody.AddForce(velocity, ForceMode.VelocityChange);
         }
 
-        public void RemoveOwner()
+        private void RemoveOwner()
         {
             transform.parent = null;
             _owner = null;

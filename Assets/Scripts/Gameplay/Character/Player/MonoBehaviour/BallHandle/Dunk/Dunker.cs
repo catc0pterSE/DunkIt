@@ -19,10 +19,11 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Dunk
         [SerializeField] private float _timeToDunk = 0.75f;
         [SerializeField] private float _highestPoint = 1;
         [SerializeField] private float _timeToHighestPoint = 0.5f;
+        [SerializeField] private float _dunkThrowForce = 5;
 
-        private AnimationCurve _xPosition;
-        private AnimationCurve _yPosition;
-        private AnimationCurve _zPosition;
+        private AnimationCurve _xPositionCurve;
+        private AnimationCurve _yPositionCurve;
+        private AnimationCurve _zPositionCurve;
         private Ball _ball;
         private Coroutine _dunking;
 
@@ -41,25 +42,39 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Dunk
             Vector3 startPosition = transform.position;
             Vector3 targetPosition = ring.DunkPoints.FindClosest(startPosition).position;
             SetUpCurves(startPosition, targetPosition);
-
             _dunking = StartCoroutine(DunkRoutine(ring.BallDunkPoint.position));
         }
 
         private void SetUpCurves(Vector3 startPosition, Vector3 targetPosition)
         {
-            _xPosition = new AnimationCurve();
-            _yPosition = new AnimationCurve();
-            _zPosition = new AnimationCurve();
-            _xPosition.AddKey(new Keyframe(0, startPosition.x));
-            _yPosition.AddKey(new Keyframe(0, startPosition.y));
-            _zPosition.AddKey(new Keyframe(0, startPosition.z));
-            _yPosition.AddKey(new Keyframe(_timeToHighestPoint, targetPosition.y + _highestPoint));
-            _xPosition.AddKey(_timeToDunk, targetPosition.x);
-            _yPosition.AddKey(_timeToDunk, targetPosition.y);
-            _zPosition.AddKey(_timeToDunk, targetPosition.z);
-            _xPosition.AddKey(_jumpTime, targetPosition.x);
-            _yPosition.AddKey(_jumpTime, startPosition.y);
-            _zPosition.AddKey(_jumpTime, targetPosition.z);
+            SetXPositionCurve(startPosition, targetPosition);
+            SetYPositionCurve(startPosition, targetPosition);
+            SetZPositionCurve(startPosition, targetPosition);
+        }
+
+        private void SetXPositionCurve(Vector3 startPosition, Vector3 targetPosition)
+        {
+            _xPositionCurve = new AnimationCurve();
+            _xPositionCurve.AddKey(new Keyframe(0, startPosition.x));
+            _xPositionCurve.AddKey(_timeToDunk, targetPosition.x);
+            _xPositionCurve.AddKey(_jumpTime, targetPosition.x);
+        }
+
+        private void SetYPositionCurve(Vector3 startPosition, Vector3 targetPosition)
+        {
+            _yPositionCurve = new AnimationCurve();
+            _yPositionCurve.AddKey(new Keyframe(0, startPosition.y));
+            _yPositionCurve.AddKey(new Keyframe(_timeToHighestPoint, targetPosition.y + _highestPoint));
+            _yPositionCurve.AddKey(_timeToDunk, targetPosition.y);
+        }
+
+        private void SetZPositionCurve(Vector3 startPosition, Vector3 targetPosition)
+        {
+            _zPositionCurve = new AnimationCurve();
+            _zPositionCurve.AddKey(new Keyframe(0, startPosition.z));
+            _zPositionCurve.AddKey(_timeToDunk, targetPosition.z);
+            _yPositionCurve.AddKey(_jumpTime, startPosition.y);
+            _zPositionCurve.AddKey(_jumpTime, targetPosition.z);
         }
 
         private IEnumerator DunkRoutine(Vector3 ballThrowPoint)
@@ -69,8 +84,8 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Dunk
 
             while (time < _jumpTime)
             {
-                transform.position = new Vector3(_xPosition.Evaluate(time), _yPosition.Evaluate(time),
-                    _zPosition.Evaluate(time));
+                transform.position = new Vector3(_xPositionCurve.Evaluate(time), _yPositionCurve.Evaluate(time),
+                    _zPositionCurve.Evaluate(time));
 
                 _mover.RotateTo(ballThrowPoint);
 
@@ -88,7 +103,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Dunk
 
         private void ThrowBall(Vector3 ballThrowPoint)
         {
-            void ReleaseBall()
+            _ball.MoveTo(ballThrowPoint, () =>
             {
                 Vector3 throwDirection =
                     new Vector3
@@ -96,12 +111,9 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Dunk
                         Vector3.down.x + Random.Range(0, NumericConstants.Half),
                         Vector3.down.y,
                         Vector3.down.z + Random.Range(0, NumericConstants.Half)
-                    ) *
-                    NumericConstants.DunkThrowForce;
+                    ) * _dunkThrowForce;
                 _ball.Throw(throwDirection);
-            }
-            
-            _ball.MoveTo(ballThrowPoint, ReleaseBall);
+            });
         }
     }
 }

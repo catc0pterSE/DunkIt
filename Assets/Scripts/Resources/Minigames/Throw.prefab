@@ -105,7 +105,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2477735640411188367
 Transform:
   m_ObjectHideFlags: 0
@@ -135,6 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interface: {fileID: 8473797805028538017}
+  _ballTrackingSeconds: 5
 --- !u!1 &6839494682592964745
 GameObject:
   m_ObjectHideFlags: 0

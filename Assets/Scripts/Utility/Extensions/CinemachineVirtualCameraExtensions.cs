@@ -6,6 +6,9 @@ namespace Utility.Extensions
 {
     public static class CinemachineVirtualCameraExtensions
     {
+        public const int CinemachineActualCameraOrder = 15;
+        public const int CinemachineDefaultCameraOrder = 0;
+        
         public static void Prioritize(this CinemachineVirtualCamera virtualCamera)
         {
             CinemachineVirtualCamera[] virtualCameras = GameObject.FindObjectsOfType<CinemachineVirtualCamera>();
@@ -15,12 +18,12 @@ namespace Utility.Extensions
                 camera.Deprioritize();
             }
             
-            virtualCamera.Priority = NumericConstants.CinemachineActualCameraOrder;
+            virtualCamera.Priority = CinemachineActualCameraOrder;
         }
         
         private static void Deprioritize(this CinemachineVirtualCamera virtualCamera)
         {
-            virtualCamera.Priority = NumericConstants.CinemachineDefaultCameraOrder;
+            virtualCamera.Priority = CinemachineDefaultCameraOrder;
         }
     }
 }

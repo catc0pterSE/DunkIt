@@ -7,9 +7,9 @@ namespace Gameplay.StateMachine.States.MinigameStates
     public abstract class MinigameState : StateWithTransitions
     {
         private readonly IGameplayHUD _gameplayHUD;
-        protected IMinigame Minigame;
+        protected abstract IMinigame Minigame { get; }
 
-        public MinigameState(IGameplayHUD gameplayHUD)
+        protected MinigameState(IGameplayHUD gameplayHUD)
         {
             
             _gameplayHUD = gameplayHUD;

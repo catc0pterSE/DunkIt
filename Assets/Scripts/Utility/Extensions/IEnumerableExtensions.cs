@@ -12,26 +12,19 @@ namespace Utility.Extensions
             foreach (var item in array)
                 function(item);
         }
-
-
+        
         public static T FindFirstOrNull<T>(this IEnumerable<T> array, Func<T, bool> prediction) where T : class
         {
-            if (array.GetEnumerator().MoveNext() == false)
-                return null;
-
             foreach (T item in array)
                 if (prediction(item))
                     return item;
 
             return null;
         }
-        
+
         public static bool FindFirstInactive<T>(this IEnumerable<T> array, out T component) where T : MonoBehaviour
         {
             component = null;
-
-            if (array == null || array.Any() == false)
-                return false;
 
             foreach (T item in array)
                 if (item.gameObject.activeSelf == false)

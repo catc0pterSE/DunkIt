@@ -5,7 +5,6 @@ using Modules.MonoBehaviour;
 using Scene;
 using UI;
 using UnityEngine;
-using Utility.Constants;
 using Utility.Extensions;
 
 namespace Gameplay.Minigame.Throw
@@ -13,10 +12,9 @@ namespace Gameplay.Minigame.Throw
     public class ThrowMinigame : SwitchableMonoBehaviour, IMinigame
     {
         [SerializeField] private ThrowUI _interface;
+        [SerializeField] private float _ballTrackingSeconds = 5;
 
-        private readonly WaitForSeconds _waitForGoalTrackingTime =
-            new WaitForSeconds(NumericConstants.BallTrackingSeconds);
-        
+        private WaitForSeconds _waitForGoalTrackingTime;
         private PlayerFacade _throwingPlayer;
         private PlayerFacade _primaryEnemy;
         private SceneConfig _sceneConfig;
@@ -41,7 +39,8 @@ namespace Gameplay.Minigame.Throw
             _sceneConfig = sceneConfig;
             _ball = ball;
             _loadingCurtain = loadingCurtain;
-
+            _waitForGoalTrackingTime = new WaitForSeconds(_ballTrackingSeconds);
+            
             return this;
         }
         

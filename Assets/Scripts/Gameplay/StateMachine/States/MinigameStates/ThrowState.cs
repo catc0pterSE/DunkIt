@@ -1,7 +1,10 @@
 ﻿using Gameplay.Character.Player.MonoBehaviour;
+using Gameplay.Minigame;
+using Gameplay.Minigame.Throw;
 using Gameplay.StateMachine.States.CutsceneStates;
 using Gameplay.StateMachine.States.Gameplay;
 using Gameplay.StateMachine.Transitions;
+using Infrastructure.CoroutineRunner;
 using Infrastructure.Factory;
 using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
@@ -12,17 +15,16 @@ using Utility.Constants;
 
 namespace Gameplay.StateMachine.States.MinigameStates
 {
-    public class ThrowState : MinigameState,  IParameterState<PlayerFacade>
+    public class ThrowState : MinigameState, IParameterState<PlayerFacade>
     {
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
         private readonly Ball.MonoBehavior.Ball _ball;
         private readonly LoadingCurtain _loadingCurtain;
         private readonly PlayerFacade[] _enemyTeam;
         private readonly SceneConfig _sceneConfig;
-
+        private readonly ThrowMinigame _throwMinigame;
 
         private PlayerFacade _throwingPlayer;
-
 
         public ThrowState(
             IGameplayHUD gameplayHUD,
@@ -30,14 +32,17 @@ namespace Gameplay.StateMachine.States.MinigameStates
             GameplayLoopStateMachine gameplayLoopStateMachine,
             PlayerFacade[] enemyTeam,
             Ball.MonoBehavior.Ball ball,
-            LoadingCurtain loadingCurtain) : base(gameplayHUD)
+            LoadingCurtain loadingCurtain,
+            ICoroutineRunner coroutineRunner) : base(gameplayHUD)
         {
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
             _ball = ball;
             _loadingCurtain = loadingCurtain;
             _enemyTeam = enemyTeam;
             _sceneConfig = sceneConfig;
-            Transitions = new ITransition[] { new AnyToBallContestStateTransition(ball, gameplayLoopStateMachine) };
+            Transitions = new ITransition[]
+                { new AnyToBallContestStateTransition(ball, gameplayLoopStateMachine, coroutineRunner) };
+            _throwMinigame = Services.Container.Single<IGameObjectFactory>().CreateThrowMinigame();
         }
 
         public void Enter(PlayerFacade player)
@@ -49,9 +54,11 @@ namespace Gameplay.StateMachine.States.MinigameStates
         private void SetThrowingPlayer(PlayerFacade player) =>
             _throwingPlayer = player;
 
+        protected override IMinigame Minigame => _throwMinigame;
+
         protected override void InitializeMinigame()
         {
-            Minigame = Services.Container.Single<IGameObjectFactory>().CreateThrowMinigame().Initialize
+            _throwMinigame.Initialize
             (
                 _throwingPlayer,
                 _enemyTeam[NumericConstants.PrimaryTeamMemberIndex],

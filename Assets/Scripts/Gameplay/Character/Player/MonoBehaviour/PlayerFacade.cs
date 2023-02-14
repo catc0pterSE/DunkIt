@@ -33,8 +33,6 @@ namespace Gameplay.Character.Player.MonoBehaviour
         private PlayerStateMachine _stateMachine;
         private SceneConfig _sceneConfig;
         private PlayerFacade _ally;
-
-        public bool IsAlly => IsPlayable;
         
         private PlayerStateMachine StateMachine => _stateMachine ??= new PlayerStateMachine(this);
         public Animator Animator => _animator;

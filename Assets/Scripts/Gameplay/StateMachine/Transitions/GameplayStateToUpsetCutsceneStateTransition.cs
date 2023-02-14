@@ -15,6 +15,8 @@ namespace Gameplay.StateMachine.Transitions
 {
     public class GameplayStateToUpsetCutsceneStateTransition: ITransition
     {
+        private const float BallTrackingSeconds = 5;
+        
         private readonly PlayerFacade[] _playerTeam;
         private readonly PlayerFacade[] _enemyTeam;
         private readonly Ball.MonoBehavior.Ball _ball;
@@ -23,7 +25,7 @@ namespace Gameplay.StateMachine.Transitions
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
         private readonly ICoroutineRunner _coroutineRunner;
         private readonly SceneConfig _sceneConfig;
-        private readonly WaitForSeconds _goalTrackingTime = new WaitForSeconds(NumericConstants.BallTrackingSeconds);
+        private readonly WaitForSeconds _goalTrackingTime = new WaitForSeconds(BallTrackingSeconds);
         
         private Coroutine _trackingGoal;
         

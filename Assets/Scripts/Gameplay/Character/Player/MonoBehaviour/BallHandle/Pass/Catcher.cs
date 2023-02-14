@@ -2,31 +2,24 @@
 using Modules.MonoBehaviour;
 using UnityEngine;
 
-namespace Gameplay.Character.Player.MonoBehaviour.TriggerZone
+namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Pass
 {
-    using Ball.MonoBehavior;
     public class Catcher: SwitchableMonoBehaviour
     {
         [SerializeField] private CharacterFacade _host;
-
-        private Ball _ball;
         
         public event Action CaughtBall;
         
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.TryGetComponent(out Ball ball) == false)
+            if (other.gameObject.TryGetComponent(out Ball.MonoBehavior.Ball ball) == false)
                 return;
-            _ball = ball;
             
-
-            void GetBall()
+            ball.MoveTo(_host.BallPosition.position, () =>
             {
-                _ball.SetOwner(_host);
+                ball.SetOwner(_host);
                 CaughtBall?.Invoke();
-            }
-            
-            _ball.MoveTo(_host.BallPosition.position, GetBall);
+            });
         }
     }
 }

@@ -43,7 +43,7 @@ namespace Gameplay.StateMachine.States.Gameplay
             {
                 new GameplayStateToDunkStateTransition(this, gameplayLoopStateMachine),
                 new GameplayStateToThrowStateTransition(this, gameplayLoopStateMachine),
-                new AnyToBallContestStateTransition(ball, gameplayLoopStateMachine),
+                new AnyToBallContestStateTransition(ball, gameplayLoopStateMachine, coroutineRunner),
                 new GameplayStateToUpsetCutsceneStateTransition(playerTeam, enemyTeam, ball, sceneConfig.EnemyRing,
                     loadingCurtain, gameplayLoopStateMachine, coroutineRunner, sceneConfig),
                 new GameplayStateToPassTransition(this, gameplayLoopStateMachine)

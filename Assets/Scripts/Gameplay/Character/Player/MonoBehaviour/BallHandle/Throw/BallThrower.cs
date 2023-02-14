@@ -9,6 +9,7 @@ using Utility.Constants;
 namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
 {
     using Camera = UnityEngine.Camera;
+    using Ball.MonoBehavior;
 
     public class BallThrower : SwitchableComponent
     {
@@ -23,7 +24,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
         private Vector3 _destinationPoint;
         private Camera _camera;
         private IInputService _inputService;
-        private Ball.MonoBehavior.Ball _ball;
+        private Ball _ball;
         private Vector3 _launchVelocity;
 
         public event Action BallThrown;
@@ -32,7 +33,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
 
         private void OnEnable()
         {
-            Time.timeScale = 0.3f;
+            Time.timeScale = 0.3f; // TODO: determine
             _trajectoryDrawer.Enable();
             InputService.ThrowButtonDown += Throw;
         }
@@ -68,7 +69,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
             AdjustFlyingTime();
         }
 
-        public void Initialize(Ball.MonoBehavior.Ball ball, Camera gameplayCamera)
+        public void Initialize(Ball ball, Camera gameplayCamera)
         {
             _ball = ball;
             _camera = gameplayCamera;

@@ -11,13 +11,17 @@ namespace Gameplay.Character.Player.MonoBehaviour.TriggerZone
 
         public event Action<PlayerFacade, PlayerFacade> BallContestStarted;
 
-        private void OnTriggerEnter(Collider other)
+        //TODO: delay routine
+        private void OnTriggerStay(Collider other)
         {
             if (other.gameObject.TryGetComponent(out PlayerFacade basketballPlayer) ==
                 false)
                 return;
 
-            if (_host.GetType() == basketballPlayer.GetType())
+            if (basketballPlayer.IsPlayable)
+                return;
+
+            if (_host == basketballPlayer)
                 return;
 
             PlayerFacade[] participants = new PlayerFacade[]
@@ -27,15 +31,16 @@ namespace Gameplay.Character.Player.MonoBehaviour.TriggerZone
             };
 
             PlayerFacade player =
-                participants.FindFirstOrNull(participant => participant.IsPlayable ) ;
+                participants.FindFirstOrNull(participant => participant.IsPlayable);
 
             PlayerFacade enemy =
-                participants.FindFirstOrNull(participant => participant.IsPlayable == false) ;
+                participants.FindFirstOrNull(participant => participant.IsPlayable == false);
 
             if (player != null && enemy != null)
                 BallContestStarted?.Invoke(player, enemy);
             else
-                throw new NullReferenceException("there is no playable or not playable characters in BallContest participants");
+                throw new NullReferenceException(
+                    "there is no playable or not playable characters in BallContest participants");
         }
     }
 }
