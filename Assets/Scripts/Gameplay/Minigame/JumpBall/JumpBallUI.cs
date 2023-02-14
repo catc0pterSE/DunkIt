@@ -59,12 +59,12 @@ namespace Gameplay.Minigame.JumpBall
 
         private void SubscribeOnTouch()
         {
-            InputService.TouchDown += Finish;
+            InputService.PointerDown += Finish;
         }
 
         private void UnsubscribeFromTouch()
         {
-            InputService.TouchDown -= Finish;
+            InputService.PointerDown -= Finish;
         }
 
 

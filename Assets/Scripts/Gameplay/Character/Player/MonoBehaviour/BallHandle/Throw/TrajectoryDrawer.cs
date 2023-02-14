@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Modules.MonoBehaviour;
 using UnityEngine;
 using Utility.Constants;
@@ -12,6 +13,12 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
         [SerializeField] private float _timeStep = 0.02f;
         [SerializeField] private int _maxLineRendererPoints = 1000;
         [SerializeField] private LayerMask _lineStopperLayerMask;
+
+        public override void Disable()
+        {
+            _lineRenderer.enabled = false;
+            base.Disable();
+        }
 
         public void Draw(Vector3 startPosition, Vector3 velocity)
         {

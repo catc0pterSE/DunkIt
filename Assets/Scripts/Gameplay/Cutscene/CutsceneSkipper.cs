@@ -17,12 +17,12 @@ namespace Gameplay.Cutscene
 
         private void OnEnable()
         {
-            InputService.TouchDown += SkipCutscene;
+            InputService.PointerDown += SkipCutscene;
         }
 
         private void OnDisable()
         {
-            InputService.TouchDown -= SkipCutscene;
+            InputService.PointerDown -= SkipCutscene;
         }
 
         private void SkipCutscene()

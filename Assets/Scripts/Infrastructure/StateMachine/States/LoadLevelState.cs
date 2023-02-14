@@ -8,6 +8,7 @@ using Gameplay.StateMachine;
 using Infrastructure.CoroutineRunner;
 using Infrastructure.Factory;
 using Modules.StateMachine;
+using Scene.Ring;
 using UI;
 using UI.HUD;
 using UI.HUD.Mobile;
@@ -83,10 +84,12 @@ namespace Infrastructure.StateMachine.States
                     ball.GetComponentInChildren<MeshRenderer>().material;
             }
 
+            Ring enemyRing = isPlayable ? sceneConfig.EnemyRing : sceneConfig.PlayerRing;
+
             playerTeam[NumericConstants.PrimaryTeamMemberIndex] = primaryPlayer.Initialize(isPlayable, secondaryPlayer,
-                ball, camera, SpawnVirtualCamera(), sceneConfig);
+                ball, camera, SpawnVirtualCamera(), enemyRing);
             playerTeam[NumericConstants.SecondaryTeamMemberIndex] = secondaryPlayer.Initialize(isPlayable,
-                primaryPlayer, ball, camera, SpawnVirtualCamera(), sceneConfig);
+                primaryPlayer, ball, camera, SpawnVirtualCamera(), enemyRing);
 
             return playerTeam;
         }

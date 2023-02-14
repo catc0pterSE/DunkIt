@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections;
+using Modules.MonoBehaviour;
 using UnityEngine;
 using Utility.Extensions;
 
 namespace Gameplay.Ball.MonoBehavior
 {
-    public class Ball : MonoBehaviour
+    public class Ball : SwitchableMonoBehaviour
     {
         [SerializeField] private float _transferSpeed = 2f;
         [SerializeField] private Rigidbody _rigidBody;
@@ -16,6 +17,8 @@ namespace Gameplay.Ball.MonoBehavior
         public Character.CharacterFacade Owner => _owner;
 
         public event Action<Character.CharacterFacade> OwnerChanged;
+
+        public float Mass => _rigidBody.mass;
 
         public void SetOwner(Character.CharacterFacade owner)
         {

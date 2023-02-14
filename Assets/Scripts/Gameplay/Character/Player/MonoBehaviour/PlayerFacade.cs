@@ -31,9 +31,9 @@ namespace Gameplay.Character.Player.MonoBehaviour
 
         private CinemachineVirtualCamera _virtualCamera;
         private PlayerStateMachine _stateMachine;
-        private SceneConfig _sceneConfig;
         private PlayerFacade _ally;
-        
+        private Ring _enemyRing;
+
         private PlayerStateMachine StateMachine => _stateMachine ??= new PlayerStateMachine(this);
         public Animator Animator => _animator;
         public bool IsPassPossible => _distanceTracker.IsPassPossible && OwnsBall;
@@ -94,19 +94,18 @@ namespace Gameplay.Character.Player.MonoBehaviour
         }
 
         public PlayerFacade Initialize(bool isPlayable, PlayerFacade ally, Ball.MonoBehavior.Ball ball,
-            UnityEngine.Camera gameplayCamera, CinemachineVirtualCamera virtualCamera,
-            SceneConfig sceneConfig)
+            UnityEngine.Camera gameplayCamera, CinemachineVirtualCamera virtualCamera, Ring enemyRing)
         {
+            _enemyRing = enemyRing;
             IsPlayable = isPlayable;
             _dunker.Initialize(ball);
             _ally = ally;
             _ballThrower.Initialize(ball, gameplayCamera);
             _inputControlledBrain.Initialize(gameplayCamera.transform);
-            _distanceTracker.Initialize(sceneConfig.EnemyRing.transform.position, ally.transform);
+            _distanceTracker.Initialize(enemyRing.transform.position, ally.transform);
             Ball = ball;
             _virtualCamera = virtualCamera;
             _virtualCamera.Follow = transform;
-            _sceneConfig = sceneConfig;
             _passer.Initialize(ball, _ally);
 
             return this;
@@ -200,7 +199,7 @@ namespace Gameplay.Character.Player.MonoBehaviour
             _virtualCamera.Prioritize();
 
         public void FocusOnEnemyBasket() =>
-            _virtualCamera.LookAt = _sceneConfig.EnemyRing.transform;
+            _virtualCamera.LookAt = _enemyRing.transform;
 
         public void FocusOnBall() =>
             _virtualCamera.LookAt = Ball.transform;

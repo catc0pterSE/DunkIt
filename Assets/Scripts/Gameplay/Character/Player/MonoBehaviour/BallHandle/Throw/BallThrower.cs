@@ -55,7 +55,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
 
         private void Update()
         {
-            if (InputService.TouchHeldDown)
+            if (InputService.PointerHeldDown)
             {
                 SetDestination();
                 EnableLandingEffect();

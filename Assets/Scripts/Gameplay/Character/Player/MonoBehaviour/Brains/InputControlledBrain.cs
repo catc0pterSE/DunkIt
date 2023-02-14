@@ -16,7 +16,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.Brains
 
         private IInputService InputService => _inputService ??= Services.Container.Single<IInputService>();
 
-        private Vector3 InputDirection => new Vector3(InputService.InputDirection.x, 0, InputService.InputDirection.y);
+        private Vector3 InputDirection => new Vector3(InputService.MovementInput.x, 0, InputService.MovementInput.y);
 
         private Vector3 GetCameraRelativeDirection()
         {
