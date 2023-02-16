@@ -172,7 +172,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1919622327166402665}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -332,8 +332,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _ballPosition: {fileID: 4042918883656718937}
   _trajectoryDrawer: {fileID: 4538433228081721433}
-  _launchVelocityXSense: 140
-  _launchVelocityYSense: 140
+  _launchVelocityXSense: 200
+  _launchVelocityYSense: 200
 --- !u!1 &4042918882263731115
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Modules.MonoBehaviour;
 using UnityEngine;
 using Utility.Constants;
@@ -13,6 +12,13 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
         [SerializeField] private float _timeStep = 0.02f;
         [SerializeField] private int _maxLineRendererPoints = 1000;
         [SerializeField] private LayerMask _lineStopperLayerMask;
+
+
+        public override void Enable()
+        {
+            base.Enable();
+            _lineRenderer.enabled = true;
+        }
 
         public override void Disable()
         {
@@ -40,11 +46,11 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
                 if (newPosition.y < points[i].y)
                     break;
 
-                /*Vector3 directionToPreviousPoint = points[i] - newPosition;
+                Vector3 directionToPreviousPoint = points[i] - newPosition;
                 float distanceTuPreviousPoint = directionToPreviousPoint.magnitude;
                 
                 if (Physics.Raycast(newPosition, directionToPreviousPoint, distanceTuPreviousPoint, _lineStopperLayerMask))
-                    break;*/
+                    break;
             }
 
             _lineRenderer.positionCount = points.Count;

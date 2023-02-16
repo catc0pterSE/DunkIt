@@ -43,8 +43,6 @@ namespace Gameplay.Character.Player.StateMachine.States
         private void OnBallThrown()
         {
             _player.DisableBallThrower();
-            _player.PrioritizeCamera();
-            _player.FocusOnBall();
         }
     }
 }

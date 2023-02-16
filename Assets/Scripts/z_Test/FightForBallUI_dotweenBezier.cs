@@ -56,7 +56,10 @@ namespace Gameplay.Minigame.FightForBall.UI
             Vector3 vector1 = _path[index - 2];
             Vector3 vector2 = _path[index - 1];
 
-            return vector2 + vector1;
+
+            Vector3 direction = vector2 - vector1;
+
+            return vector2 - direction;
         }
 
         private Vector3 CalculateTargetPosition(Vector3 startPosition)

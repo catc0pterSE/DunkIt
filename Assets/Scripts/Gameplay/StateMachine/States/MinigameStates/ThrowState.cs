@@ -20,9 +20,6 @@ namespace Gameplay.StateMachine.States.MinigameStates
 {
     public class ThrowState : MinigameState, IParameterState<PlayerFacade>
     {
-        private const float DefaultCameraXOffset = 10;
-        private const int CameraTargetGroupPlayerIndex = 1;
-
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
         private readonly Ball.MonoBehavior.Ball _ball;
         private readonly LoadingCurtain _loadingCurtain;
@@ -54,22 +51,8 @@ namespace Gameplay.StateMachine.States.MinigameStates
         public void Enter(PlayerFacade player)
         {
             SetThrowingPlayer(player);
-            SetupCamera();
+            //SetupCamera();
             base.Enter();
-        }
-
-        private void SetupCamera()
-        {
-            Transform playerTransform = _throwingPlayer.transform;
-            Transform ringTransform = _sceneConfig.EnemyRing.transform;
-            CinemachineVirtualCamera ringCamera = _sceneConfig.EnemyRing.VirtualCamera;
-            _sceneConfig.EnemyRing.RingTargetGroup.m_Targets[CameraTargetGroupPlayerIndex].target = playerTransform;
-            ringCamera.Follow = playerTransform;
-            CinemachineFramingTransposer framingTransposer =
-                ringCamera.GetCinemachineComponent<CinemachineFramingTransposer>()
-                ?? throw new NullReferenceException("There is nщ farmingTransposer on RingVirtualCamera");
-            framingTransposer.m_TrackedObjectOffset.x =
-                ringTransform.position.z > playerTransform.position.z ? -DefaultCameraXOffset : DefaultCameraXOffset;
         }
 
         private void SetThrowingPlayer(PlayerFacade player) =>

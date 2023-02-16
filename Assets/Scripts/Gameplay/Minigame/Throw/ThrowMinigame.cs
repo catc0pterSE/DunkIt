@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Cinemachine;
 using Gameplay.Character.Player.MonoBehaviour;
 using Modules.MonoBehaviour;
 using Scene;
@@ -13,6 +14,8 @@ namespace Gameplay.Minigame.Throw
     {
         [SerializeField] private ThrowUI _interface;
         [SerializeField] private float _ballTrackingSeconds = 5;
+        [SerializeField] private float _defaultCameraXOffset = 10;
+        [SerializeField] private int _cameraTargetGroupPlayerIndex = 1;
 
         private WaitForSeconds _waitForGoalTrackingTime;
         private PlayerFacade _throwingPlayer;
@@ -40,13 +43,13 @@ namespace Gameplay.Minigame.Throw
             _ball = ball;
             _loadingCurtain = loadingCurtain;
             _waitForGoalTrackingTime = new WaitForSeconds(_ballTrackingSeconds);
-            
+
             return this;
         }
-        
+
         public void Launch()
         {
-            PrioritizeRingCamera();
+            SetUpRingCamera();
             SubscribeOnThrowingPlayer();
             _interface.Enable();
         }
@@ -60,8 +63,7 @@ namespace Gameplay.Minigame.Throw
         private void OnBallThrown()
         {
             _interface.Disable();
-            _throwingPlayer.PrioritizeCamera();
-            _throwingPlayer.DisableBallThrower();
+            _sceneConfig.EnemyRing.VirtualCamera.LookAt = _ball.transform;
             StartGoalTracking();
         }
 
@@ -75,7 +77,7 @@ namespace Gameplay.Minigame.Throw
         {
             if (_trackingGoal != null)
                 StopCoroutine(_trackingGoal);
-            
+
             UnsubscribeFromEnemyRing();
         }
 
@@ -87,8 +89,20 @@ namespace Gameplay.Minigame.Throw
             OnGoalFailed();
         }
 
-        private void PrioritizeRingCamera() =>
-            _sceneConfig.EnemyRing.VirtualCamera.Prioritize();
+        private void SetUpRingCamera()
+        {
+            Transform playerTransform = _throwingPlayer.transform;
+            Transform ringTransform = _sceneConfig.EnemyRing.transform;
+            CinemachineVirtualCamera ringCamera = _sceneConfig.EnemyRing.VirtualCamera;
+            _sceneConfig.EnemyRing.RingTargetGroup.m_Targets[_cameraTargetGroupPlayerIndex].target = playerTransform;
+            ringCamera.Follow = playerTransform;
+            CinemachineFramingTransposer framingTransposer =
+                ringCamera.GetCinemachineComponent<CinemachineFramingTransposer>()
+                ?? throw new NullReferenceException("There is no framingTransposer on RingVirtualCamera");
+            framingTransposer.m_TrackedObjectOffset.x =
+                ringTransform.position.z > playerTransform.position.z ? -_defaultCameraXOffset : _defaultCameraXOffset;
+            ringCamera.Prioritize();
+        }
 
         private void SubscribeOnEnemyRing() =>
             _sceneConfig.EnemyRing.Goal += OnGoalScored;
