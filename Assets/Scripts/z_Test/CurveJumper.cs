@@ -32,7 +32,7 @@ namespace z_Test
         private void ALLLA()
         {
             Vector3 startPosition = transform.position;
-            Vector3 targetPosition = _ring.DunkPoints.FindClosest(startPosition).position;
+            Vector3 targetPosition = _ring.DunkPoints.GetTransformPositions().FindClosest(startPosition);
             
             _xPosition = new AnimationCurve();
             _yPosition = new AnimationCurve();

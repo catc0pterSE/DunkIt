@@ -8,6 +8,12 @@ namespace Utility.Extensions
     {
         public static Vector3[] GetTransformPositions(this Transform[] transforms)
         {
+            if (transforms.Length == 0)
+                throw new Exception("Array is empty");
+            
+            if (transforms == null)
+                throw new NullReferenceException("Array is not initialized");
+            
             Vector3[] positions = new Vector3[transforms.Length];
 
             for (int i = 0; i < transforms.Length; i++)
@@ -29,46 +35,64 @@ namespace Utility.Extensions
             return array[Random.Range(0, array.Length)];
         }
 
-        public static Transform FindClosest(this Transform[] transforms, Vector3 position)
+        public static Vector3 FindClosest(this Vector3[] points, Vector3 position)
         {
-            float minDistance = Single.PositiveInfinity;
-            Transform closestTransform = null;
+            if (points.Length == 0)
+                throw new Exception("Array is empty");
+            
+            if (points == null)
+                throw new NullReferenceException("Array is not initialized");
+            
+            float minDistance = Single.MaxValue;
+            Vector3 closestPoint = Vector3.zero;
 
-            foreach (Transform transform in transforms)
+            foreach (Vector3 point in points)
             {
-                float distance = Vector3.Distance(transform.position, position);
+                float distance = Vector3.Distance(point, position);
 
                 if (distance < minDistance)
                 {
-                    closestTransform = transform;
+                    closestPoint = point;
                     minDistance = distance;
                 }
             }
 
-            return closestTransform;
+            return closestPoint;
         }
 
-        public static Transform FindFarthest(this Transform[] transforms, Vector3 position)
+        public static Vector3 FindFarthest(this Vector3[] points, Vector3 position)
         {
+            if (points.Length == 0)
+                throw new Exception("Array is empty");
+            
+            if (points == null)
+                throw new NullReferenceException("Array is not initialized");
+            
             float maxDistance = Single.MinValue;
-            Transform farthestTransform = null;
+            Vector3 farthestPoint = Vector3.zero;
 
-            foreach (Transform transform in transforms)
+            foreach (Vector3 point in points)
             {
-                float distance = Vector3.Distance(transform.position, position);
+                float distance = Vector3.Distance(point, position);
 
                 if (distance > maxDistance)
                 {
-                    farthestTransform = transform;
+                    farthestPoint = point;
                     maxDistance = distance;
                 }
             }
 
-            return farthestTransform;
+            return farthestPoint;
         }
 
         public static Transform[] GetTransforms(this MonoBehaviour[] monoBehaviours)
         {
+            if (monoBehaviours.Length == 0)
+                throw new Exception("Array is empty");
+            
+            if (monoBehaviours == null)
+                throw new NullReferenceException("Array is not initialized");
+            
             Transform[] transforms = new Transform[monoBehaviours.Length];
 
             for (int i = 0; i < monoBehaviours.Length; i++)
@@ -81,6 +105,12 @@ namespace Utility.Extensions
 
         public static Vector3 GetIntermediatePosition(this Vector3[] positions)
         {
+            if (positions.Length == 0)
+                throw new Exception("Array is empty");
+            
+            if (positions == null)
+                throw new NullReferenceException("Array is not initialized");
+            
             Vector3 intermediatePosition = new Vector3();
 
             foreach (Vector3 position in positions)

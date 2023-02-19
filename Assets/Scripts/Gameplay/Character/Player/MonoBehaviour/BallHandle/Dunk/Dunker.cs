@@ -40,7 +40,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Dunk
                 StopCoroutine(_dunking);
 
             Vector3 startPosition = transform.position;
-            Vector3 targetPosition = ring.DunkPoints.FindClosest(startPosition).position;
+            Vector3 targetPosition = ring.DunkPoints.GetTransformPositions().FindClosest(startPosition);
             SetUpCurves(startPosition, targetPosition);
             _dunking = StartCoroutine(DunkRoutine(ring.BallDunkPoint.position));
         }

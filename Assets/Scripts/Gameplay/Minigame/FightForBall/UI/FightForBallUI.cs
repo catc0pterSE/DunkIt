@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Gameplay.Minigame.FightForBall.UI.Hands;
 using Modules.MonoBehaviour;
 using UnityEngine;
 using Utility.Constants;
@@ -12,27 +11,33 @@ namespace Gameplay.Minigame.FightForBall.UI
     {
         [SerializeField] private float _defaultLesserScreenSize = 500;
         [SerializeField] private Ball _ball;
-        [SerializeField] private Hand _rightHand;
-        [SerializeField] private Hand _leftHand;
+        [SerializeField] private Hand[] _hands;
         [SerializeField] private SafeZone _safeZone;
         [SerializeField] private Timer _timer;
-        [SerializeField] private Transform[] _leftHandStartPositions;
-        [SerializeField] private Transform[] _rightHandStartPositions;
-        [SerializeField] private Transform[] _topHandStartPositions;
-        [SerializeField] private Transform[] _bottomHandStartPositions;
+        [SerializeField] private float _defaultHandPerpendicularOffset;
+        [SerializeField] private float _defaultHandParallelOffset;
+        [SerializeField] private float _defaultParallelDistanceBetweenHands;
 
-        public float ScreenRatio => (float)Screen.height / Screen.width;
+        private float ScreenRatio => (float)Screen.height / Screen.width;
+        private Hand LeftHand => _hands.FindFirstOrNull(hand => hand.IsMirrored);
+        private Hand RightHand => _hands.FindFirstOrNull(hand => hand.IsMirrored == false);
+        private Hand BottomHand => _hands.FindFirstOrNull(hand => hand.IsMirrored == false);
+        private Hand TopHand => _hands.FindFirstOrNull(hand => hand.IsMirrored);
+        private float ScaledHandPerpendicularOffset => _defaultHandPerpendicularOffset * ScaleModifier;
+        private float ScaledHandParallelOffset => _defaultHandParallelOffset * ScaleModifier;
+        private float ScaledParallelDistanceBetweenHands => _defaultParallelDistanceBetweenHands * ScaleModifier;
 
         public float ScaleModifier => IsScreenVertical
             ? Screen.width / _defaultLesserScreenSize
             : Screen.height / _defaultLesserScreenSize;
 
-        public event Action Won;
-        public event Action Lost;
-
         public Vector3 Scale => new Vector3(ScaleModifier, ScaleModifier, ScaleModifier);
 
         public bool IsScreenVertical => ScreenRatio > 1;
+
+        public event Action Won;
+        public event Action Lost;
+
 
         private void OnEnable()
         {
@@ -44,8 +49,7 @@ namespace Gameplay.Minigame.FightForBall.UI
         {
             _ball.Touched -= StartMinigame;
             _timer.TimeOver -= FinishSuccessful;
-            _leftHand.BallCaught -= FinishUnsuccessful;
-            _rightHand.BallCaught -= FinishUnsuccessful;
+            _hands.Map(hand => hand.BallCaught -= FinishUnsuccessful);
             _safeZone.BallReached -= FinishSuccessful;
         }
 
@@ -54,11 +58,12 @@ namespace Gameplay.Minigame.FightForBall.UI
             _ball.Touched -= StartMinigame;
             _timer.Launch();
             _timer.TimeOver += FinishSuccessful;
-            _leftHand.BallCaught += FinishUnsuccessful;
-            _rightHand.BallCaught += FinishUnsuccessful;
             _safeZone.BallReached += FinishSuccessful;
-            _leftHand.Launch();
-            _rightHand.Launch();
+            _hands.Map(hand =>
+            {
+                hand.BallCaught += FinishUnsuccessful;
+                hand.Launch();
+            });
         }
 
         private void FinishSuccessful()
@@ -75,13 +80,6 @@ namespace Gameplay.Minigame.FightForBall.UI
             Debug.Log("Lost");
         }
 
-
-        private void DisableHands()
-        {
-            _rightHand.Disable();
-            _leftHand.Disable();
-        }
-
         private void LocateContents()
         {
             if (IsScreenVertical)
@@ -91,15 +89,24 @@ namespace Gameplay.Minigame.FightForBall.UI
                 _safeZone.transform.position =
                     new Vector3(Screen.width * NumericConstants.Half, Screen.height - _safeZone.ScaledOffset);
 
-                Vector3[] leftPositions = _leftHandStartPositions.GetTransformPositions();
-                Vector3 randomLeftPosition = leftPositions.GetRandom();
-                _leftHand.transform.position = randomLeftPosition;
-                Vector3[] rightPositions = _rightHandStartPositions.GetTransformPositions();
-                Vector3[] filteredRightPositions = rightPositions
-                    .Where(position => Math.Abs(position.y - randomLeftPosition.y) > NumericConstants.MinimalDelta)
-                    .ToArray();
-                Vector3 randomRightPosition = filteredRightPositions.GetRandom();
-                _rightHand.transform.position = randomRightPosition;
+                float upper = Screen.height - ScaledHandParallelOffset;
+                float lower = upper - ScaledParallelDistanceBetweenHands;
+                float left = Screen.width * NumericConstants.Half - ScaledHandPerpendicularOffset;
+                float right = Screen.width * NumericConstants.Half + ScaledHandPerpendicularOffset;
+
+                Vector3[] possibleRightPositions = new Vector3[]
+                {
+                    new Vector3(right, upper),
+                    new Vector3(right, lower)
+                };
+
+                Vector3[] possibleLeftPositions = new Vector3[]
+                {
+                    new Vector3(left, upper),
+                    new Vector3(left, lower)
+                };
+                Vector3 rightHandPosition = RightHand.transform.position = possibleRightPositions.GetRandom();
+                LeftHand.transform.position = possibleLeftPositions.FindFarthest(rightHandPosition);
             }
             else
             {
@@ -108,15 +115,25 @@ namespace Gameplay.Minigame.FightForBall.UI
                 _safeZone.transform.position =
                     new Vector3(Screen.width - _safeZone.ScaledOffset, Screen.height * NumericConstants.Half);
 
-                Vector3[] topPositions = _topHandStartPositions.GetTransformPositions();
-                Vector3 randomTopPosition = topPositions.GetRandom();
-                _leftHand.transform.position = randomTopPosition;
-                Vector3[] bottomPositions = _bottomHandStartPositions.GetTransformPositions();
-                Vector3[] filteredBottomPositions = bottomPositions
-                    .Where(position => Math.Abs(position.x - randomTopPosition.x) > NumericConstants.MinimalDelta)
-                    .ToArray();
-                Vector3 randomBottomPosition = filteredBottomPositions.GetRandom();
-                _rightHand.transform.position = randomBottomPosition;
+                float top = Screen.height - ScaledHandPerpendicularOffset;
+                float bottom = ScaledHandPerpendicularOffset;
+                float right = Screen.width - ScaledHandParallelOffset;
+                float left = right - ScaledParallelDistanceBetweenHands;
+
+                Vector3[] possibleTopPositions = new Vector3[]
+                {
+                    new Vector3(left, top),
+                    new Vector3(right, top)
+                };
+
+                Vector3[] possibleBottomPositions = new Vector3[]
+                {
+                    new Vector3(left, bottom),
+                    new Vector3(right, bottom)
+                };
+
+                Vector3 topHandPosition = TopHand.transform.position = possibleTopPositions.GetRandom();
+                BottomHand.transform.position = possibleBottomPositions.FindFarthest(topHandPosition);
             }
         }
     }

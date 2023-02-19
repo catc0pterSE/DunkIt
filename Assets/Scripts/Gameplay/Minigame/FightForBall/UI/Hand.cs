@@ -3,7 +3,7 @@ using Modules.MonoBehaviour;
 using UnityEngine;
 using Utility.Constants;
 
-namespace Gameplay.Minigame.FightForBall.UI.Hands
+namespace Gameplay.Minigame.FightForBall.UI
 {
     public class Hand : SwitchableMonoBehaviour
     {
@@ -19,6 +19,7 @@ namespace Gameplay.Minigame.FightForBall.UI.Hands
         private float ScaledOffScreenPosition => _offScreenPosition * ScaleModifier;
         private float ScaledMovementSpeed => _defaultMovementSpeed * ScaleModifier;
         private float ScaleModifier => _fightForBallUI.ScaleModifier;
+        public bool IsMirrored => _isMirrored;
 
         public event Action BallCaught;
 
@@ -96,7 +97,7 @@ namespace Gameplay.Minigame.FightForBall.UI.Hands
             else
             {
                 newEulerAngles = _isMirrored
-                    ? new Vector3(0, 0, NumericConstants.RightAngle)
+                    ? new Vector3(0, 180, NumericConstants.RightAngle)
                     : new Vector3(0, 0, -NumericConstants.RightAngle);
             }
 

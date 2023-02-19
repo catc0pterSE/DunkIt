@@ -126,7 +126,7 @@ MonoBehaviour:
   _passer: {fileID: -2012806606389975634}
   _catcher: {fileID: 1497494343019081299}
   _dunker: {fileID: 4617063359223777939}
-  _ballContestTriggerZone: {fileID: 6257887091626896469}
+  _fightForBallTriggerZone: {fileID: 6257887091626896469}
 --- !u!95 &5437166744856396153
 Animator:
   serializedVersion: 4
@@ -332,8 +332,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _ballPosition: {fileID: 4042918883656718937}
   _trajectoryDrawer: {fileID: 4538433228081721433}
-  _launchVelocityXSense: 30
-  _launchVelocityYSense: 30
+  _launchVelocityXSense: 60
+  _launchVelocityYSense: 60
 --- !u!1 &4042918882263731115
 GameObject:
   m_ObjectHideFlags: 0
@@ -635,7 +635,7 @@ GameObject:
   - component: {fileID: 5194296133853449263}
   - component: {fileID: 6257887091626896469}
   m_Layer: 0
-  m_Name: BallContestTrigger
+  m_Name: FightForBallTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
