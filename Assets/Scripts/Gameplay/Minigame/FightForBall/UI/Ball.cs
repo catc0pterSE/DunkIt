@@ -1,61 +1,77 @@
 ﻿using System;
 using Infrastructure.Input.InputService;
-using Infrastructure.ServiceManagement;
 using Modules.MonoBehaviour;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 using Utility.Constants;
-using Image = UnityEngine.UI.Image;
 
 namespace Gameplay.Minigame.FightForBall.UI
 {
-    public class Ball : SwitchableMonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
+    public class Ball : SwitchableMonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
+        [SerializeField] private FightForBallUI _fightForBallUI;
         [SerializeField] private RectTransform _rectTransform;
-        [SerializeField] private Image _image;
         [SerializeField] private Image _frame;
         [SerializeField] private Color _heldColor;
         [SerializeField] private Color _unHeldColor;
+        [SerializeField] private Color _caughtColor;
 
         private Coroutine _movingRoutine;
         private IInputService _inputService;
-        private bool _isPointerOver;
         private bool _isLooping;
 
-        public event Action PointerDown;
-        
-        private IInputService InputService => _inputService ??= Services.Container.Single<IInputService>();
-        //public bool IsHeld => InputService.TouchHeldDown && _isPointerOver;
-        public bool IsHeld => Input.GetMouseButton(0) && _isPointerOver;
-        public float Offset => _rectTransform.rect.height * NumericConstants.Half;
+        public float ScaledOffset => _rectTransform.rect.height * NumericConstants.Half * ScaleModifier;
+        private float ScaleModifier => _fightForBallUI.ScaleModifier;
 
-        private void OnDisable()
+        public event Action Touched;
+        private bool _isCaught;
+
+        private void OnEnable()
         {
-            _isPointerOver = false;
+            _isCaught = false;
+            transform.localScale = _fightForBallUI.Scale;
         }
 
-        private void Update()
+        public void OnBeginDrag(PointerEventData eventData)
         {
-            Color color = IsHeld ? _heldColor : _unHeldColor;
-            SetFrameColor(color);
+            if (_isCaught)
+                return;;
+            
+            Touched?.Invoke();
+            SetFrameColor(_heldColor);
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
+        public void OnDrag(PointerEventData eventData)
         {
-            _isPointerOver = true;
+            if (_isCaught)
+                return;;
+            
+            Vector3 pointerPosition = eventData.position;
+
+            Vector3 clampedPointerPosition = new Vector3
+            (
+                Mathf.Clamp(pointerPosition.x, ScaledOffset, Screen.width - ScaledOffset),
+                Mathf.Clamp(pointerPosition.y, ScaledOffset, Screen.height - ScaledOffset)
+            );
+
+            transform.position = clampedPointerPosition;
         }
 
-        public void OnPointerExit(PointerEventData eventData)
+        public void OnEndDrag(PointerEventData eventData)
         {
-            _isPointerOver = false;
+            if (_isCaught)
+                return;;
+            
+            SetFrameColor(_unHeldColor);
         }
 
-        public void OnPointerDown(PointerEventData eventData)
+        public void Stop()
         {
-            PointerDown?.Invoke();
+            _isCaught = true;
+            SetFrameColor(_caughtColor);
         }
+            
 
         private void SetFrameColor(Color color) =>
             _frame.color = color;

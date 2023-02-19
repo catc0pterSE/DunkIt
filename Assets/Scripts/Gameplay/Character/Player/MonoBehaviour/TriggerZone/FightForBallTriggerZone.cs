@@ -5,7 +5,7 @@ using Utility.Extensions;
 
 namespace Gameplay.Character.Player.MonoBehaviour.TriggerZone
 {
-    public class BallContestTriggerZone : SwitchableMonoBehaviour
+    public class FightForBallTriggerZone : SwitchableMonoBehaviour
     {
         [SerializeField] private PlayerFacade _host;
 

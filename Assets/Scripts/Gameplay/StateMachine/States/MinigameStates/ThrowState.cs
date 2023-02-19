@@ -44,7 +44,7 @@ namespace Gameplay.StateMachine.States.MinigameStates
             _enemyTeam = enemyTeam;
             _sceneConfig = sceneConfig;
             Transitions = new ITransition[]
-                { new AnyToBallContestStateTransition(ball, gameplayLoopStateMachine, coroutineRunner) };
+                { new AnyToFightForBallTransition(ball, gameplayLoopStateMachine, coroutineRunner, false) };
             _throwMinigame = Services.Container.Single<IGameObjectFactory>().CreateThrowMinigame();
         }
 

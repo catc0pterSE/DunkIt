@@ -26,7 +26,7 @@ namespace Gameplay.Character.Player.MonoBehaviour
         [SerializeField] private Passer _passer;
         [SerializeField] private Catcher _catcher;
         [SerializeField] private Dunker _dunker;
-        [SerializeField] private BallContestTriggerZone _ballContestTriggerZone;
+        [SerializeField] private FightForBallTriggerZone _fightForBallTriggerZone;
 
         private CinemachineVirtualCamera _virtualCamera;
         private PlayerStateMachine _stateMachine;
@@ -88,8 +88,8 @@ namespace Gameplay.Character.Player.MonoBehaviour
 
         public event Action<PlayerFacade, PlayerFacade> BallContestStarted
         {
-            add => _ballContestTriggerZone.BallContestStarted += value;
-            remove => _ballContestTriggerZone.BallContestStarted -= value;
+            add => _fightForBallTriggerZone.BallContestStarted += value;
+            remove => _fightForBallTriggerZone.BallContestStarted -= value;
         }
 
         public PlayerFacade Initialize(bool isPlayable, PlayerFacade ally, Ball.MonoBehavior.Ball ball,
@@ -188,11 +188,11 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public void DisableDunker() =>
             _dunker.Disable();
 
-        public void EnableBallContestTriggerZone() =>
-            _ballContestTriggerZone.Enable();
+        public void EnableFightForBallTriggerZone() =>
+            _fightForBallTriggerZone.Enable();
 
         public void DisableBallContestTriggerZone() =>
-            _ballContestTriggerZone.Disable();
+            _fightForBallTriggerZone.Disable();
 
         public void PrioritizeCamera() =>
             _virtualCamera.Prioritize();

@@ -41,7 +41,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
         {
             if (InputService.PointerHeldDown)
             {
-                Vector3 normalizedPointerMovement = InputService.PointerMovement;
+                Vector3 normalizedPointerMovement = InputService.PointerMovement.normalized;
                 
                 _launchVelocity.x += normalizedPointerMovement.x*Time.deltaTime*_launchVelocityXSense*CameraPositionMultiplier;
                 _launchVelocity.y += normalizedPointerMovement.y*Time.deltaTime*_launchVelocityYSense;

@@ -8,30 +8,36 @@ using UnityEngine;
 
 namespace Gameplay.StateMachine.Transitions
 {
-    public class AnyToBallContestStateTransition : ITransition
+    public class AnyToFightForBallTransition : ITransition
     {
         private const float DelayTime = 5;
 
         private readonly Ball.MonoBehavior.Ball _ball;
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
         private readonly ICoroutineRunner _coroutineRunner;
+        private readonly bool _isDelayable;
         private readonly WaitForSeconds _waitForDelay = new WaitForSeconds(DelayTime);
 
         private PlayerFacade _currentBallOwner;
         private Coroutine _delayRoutine;
         private bool _isOnDelay;
 
-        public AnyToBallContestStateTransition(Ball.MonoBehavior.Ball ball,
-            GameplayLoopStateMachine gameplayLoopStateMachine, ICoroutineRunner coroutineRunner)
+        public AnyToFightForBallTransition(Ball.MonoBehavior.Ball ball,
+            GameplayLoopStateMachine gameplayLoopStateMachine, ICoroutineRunner coroutineRunner, bool isDelayable)
         {
             _ball = ball;
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
             _coroutineRunner = coroutineRunner;
+            _isDelayable = isDelayable;
         }
 
         public void Enable()
         {
-            StartDelay();
+            _isOnDelay = false;
+            
+            if (_isDelayable)
+                StartDelay();
+            
             SubscribeOnBall();
             OnBallOwnerChanged(_ball.Owner);
         }
@@ -50,8 +56,7 @@ namespace Gameplay.StateMachine.Transitions
 
         private void OnBallOwnerChanged(CharacterFacade newOwner)
         {
-            if (_currentBallOwner != null)
-                UnsubscribeFromCurrentBallOwner();
+            UnsubscribeFromCurrentBallOwner();
 
             if (newOwner is not PlayerFacade basketballPlayer)
                 return;
@@ -79,8 +84,12 @@ namespace Gameplay.StateMachine.Transitions
             _currentBallOwner.BallContestStarted += MoveToBallContestState;
 
 
-        private void UnsubscribeFromCurrentBallOwner() =>
-            _currentBallOwner.BallContestStarted -= MoveToBallContestState;
+        private void UnsubscribeFromCurrentBallOwner()
+        {
+            if (_currentBallOwner != null)
+                _currentBallOwner.BallContestStarted -= MoveToBallContestState;
+        }
+
 
         private void MoveToBallContestState(PlayerFacade player, PlayerFacade enemy)
         {

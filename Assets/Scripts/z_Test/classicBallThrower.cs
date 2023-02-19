@@ -1,4 +1,6 @@
 ﻿using System;
+using Gameplay.Ball.MonoBehavior;
+using Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw;
 using Gameplay.Effects;
 using Infrastructure.Input.InputService;
 using Infrastructure.ServiceManagement;
@@ -6,10 +8,9 @@ using Modules.MonoBehaviour;
 using UnityEngine;
 using Utility.Constants;
 
-namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
+namespace z_Test
 {
     using Camera = UnityEngine.Camera;
-    using Ball.MonoBehavior;
 
     public class classicBallThrower : SwitchableComponent
     {

@@ -1,12 +1,11 @@
-﻿using Gameplay.Minigame.FightForBall.UI;
-using Utility.Constants;
+﻿using System.Collections;
+using Gameplay.Minigame.FightForBall.UI;
+using Modules.MonoBehaviour;
+using UnityEngine;
 
 namespace z_Test
 {
-    using System.Collections;
-using Modules.MonoBehaviour;
-using UnityEngine;
-using Random = UnityEngine.Random;
+    using Random = UnityEngine.Random;
 
 namespace Gameplay.Minigame.FightForBall.UI
 {
@@ -26,12 +25,12 @@ namespace Gameplay.Minigame.FightForBall.UI
 
         private void OnEnable()
         {
-            _ball.PointerDown += Launch;
+            _ball.Touched += Launch;
         }
 
         private void OnDisable()
         {
-            _ball.PointerDown -= Launch;
+            _ball.Touched -= Launch;
         }
 
         private void Launch()
@@ -91,9 +90,9 @@ namespace Gameplay.Minigame.FightForBall.UI
             Vector3 roughPosition = startPosition + direction * Random.Range(_minSegmentDistance, _maxSegmentDistance);
             Vector3 clampedPosition = new Vector3
             (
-                Mathf.Clamp(roughPosition.x, _ball.Offset, Screen.width - _ball.Offset),
-                Mathf.Clamp(roughPosition.y, _ball.Offset, Screen.height*NumericConstants.Half),
-                0
+               // Mathf.Clamp(roughPosition.x, _ball.Offset, Screen.width - _ball.Offset),
+               // Mathf.Clamp(roughPosition.y, _ball.Offset, Screen.height*NumericConstants.Half),
+              //  0
             );
             
             return clampedPosition;

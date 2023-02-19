@@ -23,11 +23,6 @@ namespace Gameplay.StateMachine.States.MinigameStates
             throw new System.NotImplementedException();
         }
 
-        public void Exit()
-        {
-          
-        }
-
         protected override void OnMiniGameWon()
         {
             throw new System.NotImplementedException();

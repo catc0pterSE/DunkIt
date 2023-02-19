@@ -17,7 +17,7 @@ namespace Gameplay.Character.Player.StateMachine.States
         {
             _player.DisableInputControlledBrain();
             _player.DisableAIControlledBrain();
-            _player.EnableBallContestTriggerZone();
+            _player.EnableFightForBallTriggerZone();
             _player.RotateTo(ringPosition, StartThrow);
         }
 

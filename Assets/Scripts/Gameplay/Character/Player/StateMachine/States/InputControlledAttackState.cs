@@ -19,7 +19,7 @@ namespace Gameplay.Character.Player.StateMachine.States
             _player.PrioritizeCamera();
             _player.FocusOnEnemyBasket();
             _player.EnableDistanceTracker();
-            _player.EnableBallContestTriggerZone();
+            _player.EnableFightForBallTriggerZone();
         }
         
         public void Exit()

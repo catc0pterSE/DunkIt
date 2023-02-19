@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Gameplay.Minigame
+namespace Gameplay.Minigame.JumpBall
 {
     public class MinigameHandle : MonoBehaviour
     {
@@ -18,10 +18,7 @@ namespace Gameplay.Minigame
 
         private void Update()
         {
-            if (IsInZone)
-                SetColor(_validColor);
-            else
-                SetColor(_inValidColor);
+            SetColor(IsInZone ? _validColor : _inValidColor);
         }
 
         private void SetColor(Color color) =>
@@ -35,7 +32,7 @@ namespace Gameplay.Minigame
             
             _raycaster.Raycast(pointerEventData, results);
 
-            return results?.Count > 0;
+            return results.Count > 0;
         }
     }
 }

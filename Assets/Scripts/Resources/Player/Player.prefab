@@ -332,8 +332,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _ballPosition: {fileID: 4042918883656718937}
   _trajectoryDrawer: {fileID: 4538433228081721433}
-  _launchVelocityXSense: 200
-  _launchVelocityYSense: 200
+  _launchVelocityXSense: 30
+  _launchVelocityYSense: 30
 --- !u!1 &4042918882263731115
 GameObject:
   m_ObjectHideFlags: 0

@@ -164,7 +164,7 @@ MonoBehaviour:
   m_BiasX: 0
   m_BiasY: 0
   m_CenterOnActivate: 1
-  m_GroupFramingSize: 0.23
+  m_GroupFramingSize: 0.2
   m_FramingMode: 2
   m_FrameDamping: 2
   m_AdjustmentMode: 0
@@ -598,7 +598,7 @@ MonoBehaviour:
   m_BiasX: 0
   m_BiasY: 0
   m_CenterOnActivate: 1
-  m_GroupFramingSize: 0.15
+  m_GroupFramingSize: 0.2
   m_FramingMode: 2
   m_FrameDamping: 2
   m_AdjustmentMode: 0
@@ -755,7 +755,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _director: {fileID: 2380539561540788583}
   _refereeCamera: {fileID: 2380539560837304686}
-  _ballCamera: {fileID: 0}
   _playerTeamTargetGroup: {fileID: 2380539561563497414}
   _enemyTeamTargetGroup: {fileID: 2380539561699507852}
 --- !u!1 &4403888258915198867
