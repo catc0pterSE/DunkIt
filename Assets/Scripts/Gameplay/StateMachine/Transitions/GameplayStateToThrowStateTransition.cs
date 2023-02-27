@@ -16,24 +16,19 @@ namespace Gameplay.StateMachine.Transitions
         private bool ThrowPossible =>
             _gameplayState.ControlledPlayer.OwnsBall && _gameplayState.ControlledPlayer.IsInThrowZone;
 
-        private IInputService InputService => _inputService ??= Services.Container.Single<IInputService>();
-
         public GameplayStateToThrowStateTransition(GameplayState gameplayState,
-            GameplayLoopStateMachine gameplayLoopStateMachine)
+            GameplayLoopStateMachine gameplayLoopStateMachine, IInputService inputService)
         {
+            _inputService = inputService;
             _gameplayState = gameplayState;
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
         }
 
-        public void Enable()
-        {
-           InputService.ThrowButtonUp += MoveToThrowState;
-        }
+        public void Enable() =>
+            _inputService.ThrowButtonUp += MoveToThrowState;
 
-        public void Disable()
-        {
-            InputService.ThrowButtonUp -= MoveToThrowState;
-        }
+        public void Disable() =>
+            _inputService.ThrowButtonUp -= MoveToThrowState;
 
         private void MoveToThrowState()
         {

@@ -13,24 +13,20 @@ namespace Gameplay.StateMachine.Transitions
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
         private IInputService _inputService;
 
-        private IInputService InputService => _inputService ??= Services.Container.Single<IInputService>();
-
         public GameplayStateToDunkStateTransition(GameplayState gameplayState,
-            GameplayLoopStateMachine gameplayLoopStateMachine)
+            GameplayLoopStateMachine gameplayLoopStateMachine, IInputService inputService)
         {
+            _inputService = inputService;
             _gameplayState = gameplayState;
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
         }
 
-        public void Enable()
-        {
-            InputService.DunkButtonUp += MoveToDunkState;
-        }
+        public void Enable() =>
+            _inputService.DunkButtonUp += MoveToDunkState;
 
-        public void Disable()
-        {
-            InputService.DunkButtonUp -= MoveToDunkState;
-        }
+        public void Disable() =>
+            _inputService.DunkButtonUp -= MoveToDunkState;
+
 
         private void MoveToDunkState()
         {

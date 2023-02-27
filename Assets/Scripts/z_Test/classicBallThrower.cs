@@ -30,13 +30,13 @@ namespace z_Test
 
         public event Action BallThrown;
 
-        private IInputService InputService => _inputService ??= Services.Container.Single<IInputService>();
+        //private IInputService InputService => _inputService ??= Services.Container.Single<IInputService>();
 
         private void OnEnable()
         {
             Time.timeScale = 0.3f; // TODO: determine
             _trajectoryDrawer.Enable();
-            InputService.ThrowButtonDown += Throw;
+           _inputService.ThrowButtonDown += Throw;
         }
 
         private void OnDisable()
@@ -45,7 +45,7 @@ namespace z_Test
             _trajectoryDrawer.StopDrawing();
             _trajectoryDrawer.Disable();
             DisableLandingEffect();
-            InputService.ThrowButtonDown -= Throw;
+            _inputService.ThrowButtonDown -= Throw;
         }
 
         private void Awake()
@@ -56,7 +56,7 @@ namespace z_Test
 
         private void Update()
         {
-            if (InputService.PointerHeldDown)
+            if (_inputService.PointerHeldDown)
             {
                 SetDestination();
                 EnableLandingEffect();
@@ -78,12 +78,12 @@ namespace z_Test
 
         private void AdjustFlyingTime()
         {
-            _flightTime += InputService.ThrowCurve * _curveChangingSpeed;
+            _flightTime += _inputService.ThrowCurve * _curveChangingSpeed;
         }
 
         private void SetDestination()
         {
-            Ray ray = _camera.ScreenPointToRay(InputService.PointerPosition);
+            Ray ray = _camera.ScreenPointToRay(_inputService.PointerPosition);
 
             bool isOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
 

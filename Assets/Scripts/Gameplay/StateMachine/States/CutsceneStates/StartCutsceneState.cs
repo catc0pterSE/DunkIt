@@ -3,6 +3,7 @@ using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.States.MinigameStates;
 using Infrastructure.Factory;
+using Infrastructure.Input.InputService;
 using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
 using UI.HUD;
@@ -22,12 +23,15 @@ namespace Gameplay.StateMachine.States.CutsceneStates
             CinemachineBrain camera,
             Ball.MonoBehavior.Ball ball,
             IGameplayHUD gameplayHUD,
-            GameplayLoopStateMachine gameplayLoopStateMachine) : base
+            GameplayLoopStateMachine gameplayLoopStateMachine,
+            IGameObjectFactory gameObjectFactory, 
+            IInputService inputService
+        ) : base
         (
             playerTeam,
             enemyTeam,
             gameplayHUD,
-            Services.Container.Single<IGameObjectFactory>().CreateStartCutscene().Initialize(camera, playerTeam, enemyTeam, referee)
+            gameObjectFactory.CreateStartCutscene().Initialize(camera, playerTeam, enemyTeam, referee, inputService)
         )
         {
             _referee = referee;
@@ -50,7 +54,7 @@ namespace Gameplay.StateMachine.States.CutsceneStates
 
         protected override void EnterNextState()
         {
-           _gameplayLoopStateMachine.Enter<JumpBallState>();
+            _gameplayLoopStateMachine.Enter<JumpBallState>();
         }
     }
 }

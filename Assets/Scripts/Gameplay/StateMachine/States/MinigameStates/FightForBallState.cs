@@ -26,14 +26,14 @@ namespace Gameplay.StateMachine.States.MinigameStates
         private PlayerFacade _fightingEnemy;
 
         public FightForBallState(PlayerFacade[] playerTeam, PlayerFacade[] enemyTeam, Ball ball, IGameplayHUD gameplayHUD,
-            GameplayLoopStateMachine gameplayLoopStateMachine)
+            GameplayLoopStateMachine gameplayLoopStateMachine, IGameObjectFactory gameObjectFactory)
             : base(gameplayHUD)
         {
             _playerTeam = playerTeam;
             _enemyTeam = enemyTeam;
             _ball = ball;
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
-            _fightForBallMinigame = Services.Container.Single<IGameObjectFactory>().CreateFightForBallMinigame();
+            _fightForBallMinigame = gameObjectFactory.CreateFightForBallMinigame();
         }
 
         public void Enter(PlayerFacade[] participants)

@@ -20,26 +20,22 @@ namespace UI.HUD.Mobile
         private IUIInputController _uiInputController;
         private GameplayHUDStateMachine _stateMachine;
 
-        private IUIInputController UIInputController =>
-            _uiInputController ??= Services.Container.Single<IUIInputController>();
-
         public GameplayHUDStateMachine StateMachine => _stateMachine ??= new GameplayHUDStateMachine(this);
 
-        private void OnEnable()
-        {
+        private void OnEnable() =>
             SubscribeUIInputControllerOnButtons();
-        }
 
-        private void OnDisable()
-        {
+        private void OnDisable() =>
             UnsubscribeUIInputControllerFromButtons();
-        }
 
         public IGameplayHUD Initialize(PlayerFacade[] indicationTargets, Camera gameplayCamera)
         {
             _offScreenIndicationRenderer.Initialize(indicationTargets, gameplayCamera);
             return this;
         }
+
+        public void SetUiInputController(IUIInputController uiInputController) =>
+            _uiInputController = uiInputController;
 
         public void SetThrowAvailability(bool isAvailable) =>
             _throwButton.gameObject.SetActive(isAvailable);
@@ -53,58 +49,34 @@ namespace UI.HUD.Mobile
         public void SetChangePlayerAvailability(bool isAvailable) =>
             _changePlayerButton.gameObject.SetActive(isAvailable);
 
-        /*public void SetThrowAvailability(bool isAvailable)
-        {
-            Debug.Log($"SetThrowAvailability {isAvailable}");
-            _throwButton.gameObject.SetActive(isAvailable);
-        }
-
-        public void SetDunkAvailability(bool isAvailable)
-        {
-            Debug.Log($"SetDunkAvailability {isAvailable}");
-            _dunkButton.gameObject.SetActive(isAvailable);
-        }
-
-        public void SetPassAvailability(bool isAvailable)
-        {
-            Debug.Log($"SetPassAvailability {isAvailable}");
-            _passButton.gameObject.SetActive(isAvailable);
-        }
-
-        public void SetChangePlayerAvailability(bool isAvailable)
-        {
-            Debug.Log($"SetChangePlayerAvailability {isAvailable}");
-            _changePlayerButton.gameObject.SetActive(isAvailable);
-        }*/
-
         private void SubscribeUIInputControllerOnButtons()
         {
-            _throwButton.Down += UIInputController.OnUIThrowButtonDown;
-            _throwButton.Up += UIInputController.OnUIThrowButtonUp;
+            _throwButton.Down += _uiInputController.OnUIThrowButtonDown;
+            _throwButton.Up += _uiInputController.OnUIThrowButtonUp;
 
-            _dunkButton.Down += UIInputController.OnUIDunkButtonDown;
-            _dunkButton.Up += UIInputController.OnUIDunkButtonUp;
+            _dunkButton.Down += _uiInputController.OnUIDunkButtonDown;
+            _dunkButton.Up += _uiInputController.OnUIDunkButtonUp;
 
-            _passButton.Down += UIInputController.OnUIPassButtonDown;
-            _passButton.Up += UIInputController.OnUIPassButtonUp;
+            _passButton.Down += _uiInputController.OnUIPassButtonDown;
+            _passButton.Up += _uiInputController.OnUIPassButtonUp;
 
-            _changePlayerButton.Down += UIInputController.OnUIChangePlayerButtonDown;
-            _changePlayerButton.Up += UIInputController.OnUIChangePlayerButtonUp;
+            _changePlayerButton.Down += _uiInputController.OnUIChangePlayerButtonDown;
+            _changePlayerButton.Up += _uiInputController.OnUIChangePlayerButtonUp;
         }
 
         private void UnsubscribeUIInputControllerFromButtons()
         {
-            _throwButton.Down -= UIInputController.OnUIThrowButtonDown;
-            _throwButton.Up -= UIInputController.OnUIThrowButtonUp;
+            _throwButton.Down -= _uiInputController.OnUIThrowButtonDown;
+            _throwButton.Up -= _uiInputController.OnUIThrowButtonUp;
 
-            _dunkButton.Down -= UIInputController.OnUIDunkButtonDown;
-            _dunkButton.Up -= UIInputController.OnUIDunkButtonUp;
+            _dunkButton.Down -= _uiInputController.OnUIDunkButtonDown;
+            _dunkButton.Up -= _uiInputController.OnUIDunkButtonUp;
 
-            _passButton.Down -= UIInputController.OnUIPassButtonDown;
-            _passButton.Up -= UIInputController.OnUIPassButtonUp;
+            _passButton.Down -= _uiInputController.OnUIPassButtonDown;
+            _passButton.Up -= _uiInputController.OnUIPassButtonUp;
 
-            _changePlayerButton.Down -= UIInputController.OnUIChangePlayerButtonDown;
-            _changePlayerButton.Up -= UIInputController.OnUIChangePlayerButtonUp;
+            _changePlayerButton.Down -= _uiInputController.OnUIChangePlayerButtonDown;
+            _changePlayerButton.Up -= _uiInputController.OnUIChangePlayerButtonUp;
         }
     }
 }

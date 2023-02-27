@@ -8,6 +8,7 @@ using Gameplay.StateMachine.States.Gameplay;
 using Gameplay.StateMachine.Transitions;
 using Infrastructure.CoroutineRunner;
 using Infrastructure.Factory;
+using Infrastructure.Input.InputService;
 using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
 using Scene;
@@ -36,7 +37,9 @@ namespace Gameplay.StateMachine.States.MinigameStates
             PlayerFacade[] enemyTeam,
             Ball.MonoBehavior.Ball ball,
             LoadingCurtain loadingCurtain,
-            ICoroutineRunner coroutineRunner) : base(gameplayHUD)
+            ICoroutineRunner coroutineRunner,
+            IGameObjectFactory gameObjectFactory
+        ) : base(gameplayHUD)
         {
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
             _ball = ball;
@@ -45,7 +48,7 @@ namespace Gameplay.StateMachine.States.MinigameStates
             _sceneConfig = sceneConfig;
             Transitions = new ITransition[]
                 { new AnyToFightForBallTransition(ball, gameplayLoopStateMachine, coroutineRunner, false) };
-            _throwMinigame = Services.Container.Single<IGameObjectFactory>().CreateThrowMinigame();
+            _throwMinigame = gameObjectFactory.CreateThrowMinigame();
         }
 
         public void Enter(PlayerFacade player)
@@ -75,7 +78,7 @@ namespace Gameplay.StateMachine.States.MinigameStates
 
         protected override void OnMiniGameLost()
         {
-            _loadingCurtain.FadeInFadeOut(()=>
+            _loadingCurtain.FadeInFadeOut(() =>
             {
                 SetDropBall();
                 MoveToGameplayState();
@@ -91,7 +94,7 @@ namespace Gameplay.StateMachine.States.MinigameStates
             primaryEnemy.transform.position = _sceneConfig.EnemyDropBallPoint.position;
             _ball.SetOwner(primaryEnemy);
         }
-        
+
         private void MoveToCelebrateCutsceneState() =>
             _gameplayLoopStateMachine.Enter<CelebrateCutsceneState>();
 

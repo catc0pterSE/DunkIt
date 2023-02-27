@@ -718,7 +718,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6309306772748354948
 Transform:
   m_ObjectHideFlags: 0
@@ -754,6 +754,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _director: {fileID: 2380539561540788583}
+  _cutsceneSkipper: {fileID: 1953511878532356503}
   _refereeCamera: {fileID: 2380539560837304686}
   _playerTeamTargetGroup: {fileID: 2380539561563497414}
   _enemyTeamTargetGroup: {fileID: 2380539561699507852}

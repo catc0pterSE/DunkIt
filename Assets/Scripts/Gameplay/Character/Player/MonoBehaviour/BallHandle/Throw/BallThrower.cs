@@ -20,28 +20,26 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
         private Vector3 _launchVelocity;
         private UnityEngine.Camera _camera;
         public event Action BallThrown;
-
-        private IInputService InputService => _inputService ??= Services.Container.Single<IInputService>();
         private float CameraPositionMultiplier => _camera.transform.position.z < transform.position.z ? 1 : -1;
 
         private void OnEnable()
         {
-            InputService.PointerUp += Throw;
+            _inputService.PointerUp += Throw;
             _trajectoryDrawer.Enable();
             _launchVelocity = Vector3.zero;
         }
 
         private void OnDisable()
         {
-            InputService.PointerUp -= Throw;
+            _inputService.PointerUp -= Throw;
             _trajectoryDrawer.Disable();
         }
 
         private void Update()
         {
-            if (InputService.PointerHeldDown)
+            if ( _inputService.PointerHeldDown)
             {
-                Vector3 normalizedPointerMovement = InputService.PointerMovement.normalized;
+                Vector3 normalizedPointerMovement =  _inputService.PointerMovement.normalized;
                 
                 _launchVelocity.x += normalizedPointerMovement.x*Time.deltaTime*_launchVelocityXSense*CameraPositionMultiplier;
                 _launchVelocity.y += normalizedPointerMovement.y*Time.deltaTime*_launchVelocityYSense;

@@ -1,11 +1,8 @@
-using System.Collections;
 using Infrastructure.CoroutineRunner;
 using Infrastructure.ServiceManagement;
 using Infrastructure.StateMachine;
 using Infrastructure.StateMachine.States;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using Utility.Constants;
 
 namespace Infrastructure
 {

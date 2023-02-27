@@ -1,4 +1,5 @@
 ﻿using Gameplay.Character.Player.MonoBehaviour;
+using Infrastructure.Input;
 using Modules.MonoBehaviour;
 using UI.HUD.StateMachine;
 using UnityEngine;

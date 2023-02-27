@@ -2,6 +2,7 @@
 using Cinemachine;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
+using Infrastructure.Input.InputService;
 using Modules.MonoBehaviour;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -17,6 +18,34 @@ namespace Gameplay.Minigame.JumpBall
         [SerializeField] private CinemachineVirtualCamera _ballCamera;
         [SerializeField] private CinemachineVirtualCamera _refereeCamera;
 
+        public JumpBallMinigame Initialize
+        (
+            CinemachineBrain gameplayCamera,
+            Referee referee,
+            PlayerFacade[] playerTeam,
+            PlayerFacade[] enemyTeam,
+            Ball.MonoBehavior.Ball ball,
+            IInputService inputService
+        )
+        {
+            _interface.Initialize(inputService);
+            
+            PlayerFacade player = playerTeam[NumericConstants.PrimaryTeamMemberIndex];
+            PlayerFacade enemy = enemyTeam[NumericConstants.PrimaryTeamMemberIndex];
+
+            _ballCamera.LookAt = ball.transform;
+            _refereeCamera.LookAt = referee.transform;
+
+            _director.BindCinemachineBrain(TimelineTrackNames.CinemachineTrackName, gameplayCamera);
+            _director.BindAnimator(TimelineTrackNames.PrimaryPlayerAnimationTrackName, player.Animator);
+            _director.BindAnimator(TimelineTrackNames.PrimaryEnemyAnimationTrackName, enemy.Animator);
+            _director.BindAnimator(TimelineTrackNames.RefereeAnimationTrackName, referee.Animator);
+
+            ball.SetOwner(referee);
+
+            return this;
+        }
+        
         public event Action Won;
 
         public event Action Lost;
@@ -33,31 +62,6 @@ namespace Gameplay.Minigame.JumpBall
             _interface.Lost -= OnLost;
         }
 
-        public JumpBallMinigame Initialize
-        (
-            CinemachineBrain gameplayCamera,
-            Referee referee,
-            PlayerFacade[] playerTeam,
-            PlayerFacade[] enemyTeam,
-            Ball.MonoBehavior.Ball ball
-        )
-        {
-            PlayerFacade player = playerTeam[NumericConstants.PrimaryTeamMemberIndex];
-            PlayerFacade enemy = enemyTeam[NumericConstants.PrimaryTeamMemberIndex];
-
-            _ballCamera.LookAt = ball.transform;
-            _refereeCamera.LookAt = referee.transform;
-
-            _director.BindCinemachineBrain(TimelineTrackNames.CinemachineTrackName, gameplayCamera);
-            _director.BindAnimator(TimelineTrackNames.PrimaryPlayerAnimationTrackName, player.Animator);
-            _director.BindAnimator(TimelineTrackNames.PrimaryEnemyAnimationTrackName, enemy.Animator);
-            _director.BindAnimator(TimelineTrackNames.RefereeAnimationTrackName, referee.Animator);
-
-            ball.SetOwner(referee);
-
-            return this;
-        }
-
         private void OnWon()
         {
             End();
@@ -72,7 +76,6 @@ namespace Gameplay.Minigame.JumpBall
 
         private void End() =>
             _director.Stop();
-
 
         public void Launch() =>
             _director.Play();

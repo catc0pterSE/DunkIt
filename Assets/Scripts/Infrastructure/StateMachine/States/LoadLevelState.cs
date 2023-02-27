@@ -7,6 +7,9 @@ using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine;
 using Infrastructure.CoroutineRunner;
 using Infrastructure.Factory;
+using Infrastructure.Input;
+using Infrastructure.Input.InputService;
+using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
 using Scene.Ring;
 using UI;
@@ -25,16 +28,20 @@ namespace Infrastructure.StateMachine.States
         private readonly SceneLoader _sceneLoader;
         private readonly IGameObjectFactory _gameObjectFactory;
         private readonly ICoroutineRunner _coroutineRunner;
+        private readonly Services _serviceContainer;
+        private readonly IInputService _inputService;
 
         private LoadingCurtain _loadingCurtain;
 
         public LoadLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
-            IGameObjectFactory gameObjectFactory, ICoroutineRunner coroutineRunner)
+            ICoroutineRunner coroutineRunner, Services serviceContainer)
         {
-            _gameObjectFactory = gameObjectFactory;
             _coroutineRunner = coroutineRunner;
+            _serviceContainer = serviceContainer;
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
+            _gameObjectFactory = serviceContainer.Single<IGameObjectFactory>();
+            _inputService = serviceContainer.Single<IInputService>();
         }
 
         private LoadingCurtain LoadingCurtain => _loadingCurtain ??=
@@ -62,9 +69,21 @@ namespace Infrastructure.StateMachine.States
             IGameplayHUD gameplayHUDView = SpawnHUD().Initialize(playerTeam.Union(enemyTeam).ToArray(), camera.Camera);
 
             GameplayLoopStateMachine gameplayLoopStateMachine =
-                new GameplayLoopStateMachine(playerTeam, enemyTeam, referee, camera, gameplayHUDView, ball, sceneConfig,
+                new GameplayLoopStateMachine
+                (
+                    playerTeam,
+                    enemyTeam,
+                    referee,
+                    camera,
+                    gameplayHUDView,
+                    ball,
+                    sceneConfig,
                     LoadingCurtain,
-                    _coroutineRunner, _gameStateMachine);
+                    _coroutineRunner,
+                    _gameObjectFactory,
+                    _inputService,
+                    _gameStateMachine
+                );
 
             _gameStateMachine.Enter<GamePlayLoopState, GameplayLoopStateMachine>(gameplayLoopStateMachine);
         }
@@ -87,9 +106,9 @@ namespace Infrastructure.StateMachine.States
             Ring enemyRing = isPlayable ? sceneConfig.EnemyRing : sceneConfig.PlayerRing;
 
             playerTeam[NumericConstants.PrimaryTeamMemberIndex] = primaryPlayer.Initialize(isPlayable, secondaryPlayer,
-                ball, camera, SpawnVirtualCamera(), enemyRing);
+                ball, camera, SpawnVirtualCamera(), enemyRing, _inputService);
             playerTeam[NumericConstants.SecondaryTeamMemberIndex] = secondaryPlayer.Initialize(isPlayable,
-                primaryPlayer, ball, camera, SpawnVirtualCamera(), enemyRing);
+                primaryPlayer, ball, camera, SpawnVirtualCamera(), enemyRing, _inputService);
 
             return playerTeam;
         }
@@ -107,10 +126,15 @@ namespace Infrastructure.StateMachine.States
         private Ball SpawnBall() =>
             _gameObjectFactory.CreateBall();
 
-
         private IGameplayHUD SpawnHUD() //TODO different for different platforms
         {
+            return SpawnMobileHUD();
+        }
+
+        private IGameplayHUD SpawnMobileHUD()
+        {
             MobileGameplayHUD mobileGameplayHUD = _gameObjectFactory.CreateMobileHUD();
+            mobileGameplayHUD.SetUiInputController(_serviceContainer.Single<IUIInputController>());
             return mobileGameplayHUD;
         }
 

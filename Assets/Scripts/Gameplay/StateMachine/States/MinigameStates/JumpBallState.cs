@@ -5,6 +5,7 @@ using Gameplay.Minigame;
 using Gameplay.Minigame.JumpBall;
 using Gameplay.StateMachine.States.Gameplay;
 using Infrastructure.Factory;
+using Infrastructure.Input.InputService;
 using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
 using UI.HUD;
@@ -20,6 +21,7 @@ namespace Gameplay.StateMachine.States.MinigameStates
         private readonly Ball.MonoBehavior.Ball _ball;
         private readonly CinemachineBrain _gameplayCamera;
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
+        private readonly IInputService _inputService;
         private readonly JumpBallMinigame _jumpBallMinigame;
 
         public JumpBallState
@@ -30,7 +32,9 @@ namespace Gameplay.StateMachine.States.MinigameStates
             Ball.MonoBehavior.Ball ball,
             CinemachineBrain gameplayCamera,
             IGameplayHUD gameplayHUD,
-            GameplayLoopStateMachine gameplayLoopStateMachine
+            GameplayLoopStateMachine gameplayLoopStateMachine,
+            IGameObjectFactory gameObjectFactory,
+            IInputService inputService
         ) : base
         (
             gameplayHUD
@@ -42,7 +46,8 @@ namespace Gameplay.StateMachine.States.MinigameStates
             _ball = ball;
             _gameplayCamera = gameplayCamera;
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
-            _jumpBallMinigame = Services.Container.Single<IGameObjectFactory>().CreateJumpBallMinigame();
+            _inputService = inputService;
+            _jumpBallMinigame = gameObjectFactory.CreateJumpBallMinigame();
         }
 
         protected override IMinigame Minigame => _jumpBallMinigame;
@@ -65,7 +70,7 @@ namespace Gameplay.StateMachine.States.MinigameStates
         }
 
         protected override void InitializeMinigame() =>
-            _jumpBallMinigame.Initialize(_gameplayCamera, _referee, _playerTeam, _enemyTeam, _ball);
+            _jumpBallMinigame.Initialize(_gameplayCamera, _referee, _playerTeam, _enemyTeam, _ball, _inputService);
 
 
         protected override void OnMiniGameWon() =>

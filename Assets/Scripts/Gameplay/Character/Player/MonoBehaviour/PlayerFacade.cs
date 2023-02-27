@@ -9,6 +9,7 @@ using Gameplay.Character.Player.MonoBehaviour.Movement;
 using Gameplay.Character.Player.MonoBehaviour.TriggerZone;
 using Gameplay.Character.Player.StateMachine;
 using Gameplay.Character.Player.StateMachine.States;
+using Infrastructure.Input.InputService;
 using Scene.Ring;
 using UnityEngine;
 using Utility.Extensions;
@@ -93,13 +94,14 @@ namespace Gameplay.Character.Player.MonoBehaviour
         }
 
         public PlayerFacade Initialize(bool isPlayable, PlayerFacade ally, Ball.MonoBehavior.Ball ball,
-            UnityEngine.Camera gameplayCamera, CinemachineVirtualCamera virtualCamera, Ring enemyRing)
+            UnityEngine.Camera gameplayCamera, CinemachineVirtualCamera virtualCamera, Ring enemyRing, IInputService inputService)
         {
             _enemyRing = enemyRing;
             IsPlayable = isPlayable;
             _dunker.Initialize(ball);
             _ally = ally;
-            _ballThrower.Initialize(ball, gameplayCamera);
+            _inputControlledBrain.Initialize(inputService);
+            _ballThrower.Initialize(ball, gameplayCamera, inputService);
             _inputControlledBrain.Initialize(gameplayCamera.transform);
             _distanceTracker.Initialize(enemyRing.transform.position, ally.transform);
             Ball = ball;

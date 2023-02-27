@@ -22,8 +22,6 @@ namespace Gameplay.StateMachine.States.Gameplay
         private readonly IGameplayHUD _gameplayHud;
         private PlayerFacade _controlledPlayer;
         private IInputService _inputService;
-
-        private IInputService InputService => _inputService ??= Services.Container.Single<IInputService>();
         private PlayerFacade NotControlledPlayer => _playerTeam.FindFirstOrNull(player => player != _controlledPlayer);
         public PlayerFacade ControlledPlayer => _controlledPlayer;
 
@@ -36,17 +34,20 @@ namespace Gameplay.StateMachine.States.Gameplay
             IGameplayHUD gameplayHud,
             GameplayLoopStateMachine gameplayLoopStateMachine,
             LoadingCurtain loadingCurtain,
-            ICoroutineRunner coroutineRunner
+            ICoroutineRunner coroutineRunner,
+            IInputService inputService
         )
         {
+            _inputService = inputService;
+            
             Transitions = new ITransition[]
             {
-                new GameplayStateToDunkStateTransition(this, gameplayLoopStateMachine),
-                new GameplayStateToThrowStateTransition(this, gameplayLoopStateMachine),
+                new GameplayStateToDunkStateTransition(this, gameplayLoopStateMachine, inputService),
+                new GameplayStateToThrowStateTransition(this, gameplayLoopStateMachine, inputService),
                 new AnyToFightForBallTransition(ball, gameplayLoopStateMachine, coroutineRunner, true),
                 new GameplayStateToUpsetCutsceneStateTransition(playerTeam, enemyTeam, ball, sceneConfig.EnemyRing,
                     loadingCurtain, gameplayLoopStateMachine, coroutineRunner, sceneConfig),
-                new GameplayStateToPassTransition(this, gameplayLoopStateMachine)
+                new GameplayStateToPassTransition(this, gameplayLoopStateMachine, inputService)
             };
             _playerTeam = playerTeam;
             _enemyTeam = enemyTeam;
@@ -125,10 +126,10 @@ namespace Gameplay.StateMachine.States.Gameplay
             _controlledPlayer = player;
 
         private void SubscribeOnChangePlayerInput() =>
-            InputService.ChangePlayerButtonDown += SwapControlledPlayer;
+            _inputService.ChangePlayerButtonDown += SwapControlledPlayer;
 
         private void UnsubscribeOfChangePlayerInput() =>
-            InputService.ChangePlayerButtonDown -= SwapControlledPlayer;
+            _inputService.ChangePlayerButtonDown -= SwapControlledPlayer;
 
         private void SwapControlledPlayer()
         {

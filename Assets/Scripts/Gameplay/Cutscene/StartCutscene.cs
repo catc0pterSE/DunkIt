@@ -2,6 +2,7 @@
 using Cinemachine;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
+using Infrastructure.Input.InputService;
 using Modules.MonoBehaviour;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -13,30 +14,30 @@ namespace Gameplay.Cutscene
     public class StartCutscene : SwitchableMonoBehaviour, ICutscene
     {
         [SerializeField] private PlayableDirector _director;
+        [SerializeField] private CutsceneSkipper _cutsceneSkipper;
         [SerializeField] private CinemachineVirtualCamera _refereeCamera;
         [SerializeField] private CinemachineTargetGroup _playerTeamTargetGroup;
         [SerializeField] private CinemachineTargetGroup _enemyTeamTargetGroup;
 
         public event Action Finished;
 
-        private void OnEnable()
-        {
+        private void OnEnable() =>
             _director.stopped += Finish;
-        }
 
-        private void OnDisable()
-        {
+        private void OnDisable() =>
             _director.stopped -= Finish;
-        }
 
         public StartCutscene Initialize
         (
             CinemachineBrain gameplayCamera,
             PlayerFacade[] playerTeam,
             PlayerFacade[] enemyTeam,
-            Referee referee
+            Referee referee,
+            IInputService inputService
         )
         {
+            _cutsceneSkipper.Initialize(inputService);
+
             PlayerFacade player1 = playerTeam[NumericConstants.PrimaryTeamMemberIndex];
             PlayerFacade player2 = playerTeam[NumericConstants.SecondaryTeamMemberIndex];
             PlayerFacade enemy1 = enemyTeam[NumericConstants.PrimaryTeamMemberIndex];
@@ -58,14 +59,10 @@ namespace Gameplay.Cutscene
             return this;
         }
 
-        public void Run()
-        {
+        public void Run() =>
             _director.Play();
-        }
 
-        private void Finish(PlayableDirector director)
-        {
+        private void Finish(PlayableDirector director) =>
             Finished?.Invoke();
-        }
     }
 }

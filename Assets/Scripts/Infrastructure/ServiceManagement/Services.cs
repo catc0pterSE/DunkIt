@@ -4,7 +4,7 @@
     {
         private static Services _instance;
 
-        private static Services Container => _instance ??= new Services();
+        public static Services Container => _instance ??= new Services();
 
         public void RegisterSingle<TService>(TService implementation) where TService: IService
         {
