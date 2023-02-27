@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.States.CutsceneStates;
 using Gameplay.StateMachine.States.Gameplay;
@@ -14,26 +13,27 @@ using Utility.Extensions;
 
 namespace Gameplay.StateMachine.Transitions
 {
-    using Ball.MonoBehavior;
     public class GameplayStateToUpsetCutsceneStateTransition: ITransition
     {
+        private const float BallTrackingSeconds = 5;
+        
         private readonly PlayerFacade[] _playerTeam;
-        private readonly EnemyFacade[] _enemyTeam;
-        private readonly Ball _ball;
+        private readonly PlayerFacade[] _enemyTeam;
+        private readonly Ball.MonoBehavior.Ball _ball;
         private readonly Ring _enemyRing;
         private readonly LoadingCurtain _loadingCurtain;
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
         private readonly ICoroutineRunner _coroutineRunner;
         private readonly SceneConfig _sceneConfig;
-        private readonly WaitForSeconds _goalTrackingTime = new WaitForSeconds(NumericConstants.BallTrackingSeconds);
+        private readonly WaitForSeconds _goalTrackingTime = new WaitForSeconds(BallTrackingSeconds);
         
         private Coroutine _trackingGoal;
         
         public GameplayStateToUpsetCutsceneStateTransition
             (
                 PlayerFacade[] playerTeam,
-                EnemyFacade[] enemyTeam,
-                Ball ball,
+                PlayerFacade[] enemyTeam,
+                Ball.MonoBehavior.Ball ball,
                 Ring enemyRing,
                 LoadingCurtain loadingCurtain,
                 GameplayLoopStateMachine gameplayLoopStateMachine,

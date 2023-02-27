@@ -17,6 +17,7 @@ namespace Gameplay.Character.Player.StateMachine.States
         {
             _player.DisableInputControlledBrain();
             _player.DisableAIControlledBrain();
+            _player.EnableFightForBallTriggerZone();
             _player.RotateTo(ringPosition, StartThrow);
         }
 
@@ -42,8 +43,6 @@ namespace Gameplay.Character.Player.StateMachine.States
         private void OnBallThrown()
         {
             _player.DisableBallThrower();
-            _player.PrioritizeCamera();
-            _player.FocusOnBall();
         }
     }
 }

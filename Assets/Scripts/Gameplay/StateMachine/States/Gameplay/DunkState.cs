@@ -1,24 +1,17 @@
 ﻿using Cinemachine;
-using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
-using Gameplay.Character.Player.StateMachine.States;
 using Gameplay.StateMachine.States.CutsceneStates;
 using Modules.StateMachine;
 using Scene;
-using Scene.Ring;
-using UnityEngine;
-using Utility.Constants;
 using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.Gameplay
 {
-    using Ball.MonoBehavior;
-
     public class DunkState : IParameterState<PlayerFacade>
     {
         private readonly PlayerFacade[] _playerTeam;
-        private readonly EnemyFacade[] _enemyTeam;
-        private readonly Ball _ball;
+        private readonly PlayerFacade[] _enemyTeam;
+        private readonly Ball.MonoBehavior.Ball _ball;
         private readonly SceneConfig _sceneConfig;
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
 
@@ -26,7 +19,7 @@ namespace Gameplay.StateMachine.States.Gameplay
 
         private PlayerFacade _jumpingPlayer;
 
-        public DunkState(PlayerFacade[] playerTeam, EnemyFacade[] enemyTeam, Ball ball, SceneConfig sceneConfig,
+        public DunkState(PlayerFacade[] playerTeam, PlayerFacade[] enemyTeam, Ball.MonoBehavior.Ball ball, SceneConfig sceneConfig,
             GameplayLoopStateMachine gameplayLoopStateMachine)
         {
             _playerTeam = playerTeam;

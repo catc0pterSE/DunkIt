@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Modules.MonoBehaviour;
 using UnityEngine;
 using Utility.Constants;
 
-namespace Gameplay.Character.Player.MonoBehaviour.BallHandle
+namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
 {
     public class TrajectoryDrawer : SwitchableComponent
     {
@@ -12,6 +13,16 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle
         [SerializeField] private float _timeStep = 0.02f;
         [SerializeField] private int _maxLineRendererPoints = 1000;
         [SerializeField] private LayerMask _lineStopperLayerMask;
+
+        private void OnEnable()
+        {
+            _lineRenderer.enabled = true;
+        }
+
+        private void OnDisable()
+        {
+            _lineRenderer.enabled = false;
+        }
 
         public void Draw(Vector3 startPosition, Vector3 velocity)
         {
@@ -30,6 +41,9 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle
 
                 points.Add(newPosition);
 
+                if (newPosition.y < points[i].y)
+                    break;
+
                 Vector3 directionToPreviousPoint = points[i] - newPosition;
                 float distanceTuPreviousPoint = directionToPreviousPoint.magnitude;
                 
@@ -44,7 +58,6 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle
         public void StopDrawing()
         {
             _lineRenderer.positionCount = 0;
-            _lineRenderer.enabled = false;
         }
     }
 }

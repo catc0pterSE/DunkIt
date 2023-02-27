@@ -1,18 +1,15 @@
-﻿using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
-using Gameplay.Character.Player.MonoBehaviour;
-using Gameplay.Minigame;
+﻿using Gameplay.Minigame;
 using Modules.StateMachine;
 using UI.HUD;
-using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.MinigameStates
 {
     public abstract class MinigameState : StateWithTransitions
     {
         private readonly IGameplayHUD _gameplayHUD;
-        protected IMinigame Minigame;
+        protected abstract IMinigame Minigame { get; }
 
-        public MinigameState(IGameplayHUD gameplayHUD)
+        protected MinigameState(IGameplayHUD gameplayHUD)
         {
             
             _gameplayHUD = gameplayHUD;

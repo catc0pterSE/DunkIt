@@ -8,14 +8,22 @@ namespace Infrastructure.Input.InputService
         private const string HorizontalAxisName = "Horizontal";
         private const string VerticalAxisName = "Vertical";
         private const string ThrowCurveAxisName = "ThrowCurve";
+        private const string MouseXAxisName = "Mouse X";
+        private const string MouseYAxisName = "Mouse Y";
 
-        public Vector2 InputDirection => new Vector2
+        public Vector2 MovementInput => new Vector2
         (
             SimpleInput.GetAxis(HorizontalAxisName),
             SimpleInput.GetAxis(VerticalAxisName)
         );
 
-        public bool TouchHeldDown => SimpleInput.GetMouseButton(0);
+        public Vector2 PointerMovement => new Vector2
+        (
+            SimpleInput.GetAxis(MouseXAxisName),
+            SimpleInput.GetAxis(MouseYAxisName)
+        );
+
+        public bool PointerHeldDown => SimpleInput.GetMouseButton(0);
         public bool ThrowButtonHeldDown { get; private set; }
         public bool PassButtonHeldDown { get; private set; }
         public bool DunkButtonHeldDown { get; private set; }
@@ -24,13 +32,13 @@ namespace Infrastructure.Input.InputService
         public Vector3 PointerPosition => UnityEngine.Input.mousePosition;
         public float ThrowCurve => SimpleInput.GetAxis(ThrowCurveAxisName);
 
-        public event Action TouchDown;
+        public event Action PointerDown;
         public event Action ThrowButtonDown;
         public event Action DunkButtonDown;
         public event Action ChangePlayerButtonDown;
         public event Action PassButtonDown;
 
-        public event Action TouchUp;
+        public event Action PointerUp;
         public event Action ThrowButtonUp;
         public event Action DunkButtonUp;
         public event Action ChangePlayerButtonUp;
@@ -44,10 +52,10 @@ namespace Infrastructure.Input.InputService
         private void Update()
         {
             if (SimpleInput.GetMouseButtonDown(0))
-                TouchDown?.Invoke();
+                PointerDown?.Invoke();
 
             if (SimpleInput.GetMouseButtonUp(0))
-                TouchUp?.Invoke();
+                PointerUp?.Invoke();
         }
 
         public void OnUIThrowButtonDown()

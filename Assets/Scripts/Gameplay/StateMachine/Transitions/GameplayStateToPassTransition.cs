@@ -13,24 +13,21 @@ namespace Gameplay.StateMachine.Transitions
 
         private IInputService _inputService;
 
-        private IInputService InputService => _inputService ??= Services.Container.Single<IInputService>();
-
         public GameplayStateToPassTransition(GameplayState gameplayState,
-            GameplayLoopStateMachine gameplayLoopStateMachine)
+            GameplayLoopStateMachine gameplayLoopStateMachine, IInputService inputService)
         {
+            _inputService = inputService;
             _gameplayState = gameplayState;
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
         }
 
-        public void Enable()
-        {
-            InputService.PassButtonDown += MoveToPassState;
-        }
+        public void Enable() =>
+            _inputService.PassButtonDown += MoveToPassState;
 
-        public void Disable()
-        {
-            InputService.PassButtonDown -= MoveToPassState;
-        }
+
+        public void Disable() =>
+            _inputService.PassButtonDown -= MoveToPassState;
+
 
         private void MoveToPassState()
         {

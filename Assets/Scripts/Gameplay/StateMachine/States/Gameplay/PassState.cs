@@ -7,14 +7,17 @@ namespace Gameplay.StateMachine.States.Gameplay
     public class PassState : IParameterState<PlayerFacade>
     {
         private readonly PlayerFacade[] _playerTeam;
+        private readonly PlayerFacade[] _enemyTeam;
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
 
         private PlayerFacade _passingPlayer;
         private PlayerFacade _catchingPlayer;
 
-        public PassState(PlayerFacade[] playerTeam, GameplayLoopStateMachine gameplayLoopStateMachine)
+        public PassState(PlayerFacade[] playerTeam, PlayerFacade[] enemyTeam,
+            GameplayLoopStateMachine gameplayLoopStateMachine)
         {
             _playerTeam = playerTeam;
+            _enemyTeam = enemyTeam;
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
         }
 
@@ -23,13 +26,26 @@ namespace Gameplay.StateMachine.States.Gameplay
             _passingPlayer = passingPlayer;
             _catchingPlayer = _playerTeam.FindFirstOrNull(player => player != _passingPlayer);
             SetPlayersStates();
+            SubscribeOnCatchingPlayers();
+        }
+
+        private void SubscribeOnCatchingPlayers()
+        {
             _catchingPlayer.CaughtBall += MoveToGameplayState;
+            _enemyTeam.Map(enemy => enemy.CaughtBall += MoveToGameplayState);
+        }
+
+        private void UnsubscribeFromCatchingPlayers()
+        {
+            _catchingPlayer.CaughtBall -= MoveToGameplayState;
+            _enemyTeam.Map(enemy => enemy.CaughtBall -= MoveToGameplayState);
         }
 
         private void SetPlayersStates()
         {
-            _passingPlayer.EnterPassState();
             _catchingPlayer.EnterCatchState();
+            _enemyTeam.Map(enemy => enemy.EnterCatchState());
+            _passingPlayer.EnterPassState();
         }
 
         private void MoveToGameplayState()
@@ -39,7 +55,7 @@ namespace Gameplay.StateMachine.States.Gameplay
 
         public void Exit()
         {
-            _catchingPlayer.CaughtBall -= MoveToGameplayState;
+           UnsubscribeFromCatchingPlayers();
         }
     }
 }

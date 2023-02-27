@@ -18,16 +18,17 @@ namespace Gameplay.Minigame.JumpBall
         private IInputService _inputService;
         private Coroutine _running;
 
-        private IInputService InputService => _inputService ??= Services.Container.Single<IInputService>();
+        public void Initialize(IInputService inputService) =>
+            _inputService = inputService;
+
+        public event Action Won;
+        public event Action Lost;
 
         private void OnEnable()
         {
             Reset();
             Launch();
         }
-
-        public event Action Won;
-        public event Action Lost;
 
         private void Launch()
         {
@@ -59,14 +60,13 @@ namespace Gameplay.Minigame.JumpBall
 
         private void SubscribeOnTouch()
         {
-            InputService.TouchDown += Finish;
+            _inputService.PointerDown += Finish;
         }
 
         private void UnsubscribeFromTouch()
         {
-            InputService.TouchDown -= Finish;
+            _inputService.PointerDown -= Finish;
         }
-
 
         private void Reset() =>
             _slider.value = _slider.minValue;

@@ -1,5 +1,8 @@
-﻿using Modules.MonoBehaviour;
+﻿using Gameplay.Character.Player.MonoBehaviour;
+using Infrastructure.Input;
+using Modules.MonoBehaviour;
 using UI.HUD.StateMachine;
+using UnityEngine;
 
 namespace UI.HUD
 {
@@ -14,5 +17,7 @@ namespace UI.HUD
         public void SetChangePlayerAvailability(bool isAvailable);
 
         public GameplayHUDStateMachine StateMachine { get; }
+
+        public IGameplayHUD Initialize(PlayerFacade[] indicationTargets, Camera gameplayCamera);
     }
 }

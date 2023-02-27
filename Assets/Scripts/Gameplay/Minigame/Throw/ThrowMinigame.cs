@@ -1,56 +1,55 @@
 ﻿using System;
 using System.Collections;
-using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
+using Cinemachine;
 using Gameplay.Character.Player.MonoBehaviour;
 using Modules.MonoBehaviour;
 using Scene;
 using UI;
 using UnityEngine;
-using Utility.Constants;
 using Utility.Extensions;
 
 namespace Gameplay.Minigame.Throw
 {
-    using Ball.MonoBehavior;
-
     public class ThrowMinigame : SwitchableMonoBehaviour, IMinigame
     {
         [SerializeField] private ThrowUI _interface;
+        [SerializeField] private float _ballTrackingSeconds = 5;
+        [SerializeField] private float _defaultCameraXOffset = 10;
+        [SerializeField] private int _cameraTargetGroupPlayerIndex = 1;
 
-        private readonly WaitForSeconds _waitForGoalTrackingTime =
-            new WaitForSeconds(NumericConstants.BallTrackingSeconds);
-        
+        private WaitForSeconds _waitForGoalTrackingTime;
         private PlayerFacade _throwingPlayer;
-        private EnemyFacade _primaryEnemy;
         private SceneConfig _sceneConfig;
-        private Ball _ball;
-        private LoadingCurtain _loadingCurtain;
+        private Ball.MonoBehavior.Ball _ball;
         private Coroutine _trackingGoal;
 
         public event Action Won;
         public event Action Lost;
 
+        private void OnDisable()
+        {
+            StopGoalTracking();
+            UnsubscribeFromThrowingPlayer();
+        }
+
         public IMinigame Initialize
         (
             PlayerFacade throwingPlayer,
-            EnemyFacade primaryEnemy,
             SceneConfig sceneConfig,
-            Ball ball,
-            LoadingCurtain loadingCurtain
+            Ball.MonoBehavior.Ball ball
         )
         {
             _throwingPlayer = throwingPlayer;
-            _primaryEnemy = primaryEnemy;
             _sceneConfig = sceneConfig;
             _ball = ball;
-            _loadingCurtain = loadingCurtain;
+            _waitForGoalTrackingTime = new WaitForSeconds(_ballTrackingSeconds);
 
             return this;
         }
-        
+
         public void Launch()
         {
-            PrioritizeRingCamera();
+            SetUpRingCamera();
             SubscribeOnThrowingPlayer();
             _interface.Enable();
         }
@@ -64,22 +63,21 @@ namespace Gameplay.Minigame.Throw
         private void OnBallThrown()
         {
             _interface.Disable();
-            _throwingPlayer.PrioritizeCamera();
-            _throwingPlayer.DisableBallThrower();
+            _sceneConfig.EnemyRing.VirtualCamera.LookAt = _ball.transform;
             StartGoalTracking();
         }
 
         private void StartGoalTracking()
         {
-            StopBallTracking();
+            StopGoalTracking();
             _trackingGoal = StartCoroutine(TrackGoal());
         }
 
-        private void StopBallTracking()
+        private void StopGoalTracking()
         {
             if (_trackingGoal != null)
                 StopCoroutine(_trackingGoal);
-            
+
             UnsubscribeFromEnemyRing();
         }
 
@@ -91,8 +89,20 @@ namespace Gameplay.Minigame.Throw
             OnGoalFailed();
         }
 
-        private void PrioritizeRingCamera() =>
-            _sceneConfig.EnemyRing.VirtualCamera.Prioritize();
+        private void SetUpRingCamera()
+        {
+            Transform playerTransform = _throwingPlayer.transform;
+            Transform ringTransform = _sceneConfig.EnemyRing.transform;
+            CinemachineVirtualCamera ringCamera = _sceneConfig.EnemyRing.VirtualCamera;
+            _sceneConfig.EnemyRing.RingTargetGroup.m_Targets[_cameraTargetGroupPlayerIndex].target = playerTransform;
+            ringCamera.Follow = playerTransform;
+            CinemachineFramingTransposer framingTransposer =
+                ringCamera.GetCinemachineComponent<CinemachineFramingTransposer>()
+                ?? throw new NullReferenceException("There is no framingTransposer on RingVirtualCamera");
+            framingTransposer.m_TrackedObjectOffset.x =
+                ringTransform.position.z > playerTransform.position.z ? -_defaultCameraXOffset : _defaultCameraXOffset;
+            ringCamera.Prioritize();
+        }
 
         private void SubscribeOnEnemyRing() =>
             _sceneConfig.EnemyRing.Goal += OnGoalScored;
@@ -100,30 +110,11 @@ namespace Gameplay.Minigame.Throw
         private void UnsubscribeFromEnemyRing() =>
             _sceneConfig.EnemyRing.Goal -= OnGoalScored;
 
-        private void OnGoalFailed()
-        {
-            StopBallTracking();
-            _loadingCurtain.FadeInFadeOut(SetDropBall);
-        }
-
-        private void SetDropBall()
-        {
-            _primaryEnemy.transform.position = _sceneConfig.EnemyDropBallPoint.position;
-            _ball.SetOwner(_primaryEnemy);
-            Finish();
+        private void OnGoalFailed() =>
             Lost?.Invoke();
-        }
 
-        private void OnGoalScored()
-        {
-            Finish();
+
+        private void OnGoalScored() =>
             Won?.Invoke();
-        }
-
-        private void Finish()
-        {
-            StopBallTracking();
-            UnsubscribeFromThrowingPlayer();
-        }
     }
 }

@@ -16,6 +16,7 @@ namespace Gameplay.Character.Player.StateMachine.States
         {
             _player.EnableInputControlledBrain();
             _player.EnablePlayerMover();
+            _player.EnableDistanceTracker();
             _player.PrioritizeCamera();
             _player.FocusOnBallOwner();
         }
@@ -24,6 +25,7 @@ namespace Gameplay.Character.Player.StateMachine.States
         {
             _player.DisablePlayerMover();
             _player.DisableInputControlledBrain();  
+            _player.DisableDistanceTracker();
         }
     }
 }

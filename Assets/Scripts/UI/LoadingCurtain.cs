@@ -36,25 +36,25 @@ namespace UI
             _curtain.alpha = _defaultCurtainAlpha;
         }
 
-        public void FadeInFadeOut(Action callback = null, bool withText = false)
+        public void FadeInFadeOut(Action toDoWhenFaded = null, bool withText = false)
         {
             Enable();
 
             if (withText == false)
                 _text.SetActive(false);
 
-            callback += FadeOut;
-            FadeIn(callback);
+            toDoWhenFaded += FadeOut;
+            FadeIn(toDoWhenFaded);
         }
 
-        public void FadeIn(Action callback=null)
+        public void FadeIn(Action toDoAfter=null)
         {
             Enable();
 
             if (_fadeJob != null)
                 StopCoroutine(_fadeJob);
 
-            _fadeJob = StartCoroutine(Fade(0, _defaultCurtainAlpha, callback));
+            _fadeJob = StartCoroutine(Fade(0, _defaultCurtainAlpha, toDoAfter));
         }
 
         public void FadeOut()
@@ -67,7 +67,7 @@ namespace UI
             _fadeJob = StartCoroutine(Fade(_defaultCurtainAlpha, 0, Disable));
         }
 
-        private IEnumerator Fade(float startAlpha, float targetAlpha, Action callback = null)
+        private IEnumerator Fade(float startAlpha, float targetAlpha, Action toDoWhenFaded = null)
         {
             yield return _waitForDelay; //TODO: THIS IS COSTYL
                 
@@ -79,7 +79,7 @@ namespace UI
                 yield return null;
             }
 
-            callback?.Invoke();
+            toDoWhenFaded?.Invoke();
         }
     }
 }

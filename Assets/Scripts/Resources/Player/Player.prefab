@@ -15,12 +15,12 @@ GameObject:
   - component: {fileID: 2336375831225123186}
   - component: {fileID: 5054484669908984701}
   - component: {fileID: 5437166744856396153}
-  - component: {fileID: 5250586742983876560}
   - component: {fileID: 4538433228081721433}
   - component: {fileID: 4157564897576991621}
   - component: {fileID: -8693731189481653844}
   - component: {fileID: -2012806606389975634}
   - component: {fileID: 4617063359223777939}
+  - component: {fileID: 1864448214675077806}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -117,16 +117,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ballPosition: {fileID: 4042918883656718937}
-  _ballContestTriggerZone: {fileID: 6257887091626896469}
   _inputControlledBrain: {fileID: 9116447531277526744}
   _aiControlledBrain: {fileID: 2336375831225123186}
   _playerMover: {fileID: 3567767349144517149}
   _animator: {fileID: 5437166744856396153}
-  _ballThrower: {fileID: 5250586742983876560}
+  _ballThrower: {fileID: 1864448214675077806}
   _distanceTracker: {fileID: -8693731189481653844}
   _passer: {fileID: -2012806606389975634}
   _catcher: {fileID: 1497494343019081299}
   _dunker: {fileID: 4617063359223777939}
+  _fightForBallTriggerZone: {fileID: 6257887091626896469}
 --- !u!95 &5437166744856396153
 Animator:
   serializedVersion: 4
@@ -147,27 +147,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &5250586742983876560
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1919622327166402665}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32081bcff70d42b6a9b89f8935ac9267, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _ballPosition: {fileID: 4042918883656718937}
-  _trajectoryDrawer: {fileID: 4538433228081721433}
-  _flightTime: 0.1
-  _maxBallSpeed: 15
-  _ballLandingEffect: {fileID: 1925459951755429354, guid: b426b8b761f3e4e42a75a3cce32be7b9, type: 3}
-  _curveChangingSpeed: 8
-  _raycastTargetLayerMask:
-    serializedVersion: 2
-    m_Bits: 96
 --- !u!114 &4538433228081721433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,7 +160,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lineRenderer: {fileID: 4157564897576991621}
-  _timeStep: 0.02
+  _timeStep: 0.1
   _maxLineRendererPoints: 1000
   _lineStopperLayerMask:
     serializedVersion: 2
@@ -320,6 +299,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ballPosition: {fileID: 4042918883656718937}
+  _flightTimeCoefficient: 0.5
 --- !u!114 &4617063359223777939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -337,6 +317,23 @@ MonoBehaviour:
   _timeToDunk: 0.75
   _highestPoint: 1
   _timeToHighestPoint: 0.5
+  _dunkThrowForce: 5
+--- !u!114 &1864448214675077806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919622327166402665}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fe84d7aef504f29b63f7cac050c6b2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ballPosition: {fileID: 4042918883656718937}
+  _trajectoryDrawer: {fileID: 4538433228081721433}
+  _launchVelocityXSense: 60
+  _launchVelocityYSense: 60
 --- !u!1 &4042918882263731115
 GameObject:
   m_ObjectHideFlags: 0
@@ -638,7 +635,7 @@ GameObject:
   - component: {fileID: 5194296133853449263}
   - component: {fileID: 6257887091626896469}
   m_Layer: 0
-  m_Name: BallContestTrigger
+  m_Name: FightForBallTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

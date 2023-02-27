@@ -1,36 +1,37 @@
 ﻿using Cinemachine;
-using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.States.MinigameStates;
 using Infrastructure.Factory;
+using Infrastructure.Input.InputService;
 using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
 using UI.HUD;
-using UI.HUD.Mobile;
 
 namespace Gameplay.StateMachine.States.CutsceneStates
 {
-    using Ball.MonoBehavior;
     public class StartCutsceneState : CutsceneState, IParameterlessState
     {
         private readonly Referee _referee;
-        private readonly Ball _ball;
+        private readonly Ball.MonoBehavior.Ball _ball;
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
 
         public StartCutsceneState
         (PlayerFacade[] playerTeam,
-            EnemyFacade[] enemyTeam,
+            PlayerFacade[] enemyTeam,
             Referee referee,
             CinemachineBrain camera,
-            Ball ball,
+            Ball.MonoBehavior.Ball ball,
             IGameplayHUD gameplayHUD,
-            GameplayLoopStateMachine gameplayLoopStateMachine) : base
+            GameplayLoopStateMachine gameplayLoopStateMachine,
+            IGameObjectFactory gameObjectFactory, 
+            IInputService inputService
+        ) : base
         (
             playerTeam,
             enemyTeam,
             gameplayHUD,
-            Services.Container.Single<IGameObjectFactory>().CreateStartCutscene().Initialize(camera, playerTeam, enemyTeam, referee)
+            gameObjectFactory.CreateStartCutscene().Initialize(camera, playerTeam, enemyTeam, referee, inputService)
         )
         {
             _referee = referee;
@@ -53,7 +54,7 @@ namespace Gameplay.StateMachine.States.CutsceneStates
 
         protected override void EnterNextState()
         {
-           _gameplayLoopStateMachine.Enter<JumpBallState>();
+            _gameplayLoopStateMachine.Enter<JumpBallState>();
         }
     }
 }

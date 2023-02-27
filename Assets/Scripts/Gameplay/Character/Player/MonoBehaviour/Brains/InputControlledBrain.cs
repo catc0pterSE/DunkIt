@@ -14,9 +14,10 @@ namespace Gameplay.Character.Player.MonoBehaviour.Brains
         private Transform _gameplayCamera;
         private IInputService _inputService;
 
-        private IInputService InputService => _inputService ??= Services.Container.Single<IInputService>();
+        private Vector3 InputDirection => new Vector3(_inputService.MovementInput.x, 0, _inputService.MovementInput.y);
 
-        private Vector3 InputDirection => new Vector3(InputService.InputDirection.x, 0, InputService.InputDirection.y);
+        public void Initialize(IInputService inputService) =>
+            _inputService = inputService;
 
         private Vector3 GetCameraRelativeDirection()
         {
@@ -26,14 +27,11 @@ namespace Gameplay.Character.Player.MonoBehaviour.Brains
             return direction;
         }
 
-        private void Update()
-        {
-                _playerMover.Move(GetCameraRelativeDirection());
-        }
+        private void Update() =>
+            _playerMover.Move(GetCameraRelativeDirection());
 
-        public void Initialize(Transform gameplayCamera)
-        {
+
+        public void Initialize(Transform gameplayCamera) =>
             _gameplayCamera = gameplayCamera;
-        }
     }
 }

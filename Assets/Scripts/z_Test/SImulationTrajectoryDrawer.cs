@@ -10,8 +10,8 @@ namespace z_Test
     public class SImulationTrajectoryDrawer : SwitchableMonoBehaviour
     {
         [SerializeField] private LineRenderer _line;
-        [SerializeField] private int _maxPhysicsFrameIterations = 100;
-        [SerializeField] private float _simulationStep = 0.02f;
+        //[SerializeField] private int _maxPhysicsFrameIterations = 100;
+        // [SerializeField] private float _simulationStep = 0.02f;
 
         private Transform _obstaclesParent;
         private Ball _ballSimulation;
