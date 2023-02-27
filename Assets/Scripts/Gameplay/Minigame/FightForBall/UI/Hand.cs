@@ -5,7 +5,7 @@ using Utility.Constants;
 
 namespace Gameplay.Minigame.FightForBall.UI
 {
-    public class Hand : SwitchableMonoBehaviour
+    public class Hand : SwitchableMonoBehaviour //TODO: not run after ball but just slide?
     {
         [SerializeField] private FightForBallUI _fightForBallUI;
         [SerializeField] private Ball _ball;
@@ -28,6 +28,11 @@ namespace Gameplay.Minigame.FightForBall.UI
             _isLaunched = false;
             transform.localScale = _fightForBallUI.Scale;
             SetRotation();
+        }
+
+        private void OnDisable()
+        {
+            transform.localScale = Vector3.one;
         }
 
         private void Update()

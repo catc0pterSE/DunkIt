@@ -1,5 +1,4 @@
-﻿using System;
-using Modules.MonoBehaviour;
+﻿using Modules.MonoBehaviour;
 using UnityEngine;
 
 namespace Gameplay.Character

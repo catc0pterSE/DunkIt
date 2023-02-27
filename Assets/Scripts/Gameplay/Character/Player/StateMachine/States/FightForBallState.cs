@@ -3,22 +3,22 @@ using Modules.StateMachine;
 
 namespace Gameplay.Character.Player.StateMachine.States
 {
-    public class NotControlledState : IParameterlessState
+    public class FightForBallState: IParameterState<PlayerFacade>
     {
-        private readonly MonoBehaviour.PlayerFacade _player;
+        private readonly PlayerFacade _player;
 
-        public NotControlledState(MonoBehaviour.PlayerFacade player)
+        public FightForBallState(PlayerFacade player)
         {
             _player = player;
         }
 
-        public void Enter()
+        public void Enter(PlayerFacade opponent)
         {
+            _player.FocusOn(opponent.transform);
         }
         
         public void Exit()
         {
-            
         }
     }
 }

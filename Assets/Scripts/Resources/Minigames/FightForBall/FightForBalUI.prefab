@@ -496,6 +496,7 @@ MonoBehaviour:
   _defaultHandPerpendicularOffset: 100
   _defaultHandParallelOffset: 250
   _defaultParallelDistanceBetweenHands: 300
+  _defaultMinimalDistanceBetweenHandAndBall: 150
 --- !u!1 &1396792597007801445
 GameObject:
   m_ObjectHideFlags: 0
@@ -640,7 +641,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3913627178085902483, guid: 2cdeb86e0961d1242ab123e3c1b1c070, type: 3}
       propertyPath: m_Name
-      value: RightHand
+      value: Hand
       objectReference: {fileID: 0}
     - target: {fileID: 3913627178085902483, guid: 2cdeb86e0961d1242ab123e3c1b1c070, type: 3}
       propertyPath: m_IsActive
@@ -777,7 +778,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3913627178085902483, guid: 2cdeb86e0961d1242ab123e3c1b1c070, type: 3}
       propertyPath: m_Name
-      value: LeftHand
+      value: MirroredHand
       objectReference: {fileID: 0}
     - target: {fileID: 3913627178085902483, guid: 2cdeb86e0961d1242ab123e3c1b1c070, type: 3}
       propertyPath: m_IsActive

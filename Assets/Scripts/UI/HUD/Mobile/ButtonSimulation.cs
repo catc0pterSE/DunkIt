@@ -9,11 +9,6 @@ namespace UI.HUD.Mobile
         public event Action Down;
         public event Action Up;
 
-        private void OnDisable()
-        {
-            Up?.Invoke();
-        }
-
         public void OnPointerDown(PointerEventData eventData)
         {
             Down?.Invoke();

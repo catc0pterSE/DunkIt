@@ -94,7 +94,7 @@ namespace Gameplay.StateMachine.Transitions
         private void MoveToBallContestState(PlayerFacade player, PlayerFacade enemy)
         {
             if (_isOnDelay == false)
-                _gameplayLoopStateMachine.Enter<BallContestState, (PlayerFacade, PlayerFacade)>((player, enemy));
+                _gameplayLoopStateMachine.Enter<FightForBallState, (PlayerFacade, PlayerFacade)>((player, enemy));
         }
     }
 }

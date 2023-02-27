@@ -6,9 +6,9 @@ using UI.HUD;
 namespace Gameplay.StateMachine.States.MinigameStates
 {
     using Ball.MonoBehavior;
-    public class BallContestState: MinigameState, IParameterState<(PlayerFacade, PlayerFacade)>
+    public class FightForBallState: MinigameState, IParameterState<(PlayerFacade, PlayerFacade)>
     {
-        public BallContestState(Ball ball, IGameplayHUD gameplayHUD) : base(gameplayHUD)
+        public FightForBallState(Ball ball, IGameplayHUD gameplayHUD) : base(gameplayHUD)
         {
         }
 

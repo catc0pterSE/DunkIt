@@ -72,7 +72,7 @@ namespace UI.Indication
             {
                 roughPosition = GetMirroredPosition(roughPosition);
             }
-
+            
             float positionX = Mathf.Clamp(roughPosition.x, _offset, Screen.width - _offset);
             float positionY = Mathf.Clamp(roughPosition.y, _offset, Screen.height - _offset);
 

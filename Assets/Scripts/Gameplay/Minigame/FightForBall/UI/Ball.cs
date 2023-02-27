@@ -32,6 +32,11 @@ namespace Gameplay.Minigame.FightForBall.UI
             _isCaught = false;
             transform.localScale = _fightForBallUI.Scale;
         }
+        
+        private void OnDisable()
+        {
+            transform.localScale = Vector3.one;
+        }
 
         public void OnBeginDrag(PointerEventData eventData)
         {

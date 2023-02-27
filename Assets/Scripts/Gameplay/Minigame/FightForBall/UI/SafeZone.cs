@@ -33,6 +33,11 @@ namespace Gameplay.Minigame.FightForBall.UI
             _animationCycleTime = _scaleCurve.keys.Last().time;
         }
         
+        private void OnDisable()
+        {
+            transform.localScale = Vector3.one;
+        }
+        
         private void Update()
         {
             if (_passedTime >= _animationCycleTime)

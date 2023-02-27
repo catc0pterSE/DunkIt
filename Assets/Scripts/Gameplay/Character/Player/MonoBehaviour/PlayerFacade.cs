@@ -119,9 +119,6 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public void EnterAIControlledState() =>
             StateMachine.Enter<AIControlledState>();
 
-        public void EnterNotControlledState() =>
-            StateMachine.Enter<NotControlledState>();
-
         public void EnterThrowState(Vector3 ringPosition) =>
             StateMachine.Enter<ThrowState, Vector3>(ringPosition);
 
@@ -137,8 +134,11 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public void EnterDunkState(Ring ring) =>
             StateMachine.Enter<DunkState, Ring>(ring);
 
-        public void EnterContestingBallState() =>
-            StateMachine.Enter<ContestingBallState>();
+        public void EnterFightForBallState(PlayerFacade opponent) =>
+            StateMachine.Enter<FightForBallState, PlayerFacade>(opponent);
+        
+        public void EnterNotControlledState() =>
+            StateMachine.Enter<NotControlledState>();
 
         public void EnableInputControlledBrain() =>
             _inputControlledBrain.Enable();
@@ -208,6 +208,9 @@ namespace Gameplay.Character.Player.MonoBehaviour
 
         public void FocusOnBallOwner() =>
             _virtualCamera.LookAt = Ball.Owner.transform;
+
+        public void FocusOn(Transform target) =>
+            _virtualCamera.LookAt = target;
 
         public void RotateTo(Vector3 position, Action callback = null) =>
             _playerMover.RotateTo(position, callback);

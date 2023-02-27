@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Modules.MonoBehaviour;
 using UnityEngine;
 using Utility.Constants;
@@ -17,6 +16,7 @@ namespace Gameplay.Minigame.FightForBall.UI
         [SerializeField] private float _defaultHandPerpendicularOffset;
         [SerializeField] private float _defaultHandParallelOffset;
         [SerializeField] private float _defaultParallelDistanceBetweenHands;
+        [SerializeField] private float _defaultMinimalDistanceBetweenHandAndBall;
 
         private float ScreenRatio => (float)Screen.height / Screen.width;
         private Hand LeftHand => _hands.FindFirstOrNull(hand => hand.IsMirrored);
@@ -26,6 +26,9 @@ namespace Gameplay.Minigame.FightForBall.UI
         private float ScaledHandPerpendicularOffset => _defaultHandPerpendicularOffset * ScaleModifier;
         private float ScaledHandParallelOffset => _defaultHandParallelOffset * ScaleModifier;
         private float ScaledParallelDistanceBetweenHands => _defaultParallelDistanceBetweenHands * ScaleModifier;
+
+        private float ScaledMinimalDistanceBetweenHandAndBall =>
+            _defaultMinimalDistanceBetweenHandAndBall * ScaleModifier;
 
         public float ScaleModifier => IsScreenVertical
             ? Screen.width / _defaultLesserScreenSize
@@ -37,7 +40,6 @@ namespace Gameplay.Minigame.FightForBall.UI
 
         public event Action Won;
         public event Action Lost;
-
 
         private void OnEnable()
         {
@@ -83,57 +85,75 @@ namespace Gameplay.Minigame.FightForBall.UI
         private void LocateContents()
         {
             if (IsScreenVertical)
-            {
-                _ball.transform.position =
-                    new Vector3(Screen.width * NumericConstants.Half, _ball.ScaledOffset);
-                _safeZone.transform.position =
-                    new Vector3(Screen.width * NumericConstants.Half, Screen.height - _safeZone.ScaledOffset);
-
-                float upper = Screen.height - ScaledHandParallelOffset;
-                float lower = upper - ScaledParallelDistanceBetweenHands;
-                float left = Screen.width * NumericConstants.Half - ScaledHandPerpendicularOffset;
-                float right = Screen.width * NumericConstants.Half + ScaledHandPerpendicularOffset;
-
-                Vector3[] possibleRightPositions = new Vector3[]
-                {
-                    new Vector3(right, upper),
-                    new Vector3(right, lower)
-                };
-
-                Vector3[] possibleLeftPositions = new Vector3[]
-                {
-                    new Vector3(left, upper),
-                    new Vector3(left, lower)
-                };
-                Vector3 rightHandPosition = RightHand.transform.position = possibleRightPositions.GetRandom();
-                LeftHand.transform.position = possibleLeftPositions.FindFarthest(rightHandPosition);
-            }
+                LocateVertical();
             else
+                LocateHorizontal();
+
+            DisableHandsTooClose();
+        }
+
+        private void LocateVertical()
+        {
+            _ball.transform.position =
+                new Vector3(Screen.width * NumericConstants.Half, _ball.ScaledOffset);
+            _safeZone.transform.position =
+                new Vector3(Screen.width * NumericConstants.Half, Screen.height - _safeZone.ScaledOffset);
+
+            float upper = Screen.height - ScaledHandParallelOffset;
+            float lower = upper - ScaledParallelDistanceBetweenHands;
+            float left = Screen.width * NumericConstants.Half - ScaledHandPerpendicularOffset;
+            float right = Screen.width * NumericConstants.Half + ScaledHandPerpendicularOffset;
+
+            Vector3[] possibleRightPositions = new Vector3[]
             {
-                _ball.transform.position =
-                    new Vector3(_ball.ScaledOffset, Screen.height * NumericConstants.Half);
-                _safeZone.transform.position =
-                    new Vector3(Screen.width - _safeZone.ScaledOffset, Screen.height * NumericConstants.Half);
+                new Vector3(right, upper),
+                new Vector3(right, lower)
+            };
 
-                float top = Screen.height - ScaledHandPerpendicularOffset;
-                float bottom = ScaledHandPerpendicularOffset;
-                float right = Screen.width - ScaledHandParallelOffset;
-                float left = right - ScaledParallelDistanceBetweenHands;
+            Vector3[] possibleLeftPositions = new Vector3[]
+            {
+                new Vector3(left, upper),
+                new Vector3(left, lower)
+            };
+            Vector3 rightHandPosition = RightHand.transform.position = possibleRightPositions.GetRandom();
+            LeftHand.transform.position = possibleLeftPositions.FindFarthest(rightHandPosition);
+        }
 
-                Vector3[] possibleTopPositions = new Vector3[]
-                {
-                    new Vector3(left, top),
-                    new Vector3(right, top)
-                };
+        private void LocateHorizontal()
+        {
+            _ball.transform.position =
+                new Vector3(_ball.ScaledOffset, Screen.height * NumericConstants.Half);
+            _safeZone.transform.position =
+                new Vector3(Screen.width - _safeZone.ScaledOffset, Screen.height * NumericConstants.Half);
 
-                Vector3[] possibleBottomPositions = new Vector3[]
-                {
-                    new Vector3(left, bottom),
-                    new Vector3(right, bottom)
-                };
+            float top = Screen.height * NumericConstants.Half + ScaledHandPerpendicularOffset;
+            float bottom = Screen.height * NumericConstants.Half - ScaledHandPerpendicularOffset;
+            float right = Screen.width - ScaledHandParallelOffset;
+            float left = right - ScaledParallelDistanceBetweenHands;
 
-                Vector3 topHandPosition = TopHand.transform.position = possibleTopPositions.GetRandom();
-                BottomHand.transform.position = possibleBottomPositions.FindFarthest(topHandPosition);
+            Vector3[] possibleTopPositions = new Vector3[]
+            {
+                new Vector3(left, top),
+                new Vector3(right, top)
+            };
+
+            Vector3[] possibleBottomPositions = new Vector3[]
+            {
+                new Vector3(left, bottom),
+                new Vector3(right, bottom)
+            };
+
+            Vector3 topHandPosition = TopHand.transform.position = possibleTopPositions.GetRandom();
+            BottomHand.transform.position = possibleBottomPositions.FindFarthest(topHandPosition);
+        }
+
+        private void DisableHandsTooClose()
+        {
+            foreach (Hand hand in _hands)
+            {
+                if (Vector3.Distance(hand.transform.position, _ball.transform.position) <
+                    ScaledMinimalDistanceBetweenHandAndBall)
+                    hand.Disable();
             }
         }
     }
