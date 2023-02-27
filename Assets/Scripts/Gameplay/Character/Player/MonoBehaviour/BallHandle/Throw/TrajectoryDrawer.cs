@@ -39,8 +39,6 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
                 Vector3 gravityComponent = Vector3.up * (NumericConstants.Half * Physics.gravity.y * timeShift * timeShift);
                 Vector3 newPosition = startPosition + progressBeforeGravity + gravityComponent;
 
-                points.Add(newPosition);
-
                 if (newPosition.y < points[i].y)
                     break;
 
@@ -49,6 +47,8 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
                 
                 if (Physics.Raycast(newPosition, directionToPreviousPoint, distanceTuPreviousPoint, _lineStopperLayerMask))
                     break;
+                
+                points.Add(newPosition);
             }
 
             _lineRenderer.positionCount = points.Count;
