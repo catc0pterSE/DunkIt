@@ -10,8 +10,9 @@
         public const string MobileHUDPath = "UI/HUD/MobileHUD";
         public const string StartCutscenePath = "Cutscene/StartCutscene/StartCutscene";
         public const string CinemachineVirtualCamera = "Cinemachine/CinemachineVirtualCamera";
-        public const string JumpBallMinigamePath = "Minigames/JumpBall";
-        public const string ThrowMinigamePath = "Minigames/Throw";
+        public const string JumpBallMinigamePath = "Minigames/JumpBallMinigame";
+        public const string ThrowMinigamePath = "Minigames/ThrowMinigame";
+        public const string FightForBallPath = "Minigames/FightForBall/FightForBallMinigame";
         public const string MobileInputServicePath = "Controls/MobileInputService";
     }
 }

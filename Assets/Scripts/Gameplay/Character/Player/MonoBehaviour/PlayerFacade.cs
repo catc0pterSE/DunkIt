@@ -53,13 +53,13 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public event Action<bool> DunkReached
         {
             add => _distanceTracker.DunkReached += value;
-            remove => _distanceTracker.DunkReached += value;
+            remove => _distanceTracker.DunkReached -= value;
         }
 
         public event Action<bool> PassReached
         {
             add => _distanceTracker.PassReached += value;
-            remove => _distanceTracker.PassReached += value;
+            remove => _distanceTracker.PassReached -= value;
         }
 
         public event Action BallThrown
@@ -86,10 +86,10 @@ namespace Gameplay.Character.Player.MonoBehaviour
             remove => _dunker.DunkPointReached -= value;
         }
 
-        public event Action<PlayerFacade, PlayerFacade> BallContestStarted
+        public event Action<PlayerFacade[]> FightForBallStarted
         {
-            add => _fightForBallTriggerZone.BallContestStarted += value;
-            remove => _fightForBallTriggerZone.BallContestStarted -= value;
+            add => _fightForBallTriggerZone.FightForBallStarted += value;
+            remove => _fightForBallTriggerZone.FightForBallStarted -= value;
         }
 
         public PlayerFacade Initialize(bool isPlayable, PlayerFacade ally, Ball.MonoBehavior.Ball ball,

@@ -30,7 +30,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.Distance
             _enemyRingPosition = enemyRingPosition;
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
             DunkReached?.Invoke(IsInDunkZone);
             ThrowReached?.Invoke(InThrowZone);

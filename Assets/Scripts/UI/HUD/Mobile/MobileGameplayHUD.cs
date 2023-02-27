@@ -53,6 +53,30 @@ namespace UI.HUD.Mobile
         public void SetChangePlayerAvailability(bool isAvailable) =>
             _changePlayerButton.gameObject.SetActive(isAvailable);
 
+        /*public void SetThrowAvailability(bool isAvailable)
+        {
+            Debug.Log($"SetThrowAvailability {isAvailable}");
+            _throwButton.gameObject.SetActive(isAvailable);
+        }
+
+        public void SetDunkAvailability(bool isAvailable)
+        {
+            Debug.Log($"SetDunkAvailability {isAvailable}");
+            _dunkButton.gameObject.SetActive(isAvailable);
+        }
+
+        public void SetPassAvailability(bool isAvailable)
+        {
+            Debug.Log($"SetPassAvailability {isAvailable}");
+            _passButton.gameObject.SetActive(isAvailable);
+        }
+
+        public void SetChangePlayerAvailability(bool isAvailable)
+        {
+            Debug.Log($"SetChangePlayerAvailability {isAvailable}");
+            _changePlayerButton.gameObject.SetActive(isAvailable);
+        }*/
+
         private void SubscribeUIInputControllerOnButtons()
         {
             _throwButton.Down += UIInputController.OnUIThrowButtonDown;

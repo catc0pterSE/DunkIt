@@ -68,19 +68,11 @@ namespace Gameplay.Minigame.FightForBall.UI
             });
         }
 
-        private void FinishSuccessful()
-        {
-            Lost?.Invoke();
-            Debug.Log("Won");
-            Time.timeScale = 0;
-        }
-
-        private void FinishUnsuccessful()
-        {
+        private void FinishSuccessful() =>
             Won?.Invoke();
-            Time.timeScale = 0;
-            Debug.Log("Lost");
-        }
+
+        private void FinishUnsuccessful() =>
+            Lost?.Invoke();
 
         private void LocateContents()
         {

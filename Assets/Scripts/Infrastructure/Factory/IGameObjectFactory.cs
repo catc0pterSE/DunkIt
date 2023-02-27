@@ -4,6 +4,7 @@ using Gameplay.Camera;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Cutscene;
+using Gameplay.Minigame.FightForBall;
 using Gameplay.Minigame.JumpBall;
 using Gameplay.Minigame.Throw;
 using Infrastructure.Input.InputService;
@@ -25,6 +26,7 @@ namespace Infrastructure.Factory
         public CinemachineVirtualCamera CreateCinemachineVirtualCamera();
         public JumpBallMinigame CreateJumpBallMinigame();
         public ThrowMinigame CreateThrowMinigame();
+        public FightForBallMinigame CreateFightForBallMinigame();
         public MobileInputService CreateMobileInputService();
     }
 }

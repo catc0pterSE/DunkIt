@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2477735640411188367}
   - component: {fileID: 1599725487983365858}
   m_Layer: 0
-  m_Name: Throw
+  m_Name: ThrowMinigame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

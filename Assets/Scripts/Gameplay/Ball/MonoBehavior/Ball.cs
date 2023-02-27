@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using Gameplay.Character;
+using Gameplay.Character.Player.MonoBehaviour;
 using Modules.MonoBehaviour;
 using UnityEngine;
 using Utility.Extensions;
@@ -44,25 +46,36 @@ namespace Gameplay.Ball.MonoBehavior
             OwnerChanged?.Invoke(_owner);
         }
 
-        public void MoveTo(Vector3 targetPosition, Action callback=null)
+        public void MoveTo(Vector3 targetPosition, Action toDoAfter = null)
         {
             RemoveOwner();
             TurnPhysicsOf();
-            
+
             if (_moving != null)
                 StopCoroutine(_moving);
 
-            _moving = StartCoroutine(MoveRoutine(targetPosition, callback));
+            _moving = StartCoroutine(MoveRoutine(targetPosition, toDoAfter));
         }
 
-        private IEnumerator MoveRoutine(Vector3 targetPosition, Action callback=null)
+        public void MoveTo(Transform target, Action toDoAfter = null) =>
+            MoveTo(target.position, toDoAfter);
+
+        public void SetOwnerSmoothly(CharacterFacade newOwner, Action toDoAfter = null) =>
+            MoveTo(newOwner.BallPosition, () =>
+            {
+                SetOwner(newOwner);
+                toDoAfter?.Invoke();
+            });
+
+        private IEnumerator MoveRoutine(Vector3 targetPosition, Action callback = null)
         {
             while (transform.position != targetPosition)
             {
-                transform.position = Vector3.MoveTowards(transform.position, targetPosition, _transferSpeed * Time.deltaTime);
+                transform.position =
+                    Vector3.MoveTowards(transform.position, targetPosition, _transferSpeed * Time.deltaTime);
                 yield return null;
             }
-            
+
             callback?.Invoke();
         }
 

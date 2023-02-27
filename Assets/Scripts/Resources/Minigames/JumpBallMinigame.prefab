@@ -961,7 +961,7 @@ GameObject:
   - component: {fileID: 6275744432263764391}
   - component: {fileID: 52200036518867669}
   m_Layer: 0
-  m_Name: JumpBall
+  m_Name: JumpBallMinigame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1045,6 +1045,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _director: {fileID: 6275744432263764391}
-  _uiMinigame: {fileID: 3947424077359275027}
+  _interface: {fileID: 3947424077359275027}
   _ballCamera: {fileID: 9033749391243236071}
   _refereeCamera: {fileID: 1063581051}

@@ -19,29 +19,29 @@ namespace Gameplay.Minigame.Throw
 
         private WaitForSeconds _waitForGoalTrackingTime;
         private PlayerFacade _throwingPlayer;
-        private PlayerFacade _primaryEnemy;
         private SceneConfig _sceneConfig;
         private Ball.MonoBehavior.Ball _ball;
-        private LoadingCurtain _loadingCurtain;
         private Coroutine _trackingGoal;
 
         public event Action Won;
         public event Action Lost;
 
+        private void OnDisable()
+        {
+            StopGoalTracking();
+            UnsubscribeFromThrowingPlayer();
+        }
+
         public IMinigame Initialize
         (
             PlayerFacade throwingPlayer,
-            PlayerFacade primaryEnemy,
             SceneConfig sceneConfig,
-            Ball.MonoBehavior.Ball ball,
-            LoadingCurtain loadingCurtain
+            Ball.MonoBehavior.Ball ball
         )
         {
             _throwingPlayer = throwingPlayer;
-            _primaryEnemy = primaryEnemy;
             _sceneConfig = sceneConfig;
             _ball = ball;
-            _loadingCurtain = loadingCurtain;
             _waitForGoalTrackingTime = new WaitForSeconds(_ballTrackingSeconds);
 
             return this;
@@ -69,11 +69,11 @@ namespace Gameplay.Minigame.Throw
 
         private void StartGoalTracking()
         {
-            StopBallTracking();
+            StopGoalTracking();
             _trackingGoal = StartCoroutine(TrackGoal());
         }
 
-        private void StopBallTracking()
+        private void StopGoalTracking()
         {
             if (_trackingGoal != null)
                 StopCoroutine(_trackingGoal);
@@ -110,30 +110,11 @@ namespace Gameplay.Minigame.Throw
         private void UnsubscribeFromEnemyRing() =>
             _sceneConfig.EnemyRing.Goal -= OnGoalScored;
 
-        private void OnGoalFailed()
-        {
-            StopBallTracking();
-            _loadingCurtain.FadeInFadeOut(SetDropBall);
-        }
-
-        private void SetDropBall()
-        {
-            _primaryEnemy.transform.position = _sceneConfig.EnemyDropBallPoint.position;
-            _ball.SetOwner(_primaryEnemy);
-            Finish();
+        private void OnGoalFailed() =>
             Lost?.Invoke();
-        }
 
-        private void OnGoalScored()
-        {
-            Finish();
+
+        private void OnGoalScored() =>
             Won?.Invoke();
-        }
-
-        private void Finish()
-        {
-            StopBallTracking();
-            UnsubscribeFromThrowingPlayer();
-        }
     }
 }

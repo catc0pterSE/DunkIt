@@ -64,29 +64,17 @@ namespace Gameplay.StateMachine.States.MinigameStates
             _referee.Disable();
         }
 
-        protected override void InitializeMinigame()
-        {
+        protected override void InitializeMinigame() =>
             _jumpBallMinigame.Initialize(_gameplayCamera, _referee, _playerTeam, _enemyTeam, _ball);
-        }
 
 
-        protected override void OnMiniGameWon()
-        {
-            _ball.MoveTo(PrimaryPlayer.BallPosition.position, () =>
-            {
-                _ball.SetOwner(PrimaryPlayer);
-                EnterNextState();
-            });
-        }
+        protected override void OnMiniGameWon() =>
+            _ball.SetOwnerSmoothly(PrimaryPlayer, EnterGameplayState);
 
-        protected override void OnMiniGameLost()
-        {
-            _ball.MoveTo(PrimaryEnemy.BallPosition.position, () =>
-            {
-                _ball.SetOwner(PrimaryEnemy);
-                EnterNextState();
-            });
-        }
+
+        protected override void OnMiniGameLost() =>
+            _ball.SetOwnerSmoothly(PrimaryEnemy, EnterGameplayState);
+
 
         protected override void SetCharactersStates()
         {
@@ -96,7 +84,7 @@ namespace Gameplay.StateMachine.States.MinigameStates
             SecondaryEnemy.EnterIdleState();
         }
 
-        private void EnterNextState() =>
+        private void EnterGameplayState() =>
             _gameplayLoopStateMachine.Enter<GameplayState>();
     }
 }

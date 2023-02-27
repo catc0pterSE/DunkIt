@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Modules.MonoBehaviour;
 using UnityEngine;
 using Utility.Constants;
@@ -13,17 +14,14 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
         [SerializeField] private int _maxLineRendererPoints = 1000;
         [SerializeField] private LayerMask _lineStopperLayerMask;
 
-
-        public override void Enable()
+        private void OnEnable()
         {
-            base.Enable();
             _lineRenderer.enabled = true;
         }
 
-        public override void Disable()
+        private void OnDisable()
         {
             _lineRenderer.enabled = false;
-            base.Disable();
         }
 
         public void Draw(Vector3 startPosition, Vector3 velocity)
@@ -60,7 +58,6 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
         public void StopDrawing()
         {
             _lineRenderer.positionCount = 0;
-            _lineRenderer.enabled = false;
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Gameplay.Minigame.JumpBall
     public class JumpBallMinigame : SwitchableMonoBehaviour, IMinigame
     {
         [SerializeField] private PlayableDirector _director;
-        [SerializeField] private JumpBallUI _uiMinigame;
+        [SerializeField] private JumpBallUI _interface;
         [SerializeField] private CinemachineVirtualCamera _ballCamera;
         [SerializeField] private CinemachineVirtualCamera _refereeCamera;
 
@@ -23,14 +23,14 @@ namespace Gameplay.Minigame.JumpBall
 
         private void OnEnable()
         {
-            _uiMinigame.Won += OnWon;
-            _uiMinigame.Lost += OnLost;
+            _interface.Won += OnWon;
+            _interface.Lost += OnLost;
         }
 
         private void OnDisable()
         {
-            _uiMinigame.Won -= OnWon;
-            _uiMinigame.Lost -= OnLost;
+            _interface.Won -= OnWon;
+            _interface.Lost -= OnLost;
         }
 
         public JumpBallMinigame Initialize

@@ -65,22 +65,33 @@ namespace Gameplay.StateMachine.States.MinigameStates
             _throwMinigame.Initialize
             (
                 _throwingPlayer,
-                _enemyTeam[NumericConstants.PrimaryTeamMemberIndex],
                 _sceneConfig,
-                _ball,
-                _loadingCurtain
+                _ball
             );
         }
 
         protected override void OnMiniGameWon() =>
             MoveToCelebrateCutsceneState();
 
-        protected override void OnMiniGameLost() =>
-            MoveToGameplayState();
+        protected override void OnMiniGameLost()
+        {
+            _loadingCurtain.FadeInFadeOut(()=>
+            {
+                SetDropBall();
+                MoveToGameplayState();
+            });
+        }
 
         protected override void SetCharactersStates() =>
             _throwingPlayer.EnterThrowState(_sceneConfig.EnemyRing.transform.position);
 
+        private void SetDropBall()
+        {
+            PlayerFacade primaryEnemy = _enemyTeam[NumericConstants.PrimaryTeamMemberIndex];
+            primaryEnemy.transform.position = _sceneConfig.EnemyDropBallPoint.position;
+            _ball.SetOwner(primaryEnemy);
+        }
+        
         private void MoveToCelebrateCutsceneState() =>
             _gameplayLoopStateMachine.Enter<CelebrateCutsceneState>();
 

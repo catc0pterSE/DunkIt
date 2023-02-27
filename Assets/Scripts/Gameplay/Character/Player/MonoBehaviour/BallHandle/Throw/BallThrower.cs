@@ -53,12 +53,13 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
             else
             {
                 _launchVelocity = Vector3.zero;
-                _trajectoryDrawer.Disable();
+                _trajectoryDrawer.StopDrawing();
             }
         }
 
-        public void Initialize(Ball ball, UnityEngine.Camera gameplayCamera)
+        public void Initialize(Ball ball, UnityEngine.Camera gameplayCamera, IInputService inputService)
         {
+            _inputService = inputService;
             _camera = gameplayCamera;
             _ball = ball;
         }

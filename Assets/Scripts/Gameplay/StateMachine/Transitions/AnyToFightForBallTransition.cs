@@ -81,20 +81,20 @@ namespace Gameplay.StateMachine.Transitions
         }
 
         private void SubscribeOnCurrentBallOwner() =>
-            _currentBallOwner.BallContestStarted += MoveToBallContestState;
+            _currentBallOwner.FightForBallStarted += MoveToFightForBallState;
 
 
         private void UnsubscribeFromCurrentBallOwner()
         {
             if (_currentBallOwner != null)
-                _currentBallOwner.BallContestStarted -= MoveToBallContestState;
+                _currentBallOwner.FightForBallStarted -= MoveToFightForBallState;
         }
 
 
-        private void MoveToBallContestState(PlayerFacade player, PlayerFacade enemy)
+        private void MoveToFightForBallState(PlayerFacade[] participants)
         {
             if (_isOnDelay == false)
-                _gameplayLoopStateMachine.Enter<FightForBallState, (PlayerFacade, PlayerFacade)>((player, enemy));
+                _gameplayLoopStateMachine.Enter<FightForBallState, PlayerFacade[]>(participants);
         }
     }
 }
