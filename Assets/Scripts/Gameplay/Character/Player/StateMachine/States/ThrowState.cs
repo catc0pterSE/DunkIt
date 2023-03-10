@@ -15,8 +15,6 @@ namespace Gameplay.Character.Player.StateMachine.States
 
         public void Enter(Vector3 ringPosition)
         {
-            _player.DisableInputControlledBrain();
-            _player.DisableAIControlledBrain();
             _player.EnableFightForBallTriggerZone();
             _player.RotateTo(ringPosition, StartThrow);
         }

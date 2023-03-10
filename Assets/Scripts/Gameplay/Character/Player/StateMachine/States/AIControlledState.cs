@@ -14,15 +14,12 @@ namespace Gameplay.Character.Player.StateMachine.States
 
         public void Enter()
         {
-            _player.EnableAIControlledBrain();
-            _player.EnablePlayerMover();
+           
         }
-
 
         public void Exit()
         {
-            _player.DisableAIControlledBrain();
-            _player.DisablePlayerMover();
+           
         }
             
     }

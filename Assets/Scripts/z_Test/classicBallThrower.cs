@@ -136,7 +136,7 @@ namespace z_Test
             if (_launchVelocity == Vector3.zero)
                 return;
 
-            _ball.Throw(_launchVelocity);
+            _ball.Fly(_launchVelocity);
             BallThrown?.Invoke();
         }
     }

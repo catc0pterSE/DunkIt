@@ -3,7 +3,6 @@ using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.Transitions;
 using Infrastructure.CoroutineRunner;
 using Infrastructure.Input.InputService;
-using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
 using Scene;
 using UI;
@@ -14,14 +13,16 @@ using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.Gameplay
 {
+    using Ball.MonoBehavior;
+
     public class GameplayState : StateWithTransitions, IParameterlessState
     {
         private readonly PlayerFacade[] _playerTeam;
         private readonly PlayerFacade[] _enemyTeam;
-        private readonly Ball.MonoBehavior.Ball _ball;
+        private readonly Ball _ball;
         private readonly IGameplayHUD _gameplayHud;
+
         private PlayerFacade _controlledPlayer;
-        private IInputService _inputService;
         private PlayerFacade NotControlledPlayer => _playerTeam.FindFirstOrNull(player => player != _controlledPlayer);
         public PlayerFacade ControlledPlayer => _controlledPlayer;
 
@@ -29,25 +30,22 @@ namespace Gameplay.StateMachine.States.Gameplay
         (
             PlayerFacade[] playerTeam,
             PlayerFacade[] enemyTeam,
-            Ball.MonoBehavior.Ball ball,
+            Ball ball,
             SceneConfig sceneConfig,
             IGameplayHUD gameplayHud,
             GameplayLoopStateMachine gameplayLoopStateMachine,
             LoadingCurtain loadingCurtain,
-            ICoroutineRunner coroutineRunner,
-            IInputService inputService
+            ICoroutineRunner coroutineRunner
         )
         {
-            _inputService = inputService;
-            
             Transitions = new ITransition[]
             {
-                new GameplayStateToDunkStateTransition(this, gameplayLoopStateMachine, inputService),
-                new GameplayStateToThrowStateTransition(this, gameplayLoopStateMachine, inputService),
+                new GameplayStateToDunkStateTransition(gameplayLoopStateMachine, playerTeam),
+                new GameplayStateToThrowStateTransition(playerTeam, gameplayLoopStateMachine),
                 new AnyToFightForBallTransition(ball, gameplayLoopStateMachine, coroutineRunner, true),
                 new GameplayStateToUpsetCutsceneStateTransition(playerTeam, enemyTeam, ball, sceneConfig.EnemyRing,
                     loadingCurtain, gameplayLoopStateMachine, coroutineRunner, sceneConfig),
-                new GameplayStateToPassTransition(this, gameplayLoopStateMachine, inputService)
+                new GameplayStateToPassTransition(playerTeam, enemyTeam, gameplayLoopStateMachine)
             };
             _playerTeam = playerTeam;
             _enemyTeam = enemyTeam;
@@ -59,29 +57,23 @@ namespace Gameplay.StateMachine.States.Gameplay
         {
             base.Enter();
             EnableHUD();
-            SubscribeOnChangePlayerInput();
+            SubscribeOnPlayerTeam();
             SetControlledPlayer
-                (
-                    _playerTeam.FindFirstOrNull(player => player.OwnsBall)
-                    ?? _playerTeam[NumericConstants.PrimaryTeamMemberIndex]
-                );
+            (
+                _playerTeam.FindFirstOrNull(player => player.OwnsBall)
+                ?? _playerTeam[NumericConstants.PrimaryTeamMemberIndex]
+            );
+            OnBallOwnerChanged(_ball.Owner);
             SubscribeOnBall();
-            SetPlayersStates();
-            SetEnemiesStates();
-            SetHUDState();
         }
 
         public override void Exit()
         {
             base.Exit();
             DisableHUD();
-            UnsubscribeOfChangePlayerInput();
+            UnsubscribeFromPlayerTeam();
             UnsubscribeFromBall();
         }
-
-        private void SetEnemiesStates() =>
-            _enemyTeam.Map(enemy =>
-                enemy.EnterAIControlledState());
 
         private void EnableHUD() =>
             _gameplayHud.Enable();
@@ -97,21 +89,49 @@ namespace Gameplay.StateMachine.States.Gameplay
 
         private void OnBallOwnerChanged(CharacterFacade newOwner)
         {
-            if (newOwner is PlayerFacade player)
-                SetControlledPlayer(player);
+            if (newOwner is not PlayerFacade player)
+                return;
 
-            SetPlayersStates();
+            SetPlayersStates(player);
             SetHUDState();
         }
 
-        private void SetPlayersStates()
+        private void SetPlayersStates(PlayerFacade ballOwner)
         {
-            if (ControlledPlayer.OwnsBall)
-                _controlledPlayer.EnterInputControlledAttackState();
+            if (ballOwner.IsPlayable)
+            {
+                SetControlledPlayer(ballOwner);
+                SetPlayerTeamAttackStates();
+                SetEnemyTeamDefenceStates();
+            }
             else
-                _controlledPlayer.EnterInputControlledDefenceState();
+            {
+                SetEnemyTeamAttackStates(ballOwner);
+                SetPlayerTeamDefenceStates();
+            }
+        }
 
-            NotControlledPlayer.EnterAIControlledState();
+        private void SetPlayerTeamAttackStates()
+        {
+            _controlledPlayer.EnterInputControlledAttackState();
+            NotControlledPlayer.EnterAIControlledAttackWithoutBallState();
+        }
+
+        private void SetEnemyTeamDefenceStates() =>
+            _enemyTeam.Map(enemyPlayer => enemyPlayer.EnterAIControlledDefenceState());
+
+        private void SetEnemyTeamAttackStates(PlayerFacade ballOwner)
+        {
+            PlayerFacade enemyWithBall = _enemyTeam.FindFirstOrNull(enemyPlayer => enemyPlayer == ballOwner);
+            enemyWithBall.EnterAIControlledAttackWithBallState();
+            PlayerFacade enemyWithoutBall = _enemyTeam.FindFirstOrNull(enemyPlayer => enemyPlayer != ballOwner);
+            enemyWithoutBall.EnterAIControlledAttackWithoutBallState();
+        }
+
+        private void SetPlayerTeamDefenceStates()
+        {
+            ControlledPlayer.EnterInputControlledDefenceState();
+            NotControlledPlayer.EnterAIControlledDefenceState();
         }
 
         private void SetHUDState()
@@ -125,19 +145,17 @@ namespace Gameplay.StateMachine.States.Gameplay
         private void SetControlledPlayer(PlayerFacade player) =>
             _controlledPlayer = player;
 
-        private void SubscribeOnChangePlayerInput() =>
-            _inputService.ChangePlayerButtonDown += SwapControlledPlayer;
 
-        private void UnsubscribeOfChangePlayerInput() =>
-            _inputService.ChangePlayerButtonDown -= SwapControlledPlayer;
+        private void SubscribeOnPlayerTeam() =>
+            _playerTeam.Map(player => player.ChangePlayerInitiated += SwapControlledPlayer);
+
+        private void UnsubscribeFromPlayerTeam() =>
+            _playerTeam.Map(player => player.ChangePlayerInitiated -= SwapControlledPlayer);
 
         private void SwapControlledPlayer()
         {
-            if (ControlledPlayer.OwnsBall)
-                return;
-
             SetControlledPlayer(NotControlledPlayer);
-            SetPlayersStates();
+            SetPlayerTeamDefenceStates();
             SetHUDState();
         }
     }

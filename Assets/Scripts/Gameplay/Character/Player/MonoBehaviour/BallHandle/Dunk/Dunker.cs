@@ -112,7 +112,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Dunk
                         Vector3.down.y,
                         Vector3.down.z + Random.Range(0, NumericConstants.Half)
                     ) * _dunkThrowForce;
-                _ball.Throw(throwDirection);
+                _ball.Fly(throwDirection);
             });
         }
     }

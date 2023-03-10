@@ -13,16 +13,16 @@ namespace Gameplay.Ball.MonoBehavior
         [SerializeField] private float _transferSpeed = 2f;
         [SerializeField] private Rigidbody _rigidBody;
 
-        private Character.CharacterFacade _owner;
+        private CharacterFacade _owner;
         private Coroutine _moving;
 
-        public Character.CharacterFacade Owner => _owner;
+        public CharacterFacade Owner => _owner;
 
-        public event Action<Character.CharacterFacade> OwnerChanged;
+        public event Action<CharacterFacade> OwnerChanged;
 
         public float Mass => _rigidBody.mass;
 
-        public void SetOwner(Character.CharacterFacade owner)
+        public void SetOwner(CharacterFacade owner)
         {
             TurnPhysicsOf();
             RemoveOwner();
@@ -32,7 +32,7 @@ namespace Gameplay.Ball.MonoBehavior
             OwnerChanged?.Invoke(_owner);
         }
 
-        public void Throw(Vector3 velocity)
+        public void Fly(Vector3 velocity)
         {
             RemoveOwner();
             TurnPhysicsOn();

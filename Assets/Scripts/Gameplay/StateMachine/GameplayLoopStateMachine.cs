@@ -41,7 +41,7 @@ namespace Gameplay.StateMachine
                 [typeof(StartCutsceneState)] = new StartCutsceneState(playerTeam, enemyTeam, referee,
                     camera.CinemachineBrain, ball, gameplayHUD, this, gameObjectFactory, inputService),
                 [typeof(JumpBallState)] = new JumpBallState(playerTeam, enemyTeam, referee, ball, camera.CinemachineBrain, gameplayHUD, this, gameObjectFactory, inputService),
-                [typeof(GameplayState)] = new GameplayState(playerTeam, enemyTeam, ball, sceneConfig, gameplayHUD, this, loadingCurtain, coroutineRunner, inputService),
+                [typeof(GameplayState)] = new GameplayState(playerTeam, enemyTeam, ball, sceneConfig, gameplayHUD, this, loadingCurtain, coroutineRunner),
                 [typeof(PassState)] = new PassState(playerTeam, enemyTeam, this),
                 [typeof(DunkState)] = new DunkState(playerTeam, enemyTeam, ball, sceneConfig, this),
                 [typeof(ThrowState)] = new ThrowState(gameplayHUD, sceneConfig, this, enemyTeam, ball, loadingCurtain, coroutineRunner, gameObjectFactory),

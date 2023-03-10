@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4871018274306801538}
   - component: {fileID: 3567767349144517149}
   - component: {fileID: 9116447531277526744}
-  - component: {fileID: 2336375831225123186}
+  - component: {fileID: -7506919795947792106}
   - component: {fileID: 5054484669908984701}
   - component: {fileID: 5437166744856396153}
   - component: {fileID: 4538433228081721433}
@@ -21,6 +21,8 @@ GameObject:
   - component: {fileID: -2012806606389975634}
   - component: {fileID: 4617063359223777939}
   - component: {fileID: 1864448214675077806}
+  - component: {fileID: 7822746910048078928}
+  - component: {fileID: -2187974916535839628}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -79,6 +81,7 @@ MonoBehaviour:
   _movementSpeed: 4
   _rotationSpeed: 800
   _gravityModifier: 1
+  _minAngle: 1
 --- !u!114 &9116447531277526744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91,19 +94,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c9ef004d9ff41a1b848dd4111bf5705, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerMover: {fileID: 3567767349144517149}
---- !u!114 &2336375831225123186
+  _mover: {fileID: 3567767349144517149}
+  _host: {fileID: 5054484669908984701}
+--- !u!114 &-7506919795947792106
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1919622327166402665}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3ca96734d0b4273917875ac779475ec, type: 3}
+  m_Script: {fileID: 11500000, guid: 2693a30a7d0a443a9b3c9a070f89fce2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mover: {fileID: 3567767349144517149}
+  _host: {fileID: 5054484669908984701}
+  _targetTracker: {fileID: -8693731189481653844}
 --- !u!114 &5054484669908984701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,16 +124,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ballPosition: {fileID: 4042918883656718937}
-  _inputControlledBrain: {fileID: 9116447531277526744}
-  _aiControlledBrain: {fileID: 2336375831225123186}
+  _inputControlledDefenceBrain: {fileID: 9116447531277526744}
+  _inputControlledAttackBrain: {fileID: -7506919795947792106}
   _playerMover: {fileID: 3567767349144517149}
   _animator: {fileID: 5437166744856396153}
-  _ballThrower: {fileID: 1864448214675077806}
-  _distanceTracker: {fileID: -8693731189481653844}
+  _inputBallThrower: {fileID: 1864448214675077806}
+  _targetTracker: {fileID: -8693731189481653844}
   _passer: {fileID: -2012806606389975634}
   _catcher: {fileID: 1497494343019081299}
   _dunker: {fileID: 4617063359223777939}
   _fightForBallTriggerZone: {fileID: 6257887091626896469}
+  _defenceBehaviourTree: {fileID: 0}
+  _attackWithBallBehaviourTree: {fileID: 0}
+  _attackWithoutBallBehaviourTree: {fileID: 7822746910048078928}
+  _behaviorTreeBlackboard: {fileID: 0}
 --- !u!95 &5437166744856396153
 Animator:
   serializedVersion: 4
@@ -154,7 +165,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1919622327166402665}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d0a071820a404069a41208365a650a3f, type: 3}
   m_Name: 
@@ -172,7 +183,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1919622327166402665}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -293,7 +304,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1919622327166402665}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b1297fc9a1b47819167b43163199913, type: 3}
   m_Name: 
@@ -334,6 +345,73 @@ MonoBehaviour:
   _trajectoryDrawer: {fileID: 4538433228081721433}
   _launchVelocityXSense: 60
   _launchVelocityYSense: 60
+--- !u!114 &7822746910048078928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919622327166402665}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aad115aca74ce3c4891b3f6de0b4aae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _serializedExposedParameters: []
+  _boundGraphSerialization: 
+  _boundGraphObjectReferences: []
+  _boundGraphSource:
+    _version: 0
+    _category: 
+    _comments: 
+    _translation: {x: 0, y: 0}
+    _zoomFactor: 1
+  _firstActivation: 0
+  _enableAction: 0
+  _disableAction: 0
+  _lockBoundGraphPrefabOverrides: 1
+  _preInitializeSubGraphs: 0
+  _updateMode: 0
+  _graph: {fileID: 11400000, guid: efb474594d736b64fbacf739bf50147d, type: 2}
+  _blackboard: {fileID: -2187974916535839628}
+--- !u!114 &-2187974916535839628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919622327166402665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b98a6db0b653f764eac834f85857a9dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parentBlackboard: {fileID: 0}
+  _serializedBlackboard: '{"_variables":{"Host":{"_value":1,"_name":"Host","_id":"53299809-bc5f-4e54-bd0c-f1b682da9846","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.PlayerFacade,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"Mover":{"_value":2,"_name":"Mover","_id":"790d4d99-8c81-472f-bf8e-529c7914a64c","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Movement.PlayerMover,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"TargetTracker":{"_value":3,"_name":"TargetTracker","_id":"3bf9efab-1ce7-47a4-8aef-708d4496cc71","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Distance.TargetTracker,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}}}'
+  _objectReferences:
+  - {fileID: 0}
+  - {fileID: 5054484669908984701}
+  - {fileID: 3567767349144517149}
+  - {fileID: -8693731189481653844}
+  _serializedVariables:
+  - _json: '{"_value":1,"_name":"Host","_id":"53299809-bc5f-4e54-bd0c-f1b682da9846","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.PlayerFacade,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
+    _references:
+    - {fileID: 0}
+    - {fileID: 5054484669908984701}
+  - _json: '{"_value":1,"_name":"Mover","_id":"790d4d99-8c81-472f-bf8e-529c7914a64c","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Movement.PlayerMover,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
+    _references:
+    - {fileID: 0}
+    - {fileID: 3567767349144517149}
+  - _json: '{"_value":1,"_name":"TargetTracker","_id":"3bf9efab-1ce7-47a4-8aef-708d4496cc71","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Distance.TargetTracker,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
+    _references:
+    - {fileID: 0}
+    - {fileID: -8693731189481653844}
 --- !u!1 &4042918882263731115
 GameObject:
   m_ObjectHideFlags: 0

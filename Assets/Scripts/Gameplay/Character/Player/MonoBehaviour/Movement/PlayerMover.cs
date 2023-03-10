@@ -14,12 +14,26 @@ namespace Gameplay.Character.Player.MonoBehaviour.Movement
         [SerializeField] private float _movementSpeed = 4;
         [SerializeField] private float _rotationSpeed = 400;
         [SerializeField] private float _gravityModifier = 1;
+        [SerializeField] private float _minAngle = 1;
 
         private Coroutine _rotating;
-        
-        public void Move(Vector3 movementDirection)
+
+        public void MoveLookingStraight(Vector3 movementDirection)
         {
             Rotate(movementDirection);
+
+            Move(movementDirection);
+        }
+
+        public void MoveLookingAt(Vector3 movementDirection, Vector3 lookAt)
+        {
+            Rotate(lookAt - transform.position);
+
+            Move(movementDirection);
+        }
+
+        private void Move(Vector3 movementDirection)
+        {
             movementDirection += GetGravity();
 
             _characterController.Move(movementDirection * (Time.deltaTime * _movementSpeed));
@@ -28,20 +42,20 @@ namespace Gameplay.Character.Player.MonoBehaviour.Movement
         public void RotateTo(Vector3 position, Action callback = null)
         {
             Vector3 positionProjection = new Vector3(position.x, transform.position.y, position.z);
-            
-            if (_rotating!=null)
+
+            if (_rotating != null)
                 StopCoroutine(_rotating);
 
             _rotating = StartCoroutine(RotateToPosition(positionProjection, callback));
         }
-        
-       
+
+
         private Vector3 GetGravity()
         {
             return Physics.gravity * _gravityModifier;
         }
 
-       private void Rotate(Vector3 direction)
+        private void Rotate(Vector3 direction)
         {
             if (direction == Vector3.zero)
                 return;
@@ -55,12 +69,12 @@ namespace Gameplay.Character.Player.MonoBehaviour.Movement
         {
             Vector3 direction = position - transform.position;
 
-            while (Vector3.Angle(transform.forward, direction) > NumericConstants.MinimalDelta)
+            while (Vector3.Angle(transform.forward, direction) > _minAngle)
             {
                 Rotate(direction);
                 yield return null;
             }
-            
+
             callback?.Invoke();
         }
     }

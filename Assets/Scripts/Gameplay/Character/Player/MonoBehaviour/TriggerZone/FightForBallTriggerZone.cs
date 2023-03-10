@@ -8,14 +8,12 @@ namespace Gameplay.Character.Player.MonoBehaviour.TriggerZone
     public class FightForBallTriggerZone : SwitchableMonoBehaviour
     {
         [SerializeField] private PlayerFacade _host;
+        [SerializeField] private PlayerFacade _ally;
 
         public event Action<PlayerFacade[]> FightForBallStarted;
-
-        //TODO: delay routine
         private void OnTriggerStay(Collider other)
         {
-            if (other.gameObject.TryGetComponent(out PlayerFacade basketballPlayer) ==
-                false)
+            if (other.gameObject.TryGetComponent(out PlayerFacade basketballPlayer) == false)
                 return;
 
             if (_host == basketballPlayer)

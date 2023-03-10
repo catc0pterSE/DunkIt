@@ -6,7 +6,6 @@
         public const int PrimaryTeamMemberIndex = 0;
         public const int SecondaryTeamMemberIndex = 1;
         public const float Half = 0.5f;
-        public const float MinimalDelta = 0.02f;
         public const int Double = 2;
         public const float RightAngle = 90;
         public const float FlatAngle = 180;

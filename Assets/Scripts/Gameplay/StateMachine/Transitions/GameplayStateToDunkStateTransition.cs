@@ -1,39 +1,34 @@
 ﻿using Gameplay.Character.Player.MonoBehaviour;
-using Gameplay.StateMachine.States.CutsceneStates;
 using Gameplay.StateMachine.States.Gameplay;
-using Infrastructure.Input.InputService;
-using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
+using Utility.Extensions;
 
 namespace Gameplay.StateMachine.Transitions
 {
     public class GameplayStateToDunkStateTransition : ITransition
     {
-        private readonly GameplayState _gameplayState;
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
-        private IInputService _inputService;
+        private readonly PlayerFacade[] _playerTeam;
 
-        public GameplayStateToDunkStateTransition(GameplayState gameplayState,
-            GameplayLoopStateMachine gameplayLoopStateMachine, IInputService inputService)
+        public GameplayStateToDunkStateTransition(GameplayLoopStateMachine gameplayLoopStateMachine,
+            PlayerFacade[] playerTeam)
         {
-            _inputService = inputService;
-            _gameplayState = gameplayState;
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
+            _playerTeam = playerTeam;
         }
 
-        public void Enable() =>
-            _inputService.DunkButtonUp += MoveToDunkState;
+        public void Enable() => SubscribeOnPlayers();
 
-        public void Disable() =>
-            _inputService.DunkButtonUp -= MoveToDunkState;
+        public void Disable() => UnsubscribeFromPlayers();
 
 
-        private void MoveToDunkState()
-        {
-            if (_gameplayState.ControlledPlayer.IsInDunkZone == false)
-                return;
+        private void SubscribeOnPlayers() =>
+            _playerTeam.Map(player => player.DunkInitiated += MoveToDunkState);
 
-            _gameplayLoopStateMachine.Enter<DunkState, PlayerFacade>(_gameplayState.ControlledPlayer);
-        }
+        private void UnsubscribeFromPlayers() =>
+            _playerTeam.Map(player => player.DunkInitiated -= MoveToDunkState);
+
+        private void MoveToDunkState(PlayerFacade dunkingPlayer) =>
+            _gameplayLoopStateMachine.Enter<DunkState, PlayerFacade>(dunkingPlayer);
     }
 }

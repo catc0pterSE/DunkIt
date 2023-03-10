@@ -17,7 +17,6 @@ namespace Gameplay.Character.Player.StateMachine.States
 
         public void Enter(Ring ring)
         {
-            _player.DisableInputControlledBrain();
             _player.EnableDunker();
             _player.Dunk(ring);
         }

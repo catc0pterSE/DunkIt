@@ -3,20 +3,17 @@ using Modules.StateMachine;
 
 namespace Gameplay.Character.Player.StateMachine.States
 {
-    
-    public class PassState: IParameterlessState
+    public class PassState : IParameterlessState
     {
-        private readonly MonoBehaviour.PlayerFacade _player;
+        private readonly PlayerFacade _player;
 
-        public PassState(MonoBehaviour.PlayerFacade player)
+        public PassState(PlayerFacade player)
         {
             _player = player;
         }
-        
+
         public void Enter()
         {
-            _player.DisableAIControlledBrain();
-            _player.DisableInputControlledBrain();
             _player.FocusOnAlly();
             _player.RotateToAlly(Pass);
         }
