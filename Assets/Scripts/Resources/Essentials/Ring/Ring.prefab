@@ -222,9 +222,6 @@ MonoBehaviour:
   _dunkPoints:
   - {fileID: 8386409825148197542}
   - {fileID: 3322276688416247362}
-  - {fileID: 1223863325030579459}
-  - {fileID: 7726573150173881180}
-  - {fileID: 1606110333884852051}
   - {fileID: 223083280315199224}
   - {fileID: 8596728693911654928}
   _ballDunkPoint: {fileID: 4823282493136196840}
@@ -384,7 +381,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3044399438818127531}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.7030003, z: 0}
+  m_LocalPosition: {x: 0, y: 3.7030008, z: -0.00000003096663}
   m_LocalScale: {x: 0.77778155, y: 1, z: 0.8695694}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -736,9 +733,6 @@ Transform:
   - {fileID: 4823282493136196840}
   - {fileID: 8386409825148197542}
   - {fileID: 3322276688416247362}
-  - {fileID: 1223863325030579459}
-  - {fileID: 7726573150173881180}
-  - {fileID: 1606110333884852051}
   - {fileID: 223083280315199224}
   - {fileID: 8596728693911654928}
   m_Father: {fileID: 2387732187581196243}
@@ -1014,37 +1008,6 @@ MonoBehaviour:
   m_MaximumFOV: 60
   m_MinimumOrthoSize: 1
   m_MaximumOrthoSize: 5000
---- !u!1 &6071832712734678115
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1223863325030579459}
-  m_Layer: 6
-  m_Name: DunkPoint 3
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1223863325030579459
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6071832712734678115}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 0.84738004, y: 3.7030008, z: -1.0944599}
-  m_LocalScale: {x: 0.87, y: 0.87, z: 0.05}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6103768328010169665}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6351374508392416832
 GameObject:
   m_ObjectHideFlags: 0
@@ -1382,12 +1345,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7325458561490110826}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -1.2919493, y: 3.7030008, z: 0.54375}
+  m_LocalPosition: {x: -0.28, y: 3.7030008, z: 1.31}
   m_LocalScale: {x: 0.87, y: 0.87, z: 0.05}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6103768328010169665}
-  m_RootOrder: 6
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7609767610883848482
 GameObject:
@@ -1460,68 +1423,6 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 2348846510558981489}
---- !u!1 &8075623865095661654
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7726573150173881180}
-  m_Layer: 6
-  m_Name: DunkPoint 4
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7726573150173881180
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8075623865095661654}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 1.2728124, y: 3.7030008, z: -0.14616004}
-  m_LocalScale: {x: 0.87, y: 0.87, z: 0.05}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6103768328010169665}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &8288347943024738367
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1606110333884852051}
-  m_Layer: 6
-  m_Name: DunkPoint 5
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1606110333884852051
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8288347943024738367}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 1.2606325, y: 3.7030008, z: 0.43848}
-  m_LocalScale: {x: 0.87, y: 0.87, z: 0.05}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6103768328010169665}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9113867934484940858
 GameObject:
   m_ObjectHideFlags: 0
@@ -1551,5 +1452,5 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6103768328010169665}
-  m_RootOrder: 7
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

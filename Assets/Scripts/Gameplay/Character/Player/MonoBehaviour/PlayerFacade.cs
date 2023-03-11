@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cinemachine;
 using Gameplay.Character.Player.MonoBehaviour.BallHandle.Dunk;
 using Gameplay.Character.Player.MonoBehaviour.BallHandle.Pass;
@@ -13,8 +14,10 @@ using Gameplay.Character.Player.StateMachine.States;
 using Infrastructure.Input.InputService;
 using NodeCanvas.BehaviourTrees;
 using NodeCanvas.Framework;
+using Scene;
 using Scene.Ring;
 using UnityEngine;
+using Utility.Constants;
 using Utility.Extensions;
 using Object = UnityEngine.Object;
 
@@ -40,32 +43,33 @@ namespace Gameplay.Character.Player.MonoBehaviour
         private CinemachineVirtualCamera _virtualCamera;
         private PlayerStateMachine _stateMachine;
         private PlayerFacade _ally;
-        private Ring _enemyRing;
+        private Ring _oppositeRing;
 
-        public PlayerFacade Initialize(bool isPlayable, PlayerFacade ally, Ball.MonoBehavior.Ball ball,
-            UnityEngine.Camera gameplayCamera, CinemachineVirtualCamera virtualCamera, Ring enemyRing,
+        public void Initialize(bool isPlayable, PlayerFacade ally, Ball.MonoBehavior.Ball ball, PlayerFacade[] oppositeTeam,
+            UnityEngine.Camera gameplayCamera, CinemachineVirtualCamera virtualCamera, SceneConfig sceneConfig,
             IInputService inputService)
         {
-            _enemyRing = enemyRing;
             IsPlayable = isPlayable;
+            _oppositeRing = isPlayable ? sceneConfig.EnemyRing : sceneConfig.PlayerRing;
             _dunker.Initialize(ball);
             _ally = ally;
             _inputControlledDefenceBrain.Initialize(gameplayCamera.transform, inputService);
             _inputControlledAttackBrain.Initialize(gameplayCamera.transform, inputService);
             _inputBallThrower.Initialize(ball, gameplayCamera, inputService);
-            _targetTracker.Initialize(enemyRing.transform.position, ally.transform);
+            _targetTracker.Initialize(_oppositeRing.transform.position, ally.transform);
             Ball = ball;
             _virtualCamera = virtualCamera;
             _virtualCamera.Follow = transform;
             _passer.Initialize(ball, _ally);
+            _fightForBallTriggerZone.Initialize(ally);
             
-            _attackWithoutBallBehaviourTree.AddBinds(new Dictionary<string, Object> //TODO: constants
+            _attackWithoutBallBehaviourTree.AddBinds(new Dictionary<string, object>
             {
-                ["Ally"] = _ally,
-                ["EnemyRing"] = _enemyRing
+                [BehaviourTreeVariableNames.AllyVariableName] = _ally,
+                [BehaviourTreeVariableNames.OppositeRingVariableName] = _oppositeRing,
+                [BehaviourTreeVariableNames.CourtCenterVariableName] = sceneConfig.CourtCenter,
+                [BehaviourTreeVariableNames.OppositeTeamVariableName] = oppositeTeam
             });
-
-            return this;
         }
 
         private PlayerStateMachine StateMachine => _stateMachine ??= new PlayerStateMachine(this);
@@ -248,8 +252,8 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public void PrioritizeCamera() =>
             _virtualCamera.Prioritize();
 
-        public void FocusOnEnemyBasket() =>
-            _virtualCamera.LookAt = _enemyRing.transform;
+        public void FocusOnOppositeBasket() =>
+            _virtualCamera.LookAt = _oppositeRing.transform;
 
         public void FocusOnBall() =>
             _virtualCamera.LookAt = Ball.transform;

@@ -8,7 +8,9 @@ namespace Scene
         [SerializeField] private Ring.Ring _enemyRing;
         [SerializeField] private Transform _enemyDropBallPoint;
         [SerializeField] private Transform _playerDropBallPoint;
+        [SerializeField] private Transform _courtCenter;
 
+        public Transform CourtCenter => _courtCenter;
         public Ring.Ring PlayerRing => _playerRing;
         public Ring.Ring EnemyRing => _enemyRing;
 

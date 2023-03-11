@@ -387,31 +387,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _parentBlackboard: {fileID: 0}
-  _serializedBlackboard: '{"_variables":{"Host":{"_value":1,"_name":"Host","_id":"53299809-bc5f-4e54-bd0c-f1b682da9846","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.PlayerFacade,
-    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"Mover":{"_value":2,"_name":"Mover","_id":"790d4d99-8c81-472f-bf8e-529c7914a64c","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Movement.PlayerMover,
-    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"TargetTracker":{"_value":3,"_name":"TargetTracker","_id":"3bf9efab-1ce7-47a4-8aef-708d4496cc71","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Distance.TargetTracker,
-    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}}}'
+  _serializedBlackboard: '{"_variables":{"HostFacade":{"_value":1,"_name":"HostFacade","_id":"53299809-bc5f-4e54-bd0c-f1b682da9846","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.PlayerFacade,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostMover":{"_value":2,"_name":"HostMover","_id":"790d4d99-8c81-472f-bf8e-529c7914a64c","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Movement.PlayerMover,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostTargetTracker":{"_value":3,"_name":"HostTargetTracker","_id":"3bf9efab-1ce7-47a4-8aef-708d4496cc71","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Distance.TargetTracker,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostTransform":{"_value":4,"_name":"HostTransform","_id":"19379dd1-c14d-4603-b9a5-e58da9a72c99","$type":"NodeCanvas.Framework.Variable`1[[UnityEngine.Transform,
+    UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}}}'
   _objectReferences:
   - {fileID: 0}
   - {fileID: 5054484669908984701}
   - {fileID: 3567767349144517149}
   - {fileID: -8693731189481653844}
+  - {fileID: 8078427120944833169}
   _serializedVariables:
-  - _json: '{"_value":1,"_name":"Host","_id":"53299809-bc5f-4e54-bd0c-f1b682da9846","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.PlayerFacade,
+  - _json: '{"_value":1,"_name":"HostFacade","_id":"53299809-bc5f-4e54-bd0c-f1b682da9846","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.PlayerFacade,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
     _references:
     - {fileID: 0}
     - {fileID: 5054484669908984701}
-  - _json: '{"_value":1,"_name":"Mover","_id":"790d4d99-8c81-472f-bf8e-529c7914a64c","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Movement.PlayerMover,
+  - _json: '{"_value":1,"_name":"HostMover","_id":"790d4d99-8c81-472f-bf8e-529c7914a64c","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Movement.PlayerMover,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
     _references:
     - {fileID: 0}
     - {fileID: 3567767349144517149}
-  - _json: '{"_value":1,"_name":"TargetTracker","_id":"3bf9efab-1ce7-47a4-8aef-708d4496cc71","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Distance.TargetTracker,
+  - _json: '{"_value":1,"_name":"HostTargetTracker","_id":"3bf9efab-1ce7-47a4-8aef-708d4496cc71","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Distance.TargetTracker,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
     _references:
     - {fileID: 0}
     - {fileID: -8693731189481653844}
+  - _json: '{"_value":1,"_name":"HostTransform","_id":"19379dd1-c14d-4603-b9a5-e58da9a72c99","$type":"NodeCanvas.Framework.Variable`1[[UnityEngine.Transform,
+      UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
+    _references:
+    - {fileID: 0}
+    - {fileID: 8078427120944833169}
 --- !u!1 &4042918882263731115
 GameObject:
   m_ObjectHideFlags: 0

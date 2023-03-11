@@ -17,7 +17,7 @@ namespace Gameplay.Character.Player.StateMachine.States
             _player.EnableInputControlledAttackBrain();
             _player.EnablePlayerMover();
             _player.PrioritizeCamera();
-            _player.FocusOnEnemyBasket();
+            _player.FocusOnOppositeBasket();
             _player.EnableDistanceTracker();
             _player.EnableFightForBallTriggerZone();
         }

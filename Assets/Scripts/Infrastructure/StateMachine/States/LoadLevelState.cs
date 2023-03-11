@@ -17,6 +17,7 @@ using UI.HUD;
 using UI.HUD.Mobile;
 using UnityEngine;
 using Utility.Constants;
+using Utility.Extensions;
 using z_Test;
 using SceneConfig = Scene.SceneConfig;
 
@@ -64,8 +65,13 @@ namespace Infrastructure.StateMachine.States
             Ball ball = SpawnBall();
             Referee referee = SpawnReferee();
             CameraFacade camera = SpawnCamera();
-            PlayerFacade[] playerTeam = SpawnPlayerTeam(camera.Camera, ball, sceneConfig, true);
-            PlayerFacade[] enemyTeam = SpawnPlayerTeam(camera.Camera, ball, sceneConfig, false);
+
+            PlayerFacade[] playerTeam = SpawnTeam();
+            PlayerFacade[] enemyTeam = SpawnTeam();
+
+            InitializeTeam(playerTeam, enemyTeam, ball, sceneConfig, true, camera.Camera);
+            InitializeTeam(enemyTeam, playerTeam, ball, sceneConfig, false, camera.Camera);
+
             IGameplayHUD gameplayHUDView = SpawnHUD().Initialize(playerTeam.Union(enemyTeam).ToArray(), camera.Camera);
 
             GameplayLoopStateMachine gameplayLoopStateMachine =
@@ -88,29 +94,32 @@ namespace Infrastructure.StateMachine.States
             _gameStateMachine.Enter<GamePlayLoopState, GameplayLoopStateMachine>(gameplayLoopStateMachine);
         }
 
-        private PlayerFacade[] SpawnPlayerTeam(Camera camera, Ball ball, SceneConfig sceneConfig, bool isPlayable)
+        private PlayerFacade[] SpawnTeam()
         {
-            PlayerFacade[] playerTeam = new PlayerFacade[NumericConstants.PlayersInTeam];
+            PlayerFacade[] team = new PlayerFacade[NumericConstants.PlayersInTeam];
 
-            PlayerFacade primaryPlayer = _gameObjectFactory.CreatePlayer();
-            PlayerFacade secondaryPlayer = _gameObjectFactory.CreatePlayer();
+            for (int i = 0; i < team.Length; i++)
+                team[i] = _gameObjectFactory.CreatePlayer();
 
-            if (isPlayable == false) //TODO: remove. for test
-            {
-                primaryPlayer.GetComponentInChildren<MeshRenderer>().material =
-                    ball.GetComponentInChildren<MeshRenderer>().material;
-                secondaryPlayer.GetComponentInChildren<MeshRenderer>().material =
-                    ball.GetComponentInChildren<MeshRenderer>().material;
-            }
+            return team;
+        }
 
-            Ring enemyRing = isPlayable ? sceneConfig.EnemyRing : sceneConfig.PlayerRing;
+        private void InitializeTeam(PlayerFacade[] team, PlayerFacade[] oppositeTeam, Ball ball,
+            SceneConfig sceneConfig, bool isPlayable, Camera camera)
+        {
+            if (isPlayable == false) //TODO: TEST - delete
+                team.Map(player => player.GetComponentInChildren<MeshRenderer>().material =
+                    ball.GetComponentInChildren<MeshRenderer>().material);
 
-            playerTeam[NumericConstants.PrimaryTeamMemberIndex] = primaryPlayer.Initialize(isPlayable, secondaryPlayer,
-                ball, camera, SpawnVirtualCamera(), enemyRing, _inputService);
-            playerTeam[NumericConstants.SecondaryTeamMemberIndex] = secondaryPlayer.Initialize(isPlayable,
-                primaryPlayer, ball, camera, SpawnVirtualCamera(), enemyRing, _inputService);
+            PlayerFacade primaryPlayer = team[NumericConstants.PrimaryTeamMemberIndex];
+            PlayerFacade secondaryPlayer = team[NumericConstants.SecondaryTeamMemberIndex];
 
-            return playerTeam;
+            primaryPlayer.Initialize(isPlayable, secondaryPlayer, ball, oppositeTeam, camera, SpawnVirtualCamera(),
+                sceneConfig,
+                _inputService);
+            secondaryPlayer.Initialize(isPlayable, primaryPlayer, ball, oppositeTeam, camera, SpawnVirtualCamera(),
+                sceneConfig,
+                _inputService);
         }
 
         private Referee SpawnReferee()

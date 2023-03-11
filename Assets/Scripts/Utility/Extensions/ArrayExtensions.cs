@@ -6,7 +6,7 @@ namespace Utility.Extensions
 {
     public static class ArrayExtensions
     {
-        public static Vector3[] GetTransformPositions(this Transform[] transforms)
+        /*public static Vector3[] GetTransformPositions(this Transform[] transforms)
         {
             if (transforms.Length == 0)
                 throw new Exception("Array is empty");
@@ -121,6 +121,6 @@ namespace Utility.Extensions
             intermediatePosition /= positions.Length;
 
             return intermediatePosition;
-        }
+        }*/
     }
 }

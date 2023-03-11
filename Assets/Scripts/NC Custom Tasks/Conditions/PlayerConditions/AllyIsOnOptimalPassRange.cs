@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using Gameplay.Character.Player.MonoBehaviour;
 using NodeCanvas.Framework;
+using UnityEngine;
 using Utility.Constants;
 using Vector3 = UnityEngine.Vector3;
 
@@ -9,19 +10,17 @@ namespace NC_Custom_Tasks.Conditions.PlayerConditions
     public class AllyIsOnOptimalPassRange : ConditionTask
     {
         [BlackboardOnly] public BBParameter<PlayerFacade> Ally;
-        [BlackboardOnly] public BBParameter<PlayerFacade> Host;
-        [BlackboardOnly] public BBParameter<float> DistanceTolerance;
+        [BlackboardOnly] public BBParameter<Transform> HostTransform;
+        public float DistanceTolerance;
 
         protected override bool OnCheck()
         {
-            PlayerFacade host = Host.value;
-            PlayerFacade ally = Ally.value;
-            float distanceTolerance = DistanceTolerance.value;
+            PlayerFacade ally = Ally.value;;
 
-            float distanceToAlly = Vector3.Distance(ally.transform.position, host.transform.position);
+            float distanceToAlly = Vector3.Distance(ally.transform.position, HostTransform.value.position);
 
-            return distanceToAlly > ally.MaxPassDistance - distanceTolerance * NumericConstants.Double &&
-                   distanceToAlly < ally.MaxPassDistance - distanceTolerance;
+            return distanceToAlly > ally.MaxPassDistance - DistanceTolerance * NumericConstants.Double &&
+                   distanceToAlly < ally.MaxPassDistance - DistanceTolerance;
         }
     }
 }
