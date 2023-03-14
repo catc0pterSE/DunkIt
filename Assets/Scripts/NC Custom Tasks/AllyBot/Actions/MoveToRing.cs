@@ -1,41 +1,45 @@
 ﻿using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour.Movement;
 using NodeCanvas.Framework;
+using Scene;
 using Scene.Ring;
 using UnityEngine;
 using Utility.Extensions;
 
-namespace NC_Custom_Tasks.Actions.PlayerActions
+namespace NC_Custom_Tasks.AllyBot.Actions
 {
     public class MoveToRing : ActionTask
     {
         [BlackboardOnly] public BBParameter<PlayerMover> Mover;
         [BlackboardOnly] public BBParameter<Ring> EnemyRing;
         [BlackboardOnly] public BBParameter<PlayerFacade> Ally;
-        [BlackboardOnly] public BBParameter<Transform> CourtCenter;
+        [BlackboardOnly] public BBParameter<CourtDimensions> CourtDimensions;
         [BlackboardOnly] public BBParameter<Transform> HostTransform;
         [BlackboardOnly] public BBParameter<PlayerFacade[]> OppositeTeamFacades;
 
         public float DistanceDelta;
         public float RotationDistanceThreshold;
-        public float AngleOffset;
+        public float MinAngleOffset;
+        public float MaxAngleOffset;
         public float AngleToCorrectDirection;
         public float DistanceToCorrectDirection;
         public float DirectionCorrection;
 
         private Coroutine _moveRoutine;
         private Vector3 _lastAllyPosition;
-        private Quaternion _leftDeflection;
-        private Quaternion _rightDeflection;
+        private Quaternion _rightRotation;
+        private Quaternion _leftRotation;
         private Transform[] _oppositeTeamTransforms;
 
         private Transform[] OppositeTeamTransforms =>
             _oppositeTeamTransforms ??= OppositeTeamFacades.value.GetTransforms();
 
-        protected override void OnExecute()
+        private float RandomOffsetAngle => Random.Range(MinAngleOffset, MaxAngleOffset);
+
+        protected override void OnExecute() //TODO: random, costyl
         {
-            _leftDeflection = Quaternion.Euler(0, AngleOffset, 0);
-            _rightDeflection = Quaternion.Euler(0, -AngleOffset, 0);
+            _rightRotation = Quaternion.Euler(0, -RandomOffsetAngle, 0);
+            _leftRotation = Quaternion.Euler(0, RandomOffsetAngle, 0);
         }
 
         protected override void OnUpdate()
@@ -44,12 +48,23 @@ namespace NC_Custom_Tasks.Actions.PlayerActions
             Vector3 projectedRingPosition = EnemyRing.value.transform.position;
             projectedRingPosition.y = allyPosition.y;
             Vector3 allyToRing = (projectedRingPosition - allyPosition).normalized;
+            CourtDimensions courtDimensions = CourtDimensions.value;
 
-            Quaternion deflection = allyPosition.z > CourtCenter.value.position.z ? _leftDeflection : _rightDeflection;
-            Vector3 destination = deflection * allyToRing * (Ally.value.MaxPassDistance - DistanceDelta) + allyPosition;
+            Quaternion deflection = allyPosition.z > courtDimensions.CourtCenter.z == EnemyRing.value.IsFlipped
+                ? _rightRotation
+                : _leftRotation;
+            Vector3 roughDestination =
+                deflection * allyToRing * (Ally.value.MaxPassDistance - DistanceDelta) + allyPosition;
+            Vector3 destination = new Vector3
+            (
+                Mathf.Clamp(roughDestination.x, courtDimensions.XMin, courtDimensions.XMax),
+                roughDestination.y,
+                Mathf.Clamp(roughDestination.z, courtDimensions.ZMin, courtDimensions.ZMax)
+            );
 
             Vector3 playerPosition = HostTransform.value.position;
             Vector3 path = destination - playerPosition;
+
             bool lookingAtAlly = path.magnitude < RotationDistanceThreshold;
             Vector3 direction = path.normalized;
 
@@ -57,13 +72,19 @@ namespace NC_Custom_Tasks.Actions.PlayerActions
             {
                 Vector3 enemyPosition = enemyTransform.position;
                 Vector3 directionToEnemy = enemyPosition - playerPosition;
-                
+
                 bool needToCorrectDirection =
                     Vector3.Angle(direction, directionToEnemy) < AngleToCorrectDirection
                     && Vector3.Distance(playerPosition, enemyPosition) < DistanceToCorrectDirection;
 
-                if (needToCorrectDirection)
-                    direction = Quaternion.Euler(0, DirectionCorrection, 0) * direction;
+                if (needToCorrectDirection == false)
+                    continue;
+                bool enemyIsToTheLeft =
+                    Vector3.Dot(HostTransform.value.right, enemyPosition - playerPosition) < 0;
+
+                direction = enemyIsToTheLeft
+                    ? Quaternion.Euler(0, DirectionCorrection, 0) * direction
+                    : Quaternion.Euler(0, -DirectionCorrection, 0) * direction;
             }
 
             if (lookingAtAlly)

@@ -1,4 +1,5 @@
 ﻿using System;
+using Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw;
 using Modules.MonoBehaviour;
 using UnityEngine;
 using Utility.Constants;
@@ -8,6 +9,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Pass
     public class Passer : SwitchableComponent
     {
         [SerializeField] private Transform _ballPosition;
+        [SerializeField] private BallThrower _ballThrower;
         [SerializeField] private float _flightTimeCoefficient = 0.5f; // TODO: depend on distance?
 
         private const int LowEnergyParabolicCoefficient = 4;

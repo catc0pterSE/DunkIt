@@ -8,16 +8,16 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
 {
     using Ball.MonoBehavior;
 
-    public class InputBallThrower : SwitchableComponent
+    public class BallThrower : SwitchableComponent
     {
         [SerializeField] private Transform _ballPosition;
         [SerializeField] private TrajectoryDrawer _trajectoryDrawer;
         [SerializeField] private float _launchVelocityXSense = 80;
         [SerializeField] private float _launchVelocityYSense = 80;
-        
+
         private IInputService _inputService;
         private Ball _ball;
-        private Vector3 _launchVelocity;
+        private Vector3 _inputLaunchVelocity;
         private UnityEngine.Camera _camera;
         public event Action BallThrown;
         private Coroutine _aimRoutine;
@@ -27,7 +27,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
         {
             _inputService.PointerDown += StartAim;
             _trajectoryDrawer.Enable();
-            _launchVelocity = Vector3.zero;
+            _inputLaunchVelocity = Vector3.zero;
         }
 
         private void OnDisable()
@@ -43,11 +43,15 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
             _ball = ball;
         }
 
-        private void Throw()
+        public void Throw(Vector3 launchVelocity)
         {
-            _ball.Fly(_launchVelocity);
+            _ball.Fly(launchVelocity);
             BallThrown?.Invoke();
         }
+
+        private void ThrowWithInputVelocity() =>
+            Throw(_inputLaunchVelocity);
+
 
         private void StartAim()
         {
@@ -57,29 +61,30 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
 
         private void StopPointerUpTracking()
         {
-            if (_aimRoutine !=null)
+            if (_aimRoutine != null)
                 StopCoroutine(_aimRoutine);
         }
 
         private IEnumerator Aim()
         {
-            _inputService.PointerUp += Throw;
-            
+            _inputService.PointerUp += ThrowWithInputVelocity;
+
             while (_inputService.PointerHeldDown)
             {
-                Vector3 normalizedPointerMovement =  _inputService.PointerMovement.normalized;
-                
-                _launchVelocity.x += normalizedPointerMovement.x*Time.deltaTime*_launchVelocityXSense*CameraPositionMultiplier;
-                _launchVelocity.y += normalizedPointerMovement.y*Time.deltaTime*_launchVelocityYSense;
+                Vector3 normalizedPointerMovement = _inputService.PointerMovement.normalized;
 
-                _launchVelocity = Vector3.ProjectOnPlane(_launchVelocity, _ballPosition.right);
+                _inputLaunchVelocity.x += normalizedPointerMovement.x * Time.deltaTime * _launchVelocityXSense *
+                                          CameraPositionMultiplier;
+                _inputLaunchVelocity.y += normalizedPointerMovement.y * Time.deltaTime * _launchVelocityYSense;
 
-                _trajectoryDrawer.Draw(_ballPosition.position, _launchVelocity);
-                
+                _inputLaunchVelocity = Vector3.ProjectOnPlane(_inputLaunchVelocity, _ballPosition.right);
+
+                _trajectoryDrawer.Draw(_ballPosition.position, _inputLaunchVelocity);
+
                 yield return null;
             }
-            
-            _inputService.PointerUp -= Throw;
+
+            _inputService.PointerUp -= ThrowWithInputVelocity;
         }
     }
 }

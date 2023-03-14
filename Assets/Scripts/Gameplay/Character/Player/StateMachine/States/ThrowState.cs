@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Gameplay.Character.Player.StateMachine.States
 {
-    public class ThrowState : IParameterState<Vector3>
+    public class ThrowState : IParameterlessState
     {
         private readonly PlayerFacade _player;
 
@@ -13,10 +13,10 @@ namespace Gameplay.Character.Player.StateMachine.States
             _player = player;
         }
 
-        public void Enter(Vector3 ringPosition)
+        public void Enter()
         {
             _player.EnableFightForBallTriggerZone();
-            _player.RotateTo(ringPosition, StartThrow);
+            _player.RotateToRing( StartThrow);
         }
 
         private void StartThrow()

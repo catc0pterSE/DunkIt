@@ -25,6 +25,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.Distance
         public float DistanceToAlly => Vector3.Distance(transform.position, _allyTransform.position);
 
         public float MaxPassDistance => _maxPassDistance;
+        public float MaxDunkDistance => _maxDunkDistance;
 
         public void Initialize(Vector3 enemyRingPosition, Transform allyTransform)
         {

@@ -12,6 +12,7 @@ using Infrastructure.Input.InputService;
 using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
 using Scene;
+using Scene.Ring;
 using UI;
 using UI.HUD;
 using UnityEngine;
@@ -29,6 +30,7 @@ namespace Gameplay.StateMachine.States.MinigameStates
         private readonly ThrowMinigame _throwMinigame;
 
         private PlayerFacade _throwingPlayer;
+        private Ring _ring;
 
         public ThrowState(
             IGameplayHUD gameplayHUD,
@@ -54,7 +56,7 @@ namespace Gameplay.StateMachine.States.MinigameStates
         public void Enter(PlayerFacade player)
         {
             SetThrowingPlayer(player);
-            //SetupCamera();
+            _ring = _throwingPlayer.OppositeRing;
             base.Enter();
         }
 
@@ -68,7 +70,6 @@ namespace Gameplay.StateMachine.States.MinigameStates
             _throwMinigame.Initialize
             (
                 _throwingPlayer,
-                _sceneConfig,
                 _ball
             );
         }
@@ -86,7 +87,7 @@ namespace Gameplay.StateMachine.States.MinigameStates
         }
 
         protected override void SetCharactersStates() =>
-            _throwingPlayer.EnterThrowState(_sceneConfig.EnemyRing.transform.position);
+            _throwingPlayer.EnterThrowState();
 
         private void SetDropBall()
         {

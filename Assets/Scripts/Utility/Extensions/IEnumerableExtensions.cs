@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Gameplay.Character.Player.MonoBehaviour;
 using UnityEngine;
 using Random = UnityEngine.Random;
 

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3567767349144517149}
   - component: {fileID: 9116447531277526744}
   - component: {fileID: -7506919795947792106}
+  - component: {fileID: -1168070809799237236}
   - component: {fileID: 5054484669908984701}
   - component: {fileID: 5437166744856396153}
   - component: {fileID: 4538433228081721433}
@@ -21,8 +22,9 @@ GameObject:
   - component: {fileID: -2012806606389975634}
   - component: {fileID: 4617063359223777939}
   - component: {fileID: 1864448214675077806}
-  - component: {fileID: 7822746910048078928}
   - component: {fileID: -2187974916535839628}
+  - component: {fileID: 7822746910048078928}
+  - component: {fileID: 7100715558482148176}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -111,6 +113,20 @@ MonoBehaviour:
   _mover: {fileID: 3567767349144517149}
   _host: {fileID: 5054484669908984701}
   _targetTracker: {fileID: -8693731189481653844}
+--- !u!114 &-1168070809799237236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919622327166402665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a0d1b71e3e34e31b1b6ffba71ad92b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _targetTracker: {fileID: -8693731189481653844}
+  _host: {fileID: 5054484669908984701}
 --- !u!114 &5054484669908984701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,9 +142,10 @@ MonoBehaviour:
   _ballPosition: {fileID: 4042918883656718937}
   _inputControlledDefenceBrain: {fileID: 9116447531277526744}
   _inputControlledAttackBrain: {fileID: -7506919795947792106}
+  _aiControlledEventLauncher: {fileID: -1168070809799237236}
   _playerMover: {fileID: 3567767349144517149}
   _animator: {fileID: 5437166744856396153}
-  _inputBallThrower: {fileID: 1864448214675077806}
+  _ballThrower: {fileID: 1864448214675077806}
   _targetTracker: {fileID: -8693731189481653844}
   _passer: {fileID: -2012806606389975634}
   _catcher: {fileID: 1497494343019081299}
@@ -137,7 +154,6 @@ MonoBehaviour:
   _defenceBehaviourTree: {fileID: 0}
   _attackWithBallBehaviourTree: {fileID: 0}
   _attackWithoutBallBehaviourTree: {fileID: 7822746910048078928}
-  _behaviorTreeBlackboard: {fileID: 0}
 --- !u!95 &5437166744856396153
 Animator:
   serializedVersion: 4
@@ -310,6 +326,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ballPosition: {fileID: 4042918883656718937}
+  _ballThrower: {fileID: 0}
   _flightTimeCoefficient: 0.5
 --- !u!114 &4617063359223777939
 MonoBehaviour:
@@ -345,35 +362,6 @@ MonoBehaviour:
   _trajectoryDrawer: {fileID: 4538433228081721433}
   _launchVelocityXSense: 60
   _launchVelocityYSense: 60
---- !u!114 &7822746910048078928
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1919622327166402665}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aad115aca74ce3c4891b3f6de0b4aae8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _serializedExposedParameters: []
-  _boundGraphSerialization: 
-  _boundGraphObjectReferences: []
-  _boundGraphSource:
-    _version: 0
-    _category: 
-    _comments: 
-    _translation: {x: 0, y: 0}
-    _zoomFactor: 1
-  _firstActivation: 0
-  _enableAction: 0
-  _disableAction: 0
-  _lockBoundGraphPrefabOverrides: 1
-  _preInitializeSubGraphs: 0
-  _updateMode: 0
-  _graph: {fileID: 11400000, guid: efb474594d736b64fbacf739bf50147d, type: 2}
-  _blackboard: {fileID: -2187974916535839628}
 --- !u!114 &-2187974916535839628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -419,6 +407,64 @@ MonoBehaviour:
     _references:
     - {fileID: 0}
     - {fileID: 8078427120944833169}
+--- !u!114 &7822746910048078928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919622327166402665}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aad115aca74ce3c4891b3f6de0b4aae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _serializedExposedParameters: []
+  _boundGraphSerialization: 
+  _boundGraphObjectReferences: []
+  _boundGraphSource:
+    _version: 0
+    _category: 
+    _comments: 
+    _translation: {x: 0, y: 0}
+    _zoomFactor: 1
+  _firstActivation: 0
+  _enableAction: 0
+  _disableAction: 0
+  _lockBoundGraphPrefabOverrides: 1
+  _preInitializeSubGraphs: 0
+  _updateMode: 0
+  _graph: {fileID: 11400000, guid: efb474594d736b64fbacf739bf50147d, type: 2}
+  _blackboard: {fileID: -2187974916535839628}
+--- !u!114 &7100715558482148176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919622327166402665}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aad115aca74ce3c4891b3f6de0b4aae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _serializedExposedParameters: []
+  _boundGraphSerialization: 
+  _boundGraphObjectReferences: []
+  _boundGraphSource:
+    _version: 0
+    _category: 
+    _comments: 
+    _translation: {x: 0, y: 0}
+    _zoomFactor: 1
+  _firstActivation: 0
+  _enableAction: 0
+  _disableAction: 0
+  _lockBoundGraphPrefabOverrides: 1
+  _preInitializeSubGraphs: 0
+  _updateMode: 0
+  _graph: {fileID: 11400000, guid: a14c5726ebb7bf24ba59b0f201a2d01c, type: 2}
+  _blackboard: {fileID: -2187974916535839628}
 --- !u!1 &4042918882263731115
 GameObject:
   m_ObjectHideFlags: 0

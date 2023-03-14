@@ -1,11 +1,10 @@
-﻿using System.Numerics;
-using Gameplay.Character.Player.MonoBehaviour;
+﻿using Gameplay.Character.Player.MonoBehaviour;
 using NodeCanvas.Framework;
 using UnityEngine;
 using Utility.Constants;
 using Vector3 = UnityEngine.Vector3;
 
-namespace NC_Custom_Tasks.Conditions.PlayerConditions
+namespace NC_Custom_Tasks.AllyBot.Conditions
 {
     public class AllyIsOnOptimalPassRange : ConditionTask
     {

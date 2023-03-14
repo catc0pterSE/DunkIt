@@ -45,7 +45,7 @@ namespace Gameplay.StateMachine.States.Gameplay
 
         private void SetUpDunkCamera()
         {
-            _dunkVirtualCamera = _sceneConfig.EnemyRing.DunkVirtualCamera;
+            _dunkVirtualCamera = _sceneConfig.LeftRing.DunkVirtualCamera;
             _dunkVirtualCamera.Prioritize();
             _dunkVirtualCamera.LookAt = _ball.transform;
         }
@@ -57,10 +57,10 @@ namespace Gameplay.StateMachine.States.Gameplay
             _jumpingPlayer.DunkPointReached -= OnDunkPointReached;
 
         private void SubscribeOnGoalScored() =>
-            _sceneConfig.EnemyRing.Goal += MoveToCelebrateCutscene;
+            _sceneConfig.LeftRing.Goal += MoveToCelebrateCutscene;
 
         private void UnsubscribeFromGoalScored() =>
-            _sceneConfig.EnemyRing.Goal += MoveToCelebrateCutscene;
+            _sceneConfig.LeftRing.Goal += MoveToCelebrateCutscene;
 
         private void MoveToCelebrateCutscene()
         {
@@ -77,7 +77,7 @@ namespace Gameplay.StateMachine.States.Gameplay
             PlayerFacade otherPlayer = _playerTeam.FindFirstOrNull(player => player != _jumpingPlayer);
             otherPlayer.EnterIdleState();
             _enemyTeam.Map(enemy => enemy.EnterIdleState());
-            _jumpingPlayer.EnterDunkState(_sceneConfig.EnemyRing);
+            _jumpingPlayer.EnterDunkState(_sceneConfig.LeftRing);
         }
     }
 }
