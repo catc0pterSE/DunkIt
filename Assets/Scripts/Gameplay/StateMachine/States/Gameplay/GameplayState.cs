@@ -1,10 +1,11 @@
-﻿using Gameplay.Character;
+﻿using System.Linq;
+using Gameplay.Character;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.Transitions;
 using Infrastructure.CoroutineRunner;
-using Infrastructure.Input.InputService;
 using Modules.StateMachine;
 using Scene;
+using Scene.Ring;
 using UI;
 using UI.HUD;
 using UI.HUD.StateMachine.States;
@@ -13,13 +14,11 @@ using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.Gameplay
 {
-    using Ball.MonoBehavior;
-
     public class GameplayState : StateWithTransitions, IParameterlessState
     {
         private readonly PlayerFacade[] _playerTeam;
         private readonly PlayerFacade[] _enemyTeam;
-        private readonly Ball _ball;
+        private readonly Ball.MonoBehavior.Ball _ball;
         private readonly IGameplayHUD _gameplayHud;
 
         private PlayerFacade _controlledPlayer;
@@ -30,7 +29,7 @@ namespace Gameplay.StateMachine.States.Gameplay
         (
             PlayerFacade[] playerTeam,
             PlayerFacade[] enemyTeam,
-            Ball ball,
+            Ball.MonoBehavior.Ball ball,
             SceneConfig sceneConfig,
             IGameplayHUD gameplayHud,
             GameplayLoopStateMachine gameplayLoopStateMachine,
@@ -38,19 +37,22 @@ namespace Gameplay.StateMachine.States.Gameplay
             ICoroutineRunner coroutineRunner
         )
         {
+            _playerTeam = playerTeam;
+            _enemyTeam = enemyTeam;
+            _ball = ball;
+            _gameplayHud = gameplayHud;
+            Ring enemyRing = _playerTeam.First().OppositeRing;
+
             Transitions = new ITransition[]
             {
                 new GameplayStateToDunkStateTransition(gameplayLoopStateMachine, playerTeam),
                 new GameplayStateToThrowStateTransition(playerTeam, gameplayLoopStateMachine),
                 new AnyToFightForBallTransition(ball, gameplayLoopStateMachine, coroutineRunner, true),
-                new GameplayStateToUpsetCutsceneStateTransition(playerTeam, enemyTeam, ball, sceneConfig.LeftRing,
-                    loadingCurtain, gameplayLoopStateMachine, coroutineRunner, sceneConfig),
-                new GameplayStateToPassTransition(playerTeam, enemyTeam, gameplayLoopStateMachine)
+                new GameplayStateToUpsetCutsceneStateTransition(enemyRing, gameplayLoopStateMachine),
+                new GameplayStateToPassTransition(playerTeam, enemyTeam, gameplayLoopStateMachine),
+                new AnyToDropBallTransition(ball, gameplayLoopStateMachine, loadingCurtain, playerTeam, enemyTeam, sceneConfig)
             };
-            _playerTeam = playerTeam;
-            _enemyTeam = enemyTeam;
-            _ball = ball;
-            _gameplayHud = gameplayHud;
+           
         }
 
         public override void Enter()

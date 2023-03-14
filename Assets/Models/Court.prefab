@@ -490,7 +490,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8593964234089917570}
   m_Layer: 6
-  m_Name: PlayerBallDropPoint
+  m_Name: LeftBallDropPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -535,7 +535,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6762146132536125521}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.459, y: 0.24, z: -1.436}
+  m_LocalPosition: {x: -2.334, y: 0.24, z: -1.328}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -566,7 +566,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7110542399603318471}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.529, y: 0.24, z: 1.467}
+  m_LocalPosition: {x: 2.358, y: 0.24, z: 1.251}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -830,8 +830,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rightRing: {fileID: 4034084039981177713}
   _leftRing: {fileID: 5498443330463483895}
-  _enemyDropBallPoint: {fileID: 7594750932976958550}
-  _playerDropBallPoint: {fileID: 8593964234089917570}
+  _rightDropBallPoint: {fileID: 7594750932976958550}
+  _leftDropBallPoint: {fileID: 8593964234089917570}
   _courtCenter: {fileID: 224250070610328770}
   _leftDownCorner: {fileID: 355564831175665652}
   _rightUpCorner: {fileID: 6765883411568886802}
@@ -977,7 +977,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7594750932976958550}
   m_Layer: 0
-  m_Name: EnemyBallDropPoint
+  m_Name: RightBallDropPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

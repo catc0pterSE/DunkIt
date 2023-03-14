@@ -2,7 +2,6 @@
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.States.CutsceneStates;
 using Modules.StateMachine;
-using Scene;
 using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.Gameplay
@@ -12,20 +11,18 @@ namespace Gameplay.StateMachine.States.Gameplay
         private readonly PlayerFacade[] _playerTeam;
         private readonly PlayerFacade[] _enemyTeam;
         private readonly Ball.MonoBehavior.Ball _ball;
-        private readonly SceneConfig _sceneConfig;
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
 
         private CinemachineVirtualCamera _dunkVirtualCamera;
 
         private PlayerFacade _jumpingPlayer;
 
-        public DunkState(PlayerFacade[] playerTeam, PlayerFacade[] enemyTeam, Ball.MonoBehavior.Ball ball, SceneConfig sceneConfig,
+        public DunkState(PlayerFacade[] playerTeam, PlayerFacade[] enemyTeam, Ball.MonoBehavior.Ball ball,
             GameplayLoopStateMachine gameplayLoopStateMachine)
         {
             _playerTeam = playerTeam;
             _enemyTeam = enemyTeam;
             _ball = ball;
-            _sceneConfig = sceneConfig;
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
         }
 
@@ -45,7 +42,7 @@ namespace Gameplay.StateMachine.States.Gameplay
 
         private void SetUpDunkCamera()
         {
-            _dunkVirtualCamera = _sceneConfig.LeftRing.DunkVirtualCamera;
+            _dunkVirtualCamera = _jumpingPlayer.OppositeRing.DunkVirtualCamera;
             _dunkVirtualCamera.Prioritize();
             _dunkVirtualCamera.LookAt = _ball.transform;
         }
@@ -57,10 +54,10 @@ namespace Gameplay.StateMachine.States.Gameplay
             _jumpingPlayer.DunkPointReached -= OnDunkPointReached;
 
         private void SubscribeOnGoalScored() =>
-            _sceneConfig.LeftRing.Goal += MoveToCelebrateCutscene;
+            _jumpingPlayer.OppositeRing.Goal += MoveToCelebrateCutscene;
 
         private void UnsubscribeFromGoalScored() =>
-            _sceneConfig.LeftRing.Goal += MoveToCelebrateCutscene;
+            _jumpingPlayer.OppositeRing.Goal += MoveToCelebrateCutscene;
 
         private void MoveToCelebrateCutscene()
         {
@@ -77,7 +74,7 @@ namespace Gameplay.StateMachine.States.Gameplay
             PlayerFacade otherPlayer = _playerTeam.FindFirstOrNull(player => player != _jumpingPlayer);
             otherPlayer.EnterIdleState();
             _enemyTeam.Map(enemy => enemy.EnterIdleState());
-            _jumpingPlayer.EnterDunkState(_sceneConfig.LeftRing);
+            _jumpingPlayer.EnterDunkState();
         }
     }
 }

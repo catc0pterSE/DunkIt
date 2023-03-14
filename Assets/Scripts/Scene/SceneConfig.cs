@@ -6,8 +6,8 @@ namespace Scene
     {
         [SerializeField] private Ring.Ring _rightRing;
         [SerializeField] private Ring.Ring _leftRing;
-        [SerializeField] private Transform _enemyDropBallPoint;
-        [SerializeField] private Transform _playerDropBallPoint;
+        [SerializeField] private Transform _rightDropBallPoint;
+        [SerializeField] private Transform _leftDropBallPoint;
         [SerializeField] private Transform _courtCenter;
         [SerializeField] private Transform _leftDownCorner;
         [SerializeField] private Transform _rightUpCorner;
@@ -22,9 +22,9 @@ namespace Scene
         );
 
         public Ring.Ring RightRing => _rightRing;
-        public Ring.Ring LeftRing => _leftRing;
-        public Transform EnemyDropBallPoint => _enemyDropBallPoint;
-        public Transform PlayerDropBallPoint => _playerDropBallPoint;
+        public Ring.Ring LeftRing => _leftRing; 
+        public Transform RightDropBallPoint => _rightDropBallPoint;
+        public Transform LeftDropBallPoint => _leftDropBallPoint;
 
         private Vector3 LeftDownCorner => _leftDownCorner.position;
         private Vector3 RightUpCorner => _rightUpCorner.position;

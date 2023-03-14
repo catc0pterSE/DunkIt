@@ -4,7 +4,6 @@ using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.States.MinigameStates;
 using Infrastructure.Factory;
 using Infrastructure.Input.InputService;
-using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
 using UI.HUD;
 

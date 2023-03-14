@@ -45,10 +45,11 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public void Initialize(bool isPlayable, PlayerFacade ally, Ball.MonoBehavior.Ball ball,
             PlayerFacade[] oppositeTeam,
             UnityEngine.Camera gameplayCamera, CinemachineVirtualCamera virtualCamera, SceneConfig sceneConfig,
-            IInputService inputService)
+            bool leftSide, IInputService inputService)
         {
+            LeftSide = leftSide;
             IsPlayable = isPlayable;
-            _oppositeRing = isPlayable ? sceneConfig.RightRing : sceneConfig.LeftRing;
+            _oppositeRing = LeftSide ? sceneConfig.RightRing : sceneConfig.LeftRing;
             _dunker.Initialize(ball);
             _ally = ally;
             _inputControlledDefenceBrain.Initialize(gameplayCamera.transform, inputService);
@@ -74,10 +75,9 @@ namespace Gameplay.Character.Player.MonoBehaviour
         private Type CurrentState => StateMachine.CurrentState;
         public Animator Animator => _animator;
         public bool IsPlayable { get; private set; }
-
+        public bool LeftSide { get; private set; }
         public bool IsControlled => CurrentState == typeof(InputControlledAttackState) ||
                                     CurrentState == typeof(InputControlledDefenceState);
-
         public Ring OppositeRing => _oppositeRing;
         public float MaxPassDistance => _targetTracker.MaxPassDistance;
         public bool IsInPassDistance => _targetTracker.IsInPassDistance;
@@ -207,8 +207,8 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public void EnterCatchState(PlayerFacade passingPlayer) =>
             StateMachine.Enter<CatchState, PlayerFacade>(passingPlayer);
 
-        public void EnterDunkState(Ring ring) =>
-            StateMachine.Enter<DunkState, Ring>(ring);
+        public void EnterDunkState() =>
+            StateMachine.Enter<DunkState>();
 
         public void EnterFightForBallState(PlayerFacade opponent) =>
             StateMachine.Enter<FightForBallState, PlayerFacade>(opponent);
@@ -309,7 +309,7 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public void Pass() =>
             _passer.Pass();
 
-        public void Dunk(Ring ring) => //TODO: why parameter
-            _dunker.Dunk(ring);
+        public void Dunk() => //TODO: why parameter
+            _dunker.Dunk(OppositeRing);
     }
 }

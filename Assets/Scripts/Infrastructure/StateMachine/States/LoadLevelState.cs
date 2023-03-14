@@ -11,14 +11,12 @@ using Infrastructure.Input;
 using Infrastructure.Input.InputService;
 using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
-using Scene.Ring;
 using UI;
 using UI.HUD;
 using UI.HUD.Mobile;
 using UnityEngine;
 using Utility.Constants;
 using Utility.Extensions;
-using z_Test;
 using SceneConfig = Scene.SceneConfig;
 
 namespace Infrastructure.StateMachine.States
@@ -69,8 +67,8 @@ namespace Infrastructure.StateMachine.States
             PlayerFacade[] playerTeam = SpawnTeam();
             PlayerFacade[] enemyTeam = SpawnTeam();
 
-            InitializeTeam(playerTeam, enemyTeam, ball, sceneConfig, true, camera.Camera);
-            InitializeTeam(enemyTeam, playerTeam, ball, sceneConfig, false, camera.Camera);
+            InitializeTeam(playerTeam, enemyTeam, ball, sceneConfig, true, true, camera.Camera);               //TODO: side selection
+            InitializeTeam(enemyTeam, playerTeam, ball, sceneConfig, false, false, camera.Camera);
 
             IGameplayHUD gameplayHUDView = SpawnHUD().Initialize(playerTeam.Union(enemyTeam).ToArray(), camera.Camera);
 
@@ -105,7 +103,7 @@ namespace Infrastructure.StateMachine.States
         }
 
         private void InitializeTeam(PlayerFacade[] team, PlayerFacade[] oppositeTeam, Ball ball,
-            SceneConfig sceneConfig, bool isPlayable, Camera camera)
+            SceneConfig sceneConfig, bool isPlayable, bool leftSide, Camera camera)
         {
             if (isPlayable == false) //TODO: TEST - delete
                 team.Map(player => player.GetComponentInChildren<MeshRenderer>().material =
@@ -115,11 +113,9 @@ namespace Infrastructure.StateMachine.States
             PlayerFacade secondaryPlayer = team[NumericConstants.SecondaryTeamMemberIndex];
 
             primaryPlayer.Initialize(isPlayable, secondaryPlayer, ball, oppositeTeam, camera, SpawnVirtualCamera(),
-                sceneConfig,
-                _inputService);
+                sceneConfig, leftSide, _inputService);
             secondaryPlayer.Initialize(isPlayable, primaryPlayer, ball, oppositeTeam, camera, SpawnVirtualCamera(),
-                sceneConfig,
-                _inputService);
+                sceneConfig, leftSide, _inputService);
         }
 
         private Referee SpawnReferee()
