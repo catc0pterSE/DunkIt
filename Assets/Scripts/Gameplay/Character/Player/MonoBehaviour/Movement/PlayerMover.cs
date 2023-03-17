@@ -27,8 +27,9 @@ namespace Gameplay.Character.Player.MonoBehaviour.Movement
 
         public void MoveLookingAt(Vector3 movementDirection, Vector3 lookAt)
         {
-            Rotate(lookAt - transform.position);
-
+            Vector3 positionProjection = new Vector3(lookAt.x, transform.position.y, lookAt.z);
+            
+            Rotate(positionProjection - transform.position);
             Move(movementDirection);
         }
 

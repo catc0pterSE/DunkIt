@@ -32,6 +32,7 @@ namespace Gameplay.Ball.MonoBehavior
 
         public void SetOwner(CharacterFacade owner)
         {
+            StopTrackingLost();
             TurnPhysicsOf();
             RemoveOwner();
             transform.Reset(false);

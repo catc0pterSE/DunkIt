@@ -29,7 +29,6 @@ namespace NC_Custom_Tasks.AttackWithBallBot.Conditions
 
                 if (oppositePlayerOnTheWay)
                 {
-                    Debug.DrawLine(PlayerPosition, oppositePlayerPosition, Color.red);
                     PlayersToAvoid.value.Add(oppositePlayer);
                 }
             }

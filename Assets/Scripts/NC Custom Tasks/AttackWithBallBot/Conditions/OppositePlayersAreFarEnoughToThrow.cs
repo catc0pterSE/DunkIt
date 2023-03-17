@@ -15,6 +15,7 @@ namespace NC_Custom_Tasks.AttackWithBallBot.Conditions
         private Vector3 PlayerPosition => PlayerTransform.value.position;
 
         protected override bool OnCheck() =>
+
             OppositePlayersTransforms.FindFirstOrNull(transform =>
                 Vector3.Distance(transform.position, PlayerPosition) < AcceptableDistance) == null;
     }

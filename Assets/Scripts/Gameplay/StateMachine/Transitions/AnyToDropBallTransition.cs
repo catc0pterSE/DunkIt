@@ -69,8 +69,8 @@ namespace Gameplay.StateMachine.Transitions
                 dropPosition = _sceneConfig.RightDropBallPoint.transform.position;
             }
 
-            _ball.SetOwner(droppingPlayer);
             droppingPlayer.transform.position = dropPosition;
+            _ball.SetOwner(droppingPlayer);
         }
 
         private void EnterGameplayState() => _gameplayLoopStateMachine.Enter<GameplayState>();

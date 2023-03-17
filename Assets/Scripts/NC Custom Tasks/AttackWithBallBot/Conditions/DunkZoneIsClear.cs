@@ -21,16 +21,16 @@ namespace NC_Custom_Tasks.AttackWithBallBot.Conditions
             Vector3 playerPosition = PlayerTransform.value.position;
             float maxDunkDistance = TargetTracker.value.MaxDunkDistance;
             Transform enemyRingTransform = EnemyRing.value.transform;
+            Vector3 enemyRingPosition = enemyRingTransform.position;
             Vector3 enemyRingForward = enemyRingTransform.forward;
-            
-            Vector3 rightExtremePoint;
 
-            if (EnemyRing.value.IsFlipped == false)
-                rightExtremePoint = -enemyRingForward * maxDunkDistance;
-            else
-                rightExtremePoint = enemyRingForward * maxDunkDistance;
 
-            Vector3 leftExtremePoint = -rightExtremePoint;
+            Vector3 offset = EnemyRing.value.IsFlipped
+                ? -enemyRingForward * maxDunkDistance
+                : enemyRingForward * maxDunkDistance;
+
+            Vector3 rightExtremePoint = enemyRingPosition + offset;
+            Vector3 leftExtremePoint = enemyRingPosition - offset;
 
             Vector3 playerToRightExtremePoint = rightExtremePoint - playerPosition;
             Vector3 playerToLeftExtremePoint = leftExtremePoint - playerPosition;
