@@ -13,7 +13,7 @@ namespace Gameplay.Character.Player.StateMachine
             {
                 [typeof(InputControlledAttackState)] = new InputControlledAttackState(player),
                 [typeof(InputControlledDefenceState)] = new InputControlledDefenceState(player),
-                [typeof(AIControlledAttackWithBallState)] = new AIControlledAttackWithBallState(),
+                [typeof(AIControlledAttackWithBallState)] = new AIControlledAttackWithBallState(player),
                 [typeof(AIControlledAttackWithoutBallState)] = new AIControlledAttackWithoutBallState(player),
                 [typeof(AIControlledDefenceState)] = new AIControlledDefenceState(),
                 [typeof(ThrowState)] = new ThrowState(player),

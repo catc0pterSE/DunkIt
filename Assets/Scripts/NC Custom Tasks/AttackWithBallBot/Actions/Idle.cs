@@ -2,7 +2,7 @@
 
 namespace NC_Custom_Tasks.AttackWithBallBot.Actions
 {
-    public class SelectTargetPoint: ActionTask
+    public class Idle: ActionTask
     {
         
     }

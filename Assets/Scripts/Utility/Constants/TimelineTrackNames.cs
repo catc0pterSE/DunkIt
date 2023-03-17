@@ -3,10 +3,10 @@
     public static class TimelineTrackNames
     {
         public const string CinemachineTrackName = "CinemachineTrack";
-        public const string PrimaryPlayerAnimationTrackName = "Player1Animation";
-        public const string SecondaryPlayerAnimationTrackName = "Player2Animation";
-        public const string PrimaryEnemyAnimationTrackName = "Enemy1Animation";
-        public const string SecondaryEnemyAnimationTrackName = "Enemy2Animation";
+        public const string LeftTeamPrimaryPlayerAnimationTrackName = "LeftTeamPlayer1Animation";
+        public const string LeftTeamSecondaryPlayerAnimationTrackName = "LeftTeamPlayer2Animation";
+        public const string RightTeamPrimaryPlayerAnimationTrackName = "RightTeamPlayer1Animation";
+        public const string RightTeamSecondaryEnemyAnimationTrackName = "RightTeamPlayer2Animation";
         public const string RefereeAnimationTrackName = "RefereeAnimation";
     }
 }

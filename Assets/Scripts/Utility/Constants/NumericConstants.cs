@@ -9,5 +9,6 @@
         public const int Double = 2;
         public const float RightAngle = 90;
         public const float FlatAngle = 180;
+        public const float MaxPercents = 100;
     }
 }

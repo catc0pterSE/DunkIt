@@ -1,7 +1,16 @@
-﻿namespace NC_Custom_Tasks.AttackWithBallBot.Actions
+﻿using Gameplay.Character.Player.MonoBehaviour.Brains;
+using NodeCanvas.Framework;
+
+namespace NC_Custom_Tasks.AttackWithBallBot.Actions
 {
-    public class Pass
+    public class Pass : ActionTask
     {
-        
+        [BlackboardOnly] public BBParameter<AIControlledEventLauncher> AIControlledEventLauncher;
+
+        protected override void OnExecute()
+        {
+            AIControlledEventLauncher.value.InitiatePass();
+            EndAction(true);
+        }
     }
 }

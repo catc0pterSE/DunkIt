@@ -20,6 +20,8 @@ using Utility.Extensions;
 
 namespace Gameplay.Character.Player.MonoBehaviour
 {
+    using Ball.MonoBehavior;
+
     public class PlayerFacade : CharacterFacade
     {
         [SerializeField] private InputControlledDefenceBrain _inputControlledDefenceBrain;
@@ -42,15 +44,23 @@ namespace Gameplay.Character.Player.MonoBehaviour
         private PlayerFacade _ally;
         private Ring _oppositeRing;
 
-        public void Initialize(bool isPlayable, PlayerFacade ally, Ball.MonoBehavior.Ball ball,
+        public void Initialize
+        (
+            bool isPlayable,
+            PlayerFacade ally,
+            Ball ball,
             PlayerFacade[] oppositeTeam,
-            UnityEngine.Camera gameplayCamera, CinemachineVirtualCamera virtualCamera, SceneConfig sceneConfig,
-            bool leftSide, IInputService inputService)
+            UnityEngine.Camera gameplayCamera,
+            CinemachineVirtualCamera virtualCamera,
+            SceneConfig sceneConfig,
+            bool leftSide,
+            IInputService inputService
+        )
         {
             LeftSide = leftSide;
             IsPlayable = isPlayable;
             _oppositeRing = LeftSide ? sceneConfig.RightRing : sceneConfig.LeftRing;
-            _dunker.Initialize(ball);
+            _dunker.Initialize(ball, _oppositeRing);
             _ally = ally;
             _inputControlledDefenceBrain.Initialize(gameplayCamera.transform, inputService);
             _inputControlledAttackBrain.Initialize(gameplayCamera.transform, inputService);
@@ -69,6 +79,14 @@ namespace Gameplay.Character.Player.MonoBehaviour
                 [BehaviourTreeVariableNames.CourtDimensionsVariableName] = sceneConfig.CourtDimensions,
                 [BehaviourTreeVariableNames.OppositeTeamVariableName] = oppositeTeam
             });
+            
+            _attackWithBallBehaviourTree.AddBinds(new Dictionary<string, object>
+            {
+                [BehaviourTreeVariableNames.AllyVariableName] = _ally,
+                [BehaviourTreeVariableNames.OppositeRingVariableName] = _oppositeRing,
+                [BehaviourTreeVariableNames.CourtDimensionsVariableName] = sceneConfig.CourtDimensions,
+                [BehaviourTreeVariableNames.OppositeTeamVariableName] = oppositeTeam
+            });
         }
 
         private PlayerStateMachine StateMachine => _stateMachine ??= new PlayerStateMachine(this);
@@ -76,8 +94,10 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public Animator Animator => _animator;
         public bool IsPlayable { get; private set; }
         public bool LeftSide { get; private set; }
+
         public bool IsControlled => CurrentState == typeof(InputControlledAttackState) ||
                                     CurrentState == typeof(InputControlledDefenceState);
+
         public Ring OppositeRing => _oppositeRing;
         public float MaxPassDistance => _targetTracker.MaxPassDistance;
         public bool IsInPassDistance => _targetTracker.IsInPassDistance;
@@ -229,10 +249,16 @@ namespace Gameplay.Character.Player.MonoBehaviour
             _inputControlledAttackBrain.Disable();
 
         public void EnableAIControlledAttackWithoutBallBrain() =>
-            _attackWithoutBallBehaviourTree.enabled = true; //TODO: extension
+            _attackWithoutBallBehaviourTree.Enable();
 
         public void DisableAIControlledAttackWithoutBallBrain() =>
-            _attackWithoutBallBehaviourTree.enabled = false;
+            _attackWithoutBallBehaviourTree.Disable();
+        
+        public void EnableAIControlledAttackWithBallBrain() =>
+            _attackWithBallBehaviourTree.Enable();
+
+        public void DisableAIControlledAttackWithBallBrain() =>
+            _attackWithBallBehaviourTree.Disable();
 
         public void EnablePlayerMover() =>
             _playerMover.Enable();
@@ -309,7 +335,7 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public void Pass() =>
             _passer.Pass();
 
-        public void Dunk() => //TODO: why parameter
-            _dunker.Dunk(OppositeRing);
+        public void Dunk() =>
+            _dunker.Dunk();
     }
 }

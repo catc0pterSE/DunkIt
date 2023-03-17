@@ -1,17 +1,22 @@
-﻿using Modules.StateMachine;
+﻿using Gameplay.Character.Player.MonoBehaviour;
+using Modules.StateMachine;
 
 namespace Gameplay.Character.Player.StateMachine.States
 {
-    public class AIControlledAttackWithBallState: IParameterlessState
+    public class AIControlledAttackWithBallState : IParameterlessState
     {
-        public void Exit()
+        private readonly PlayerFacade _player;
+
+        public AIControlledAttackWithBallState(PlayerFacade player)
         {
-           
+            _player = player;
         }
 
-        public void Enter()
-        {
-           
-        }
+        public void Enter() =>
+            _player.EnableAIControlledAttackWithBallBrain();
+
+
+        public void Exit() =>
+            _player.DisableAIControlledAttackWithBallBrain();
     }
 }

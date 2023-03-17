@@ -1,4 +1,5 @@
-﻿using Gameplay.StateMachine.States.Gameplay;
+﻿using Gameplay.StateMachine.States.CutsceneStates;
+using Gameplay.StateMachine.States.Gameplay;
 using Modules.StateMachine;
 using Scene.Ring;
 
@@ -38,7 +39,7 @@ namespace Gameplay.StateMachine.Transitions
         private void OnGoalScored() => MoveToUpsetCutscene();
 
         private void MoveToUpsetCutscene() => 
-        _gameplayLoopStateMachine.Enter<GameplayState>();
+        _gameplayLoopStateMachine.Enter<UpsetCutsceneState>();
         
     }
 }

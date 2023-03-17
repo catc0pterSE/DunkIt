@@ -23,8 +23,8 @@ GameObject:
   - component: {fileID: 4617063359223777939}
   - component: {fileID: 1864448214675077806}
   - component: {fileID: -2187974916535839628}
-  - component: {fileID: 7822746910048078928}
   - component: {fileID: 7100715558482148176}
+  - component: {fileID: 7822746910048078928}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -46,6 +46,7 @@ Transform:
   m_Children:
   - {fileID: 4042918882263731118}
   - {fileID: 1679206378160196402}
+  - {fileID: 6686152275885002867}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -152,7 +153,7 @@ MonoBehaviour:
   _dunker: {fileID: 4617063359223777939}
   _fightForBallTriggerZone: {fileID: 6257887091626896469}
   _defenceBehaviourTree: {fileID: 0}
-  _attackWithBallBehaviourTree: {fileID: 0}
+  _attackWithBallBehaviourTree: {fileID: 7100715558482148176}
   _attackWithoutBallBehaviourTree: {fileID: 7822746910048078928}
 --- !u!95 &5437166744856396153
 Animator:
@@ -379,6 +380,11 @@ MonoBehaviour:
     Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostMover":{"_value":2,"_name":"HostMover","_id":"790d4d99-8c81-472f-bf8e-529c7914a64c","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Movement.PlayerMover,
     Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostTargetTracker":{"_value":3,"_name":"HostTargetTracker","_id":"3bf9efab-1ce7-47a4-8aef-708d4496cc71","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Distance.TargetTracker,
     Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostTransform":{"_value":4,"_name":"HostTransform","_id":"19379dd1-c14d-4603-b9a5-e58da9a72c99","$type":"NodeCanvas.Framework.Variable`1[[UnityEngine.Transform,
+    UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostPasser":{"_value":5,"_name":"HostPasser","_id":"e2a56f76-e210-4ddd-9b28-9c7613fa03b0","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.BallHandle.Pass.Passer,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostBallThrower":{"_value":6,"_name":"HostBallThrower","_id":"9141eb0d-330f-486a-8b41-99dc23c84bcf","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw.BallThrower,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostAIControlledEventLauncher":{"_value":7,"_name":"HostAIControlledEventLauncher","_id":"63fbd99e-58e1-4f25-a71f-adce4802e84d","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Brains.AIControlledEventLauncher,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostDunker":{"_value":8,"_name":"HostDunker","_id":"2cbdb2d1-d81e-4b99-8c73-f3716c7d1d07","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.BallHandle.Dunk.Dunker,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostBallHolder":{"_value":9,"_name":"HostBallHolder","_id":"62da6bac-6102-4eb6-9150-e626ef7f4eeb","$type":"NodeCanvas.Framework.Variable`1[[UnityEngine.Transform,
     UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}}}'
   _objectReferences:
   - {fileID: 0}
@@ -386,6 +392,11 @@ MonoBehaviour:
   - {fileID: 3567767349144517149}
   - {fileID: -8693731189481653844}
   - {fileID: 8078427120944833169}
+  - {fileID: -2012806606389975634}
+  - {fileID: 1864448214675077806}
+  - {fileID: -1168070809799237236}
+  - {fileID: 4617063359223777939}
+  - {fileID: 4042918883656718937}
   _serializedVariables:
   - _json: '{"_value":1,"_name":"HostFacade","_id":"53299809-bc5f-4e54-bd0c-f1b682da9846","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.PlayerFacade,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
@@ -407,35 +418,31 @@ MonoBehaviour:
     _references:
     - {fileID: 0}
     - {fileID: 8078427120944833169}
---- !u!114 &7822746910048078928
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1919622327166402665}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aad115aca74ce3c4891b3f6de0b4aae8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _serializedExposedParameters: []
-  _boundGraphSerialization: 
-  _boundGraphObjectReferences: []
-  _boundGraphSource:
-    _version: 0
-    _category: 
-    _comments: 
-    _translation: {x: 0, y: 0}
-    _zoomFactor: 1
-  _firstActivation: 0
-  _enableAction: 0
-  _disableAction: 0
-  _lockBoundGraphPrefabOverrides: 1
-  _preInitializeSubGraphs: 0
-  _updateMode: 0
-  _graph: {fileID: 11400000, guid: efb474594d736b64fbacf739bf50147d, type: 2}
-  _blackboard: {fileID: -2187974916535839628}
+  - _json: '{"_value":1,"_name":"HostPasser","_id":"e2a56f76-e210-4ddd-9b28-9c7613fa03b0","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.BallHandle.Pass.Passer,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
+    _references:
+    - {fileID: 0}
+    - {fileID: -2012806606389975634}
+  - _json: '{"_value":1,"_name":"HostBallThrower","_id":"9141eb0d-330f-486a-8b41-99dc23c84bcf","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw.BallThrower,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
+    _references:
+    - {fileID: 0}
+    - {fileID: 1864448214675077806}
+  - _json: '{"_value":1,"_name":"HostAIControlledEventLauncher","_id":"63fbd99e-58e1-4f25-a71f-adce4802e84d","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Brains.AIControlledEventLauncher,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
+    _references:
+    - {fileID: 0}
+    - {fileID: -1168070809799237236}
+  - _json: '{"_value":1,"_name":"HostDunker","_id":"2cbdb2d1-d81e-4b99-8c73-f3716c7d1d07","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.BallHandle.Dunk.Dunker,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
+    _references:
+    - {fileID: 0}
+    - {fileID: 4617063359223777939}
+  - _json: '{"_value":1,"_name":"HostBallHolder","_id":"62da6bac-6102-4eb6-9150-e626ef7f4eeb","$type":"NodeCanvas.Framework.Variable`1[[UnityEngine.Transform,
+      UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
+    _references:
+    - {fileID: 0}
+    - {fileID: 4042918883656718937}
 --- !u!114 &7100715558482148176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -464,6 +471,35 @@ MonoBehaviour:
   _preInitializeSubGraphs: 0
   _updateMode: 0
   _graph: {fileID: 11400000, guid: a14c5726ebb7bf24ba59b0f201a2d01c, type: 2}
+  _blackboard: {fileID: -2187974916535839628}
+--- !u!114 &7822746910048078928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919622327166402665}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aad115aca74ce3c4891b3f6de0b4aae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _serializedExposedParameters: []
+  _boundGraphSerialization: 
+  _boundGraphObjectReferences: []
+  _boundGraphSource:
+    _version: 0
+    _category: 
+    _comments: 
+    _translation: {x: 0, y: 0}
+    _zoomFactor: 1
+  _firstActivation: 0
+  _enableAction: 0
+  _disableAction: 0
+  _lockBoundGraphPrefabOverrides: 1
+  _preInitializeSubGraphs: 0
+  _updateMode: 0
+  _graph: {fileID: 11400000, guid: efb474594d736b64fbacf739bf50147d, type: 2}
   _blackboard: {fileID: -2187974916535839628}
 --- !u!1 &4042918882263731115
 GameObject:
@@ -689,8 +725,7 @@ Transform:
   m_LocalPosition: {x: -0, y: 0.62, z: 1.457}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 6686152275885002867}
+  m_Children: []
   m_Father: {fileID: 4042918882263731118}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -719,13 +754,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7789709571627010022}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.051, y: 0, z: -0.982}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.05099964, y: 0.62, z: 0.4749999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4042918883656718937}
-  m_RootOrder: 0
+  m_Father: {fileID: 8078427120944833169}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &670492884037608625
 CapsuleCollider:

@@ -42,13 +42,14 @@ namespace Gameplay.StateMachine.States.Gameplay
             _ball = ball;
             _gameplayHud = gameplayHud;
             Ring enemyRing = _playerTeam.First().OppositeRing;
+            Ring playerRing = _enemyTeam.First().OppositeRing;
 
             Transitions = new ITransition[]
             {
                 new GameplayStateToDunkStateTransition(gameplayLoopStateMachine, playerTeam),
                 new GameplayStateToThrowStateTransition(playerTeam, gameplayLoopStateMachine),
                 new AnyToFightForBallTransition(ball, gameplayLoopStateMachine, coroutineRunner, true),
-                new GameplayStateToUpsetCutsceneStateTransition(enemyRing, gameplayLoopStateMachine),
+                new GameplayStateToUpsetCutsceneStateTransition(playerRing, gameplayLoopStateMachine),
                 new GameplayStateToPassTransition(playerTeam, enemyTeam, gameplayLoopStateMachine),
                 new AnyToDropBallTransition(ball, gameplayLoopStateMachine, loadingCurtain, playerTeam, enemyTeam, sceneConfig)
             };

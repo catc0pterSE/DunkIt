@@ -42,7 +42,8 @@ namespace Gameplay.Ball.MonoBehavior
 
         public void Fly(Vector3 velocity)
         {
-            StartTrackingLost(_owner);
+            CharacterFacade lasrOwner = _owner;
+            StartTrackingLost(lasrOwner);
             RemoveOwner();
             TurnPhysicsOn();
             _rigidBody.AddForce(velocity, ForceMode.VelocityChange);

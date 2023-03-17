@@ -26,23 +26,25 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Dunk
         private AnimationCurve _zPositionCurve;
         private Ball _ball;
         private Coroutine _dunking;
+        private Ring _oppositeRing;
 
         public event Action DunkPointReached;
 
-        public void Initialize(Ball ball)
+        public void Initialize(Ball ball, Ring oppositeRing)
         {
+            _oppositeRing = oppositeRing;
             _ball = ball;
         }
 
-        public void Dunk(Ring ring)
+        public void Dunk()
         {
             if (_dunking != null)
                 StopCoroutine(_dunking);
 
             Vector3 startPosition = transform.position;
-            Vector3 targetPosition = ring.DunkPoints.GetTransformPositions().FindClosest(startPosition);
+            Vector3 targetPosition = _oppositeRing.DunkPoints.GetTransformPositions().FindClosest(startPosition);
             SetUpCurves(startPosition, targetPosition);
-            _dunking = StartCoroutine(DunkRoutine(ring.BallDunkPoint.position));
+            _dunking = StartCoroutine(DunkRoutine(_oppositeRing.BallDunkPoint.position));
         }
 
         private void SetUpCurves(Vector3 startPosition, Vector3 targetPosition)

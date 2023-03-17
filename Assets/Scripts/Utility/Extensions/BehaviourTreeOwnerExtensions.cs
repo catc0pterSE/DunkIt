@@ -16,5 +16,15 @@ namespace Utility.Extensions
                 blackboard.GetVariable(variable.Key).value = variable.Value;
             }
         }
+        
+        public static void Enable(this BehaviourTreeOwner behaviorTreeOwner)
+        {
+            behaviorTreeOwner.enabled = true;
+        }
+        
+        public static void Disable(this BehaviourTreeOwner behaviorTreeOwner)
+        {
+            behaviorTreeOwner.enabled = false;
+        }
     }
 }

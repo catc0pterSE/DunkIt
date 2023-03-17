@@ -44,7 +44,7 @@ namespace Gameplay.StateMachine
                 [typeof(ThrowState)] = new ThrowState(gameplayHUD, sceneConfig, this, enemyTeam, enemyTeam, ball, loadingCurtain, coroutineRunner, gameObjectFactory),
                 [typeof(FightForBallState)] = new FightForBallState(playerTeam, enemyTeam, ball, gameplayHUD, this, gameObjectFactory),
                 [typeof(CelebrateCutsceneState)] = new CelebrateCutsceneState(),
-                [typeof(UpsetCutsceneState)] = new UpsetCutsceneState()
+                [typeof(UpsetCutsceneState)] = new UpsetCutsceneState(this)
             };
         }
 

@@ -8,7 +8,7 @@ using Utility.Extensions;
 
 namespace NC_Custom_Tasks.AllyBot.Actions
 {
-    public class MoveToRing : ActionTask
+    public class MoveAlongAlly : ActionTask
     {
         [BlackboardOnly] public BBParameter<PlayerMover> Mover;
         [BlackboardOnly] public BBParameter<Ring> EnemyRing;
@@ -79,8 +79,9 @@ namespace NC_Custom_Tasks.AllyBot.Actions
 
                 if (needToCorrectDirection == false)
                     continue;
+                
                 bool enemyIsToTheLeft =
-                    Vector3.Dot(HostTransform.value.right, enemyPosition - playerPosition) < 0;
+                    Vector3.Cross(direction, enemyPosition - playerPosition).y < 0;
 
                 direction = enemyIsToTheLeft
                     ? Quaternion.Euler(0, DirectionCorrection, 0) * direction
