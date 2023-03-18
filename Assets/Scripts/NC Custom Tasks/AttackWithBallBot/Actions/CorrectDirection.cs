@@ -25,15 +25,14 @@ namespace NC_Custom_Tasks.AttackWithBallBot.Actions
                 Vector3 playerPosition = PlayerTransform.value.position;
 
                 Vector3 toOppositePlayer = (oppositePlayerPosition - playerPosition);
-                Vector3 right = Quaternion.Euler(0,NumericConstants.RightAngle,0)*toOppositePlayer.normalized;
+                Vector3 right = Quaternion.Euler(0,NumericConstants.RightAngle,0)*Direction.value;
+                Debug.DrawRay(playerPosition, right*10, Color.red);
                 
                 float coefficient = Vector3.Dot(right*ThreatDistance.value, (oppositePlayerPosition - playerPosition))/ThreatDistance.value;
 
-                Debug.Log(coefficient);
-
-                float directionCorrection = coefficient.MapClamped(-1, 1, CorrectionForce.value, -CorrectionForce.value)*(1-toOppositePlayer.magnitude/ThreatDistance.value);
+                float directionCorrection = coefficient.MapClamped(-1, 1, -CorrectionForce.value, CorrectionForce.value)*(1-toOppositePlayer.magnitude/ThreatDistance.value);
                 
-                Direction.value = Quaternion.Euler(0, directionCorrection, 0) * currentDirection;
+                Direction.value = Quaternion.Euler(0, -directionCorrection, 0) * currentDirection;
             }
             
             EndAction(true);
