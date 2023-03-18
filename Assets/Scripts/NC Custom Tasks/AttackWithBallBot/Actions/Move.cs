@@ -11,6 +11,7 @@ namespace NC_Custom_Tasks.AttackWithBallBot.Actions
 
         protected override void OnExecute()
         {
+            Debug.DrawRay(Mover.value.transform.position, Direction.value*10, Color.green);
             Mover.value.MoveLookingStraight(Direction.value);
             EndAction(true);
         }

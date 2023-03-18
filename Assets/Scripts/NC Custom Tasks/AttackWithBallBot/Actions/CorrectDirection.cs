@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Gameplay.Character.Player.MonoBehaviour;
 using NodeCanvas.Framework;
 using UnityEngine;
+using Utility.Constants;
+using Utility.Extensions;
 
 namespace NC_Custom_Tasks.AttackWithBallBot.Actions
 {
@@ -10,8 +13,8 @@ namespace NC_Custom_Tasks.AttackWithBallBot.Actions
         [BlackboardOnly] public BBParameter<Transform> PlayerTransform;
         [BlackboardOnly] public BBParameter<List<PlayerFacade>> PlayersToAvoid;
         [BlackboardOnly] public BBParameter<Vector3> Direction;
-        public float DirectionCorrection;
-        
+        [BlackboardOnly] public BBParameter<float> ThreatDistance;
+        [BlackboardOnly] public BBParameter<float> CorrectionForce;
         protected override void OnExecute()
         {
             Vector3 currentDirection = Direction.value;
@@ -20,13 +23,17 @@ namespace NC_Custom_Tasks.AttackWithBallBot.Actions
             {
                 Vector3 oppositePlayerPosition = oppositePlayer.transform.position;
                 Vector3 playerPosition = PlayerTransform.value.position;
-            
-                bool enemyIsToTheLeft =
-                    Vector3.Cross(currentDirection, oppositePlayerPosition - playerPosition).y < 0;
 
-                Direction.value = enemyIsToTheLeft
-                    ? Quaternion.Euler(0, DirectionCorrection, 0) * currentDirection
-                    : Quaternion.Euler(0, -DirectionCorrection, 0) * currentDirection;
+                Vector3 toOppositePlayer = (oppositePlayerPosition - playerPosition);
+                Vector3 right = Quaternion.Euler(0,NumericConstants.RightAngle,0)*toOppositePlayer.normalized;
+                
+                float coefficient = Vector3.Dot(right*ThreatDistance.value, (oppositePlayerPosition - playerPosition))/ThreatDistance.value;
+
+                Debug.Log(coefficient);
+
+                float directionCorrection = coefficient.MapClamped(-1, 1, CorrectionForce.value, -CorrectionForce.value)*(1-toOppositePlayer.magnitude/ThreatDistance.value);
+                
+                Direction.value = Quaternion.Euler(0, directionCorrection, 0) * currentDirection;
             }
             
             EndAction(true);

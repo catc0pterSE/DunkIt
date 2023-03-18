@@ -3,7 +3,7 @@ using NodeCanvas.Framework;
 
 namespace NC_Custom_Tasks.AllyBot.Actions
 {
-    public class Idle : ActionTask
+    public class IdleLookingAtAlly : ActionTask
     {
         [BlackboardOnly] public BBParameter<PlayerFacade> Host;
 

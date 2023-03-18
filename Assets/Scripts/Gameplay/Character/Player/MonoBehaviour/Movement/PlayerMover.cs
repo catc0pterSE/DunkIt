@@ -12,7 +12,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.Movement
     {
         [SerializeField] private CharacterController _characterController;
         [SerializeField] private float _movementSpeed = 4;
-        [SerializeField] private float _rotationSpeed = 400;
+        [SerializeField] private float _rotationSpeed = 50;
         [SerializeField] private float _gravityModifier = 1;
         [SerializeField] private float _minAngle = 1;
 
@@ -27,8 +27,9 @@ namespace Gameplay.Character.Player.MonoBehaviour.Movement
 
         public void MoveLookingAt(Vector3 movementDirection, Vector3 lookAt)
         {
+            Debug.Log("MoveLookingAt");
             Vector3 positionProjection = new Vector3(lookAt.x, transform.position.y, lookAt.z);
-            
+
             Rotate(positionProjection - transform.position);
             Move(movementDirection);
         }
@@ -60,14 +61,15 @@ namespace Gameplay.Character.Player.MonoBehaviour.Movement
         {
             if (direction == Vector3.zero)
                 return;
-
+            
             Quaternion toRotation = Quaternion.LookRotation(direction, Vector3.up);
-            transform.rotation =
+            transform.rotation = 
                 Quaternion.RotateTowards(transform.rotation, toRotation, _rotationSpeed * Time.deltaTime);
         }
 
         private IEnumerator RotateToPosition(Vector3 position, Action callback = null)
         {
+            Debug.Log($"{gameObject.name} rotateCoroutine");
             Vector3 direction = position - transform.position;
 
             while (Vector3.Angle(transform.forward, direction) > _minAngle)

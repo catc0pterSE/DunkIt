@@ -3,6 +3,7 @@ using Gameplay.Character.Player.MonoBehaviour.Distance;
 using NodeCanvas.Framework;
 using Scene.Ring;
 using UnityEngine;
+using Utility.Constants;
 using Utility.Extensions;
 
 namespace NC_Custom_Tasks.AttackWithBallBot.Conditions
@@ -26,8 +27,8 @@ namespace NC_Custom_Tasks.AttackWithBallBot.Conditions
 
 
             Vector3 offset = EnemyRing.value.IsFlipped
-                ? -enemyRingForward * maxDunkDistance
-                : enemyRingForward * maxDunkDistance;
+                ? -enemyRingForward * (maxDunkDistance * NumericConstants.Double)
+                : enemyRingForward * (maxDunkDistance * NumericConstants.Double);
 
             Vector3 rightExtremePoint = enemyRingPosition + offset;
             Vector3 leftExtremePoint = enemyRingPosition - offset;

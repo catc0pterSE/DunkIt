@@ -25,7 +25,7 @@ namespace NC_Custom_Tasks.AttackWithBallBot.Conditions
                 Vector3 oppositePlayerPosition = oppositePlayer.transform.position;
                 bool oppositePlayerOnTheWay =
                     Vector3.Distance(oppositePlayerPosition, PlayerPosition) < ThreatDistance.value
-                    && Vector3.Angle(oppositePlayerPosition, Direction.value) < CheckAngle;
+                    && Vector3.Angle(oppositePlayerPosition-PlayerPosition, Direction.value) < CheckAngle;
 
                 if (oppositePlayerOnTheWay)
                 {
