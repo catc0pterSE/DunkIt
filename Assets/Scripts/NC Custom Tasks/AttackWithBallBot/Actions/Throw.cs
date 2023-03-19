@@ -36,16 +36,16 @@ namespace NC_Custom_Tasks.AttackWithBallBot.Actions
                 throw new WarningException(
                     "discriminant is negative in attempt to throw a Ball. Max Ball speed is too low");
 
-            float discriminantRoot = Mathf.Sqrt(discriminant);
-            float maxFlightTime = Mathf.Sqrt((potentialEnergy + discriminantRoot) * NumericConstants.Double / gSquared);
-            float minFlightTime = Mathf.Sqrt((potentialEnergy - discriminantRoot) * NumericConstants.Double / gSquared);
+            // float discriminantRoot = Mathf.Sqrt(discriminant);
+            // float maxFlightTime = Mathf.Sqrt((potentialEnergy + discriminantRoot) * NumericConstants.Double / gSquared);
+            // float minFlightTime = Mathf.Sqrt((potentialEnergy - discriminantRoot) * NumericConstants.Double / gSquared);
             float lowEnergyTime = Mathf.Sqrt(Mathf.Sqrt(toTarget.sqrMagnitude * 4 / gSquared));
-            
-           // float flightTime = Random.Range(minFlightTime, maxFlightTime);
-           float flightTime = lowEnergyTime;
-           
+
+            // float flightTime = Random.Range(minFlightTime, maxFlightTime);
+            float flightTime = lowEnergyTime;
+
             Vector3 launchVelocity = toTarget / flightTime - Physics.gravity * (flightTime * NumericConstants.Half);
-            
+
 
             return launchVelocity;
         }

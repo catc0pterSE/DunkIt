@@ -4,16 +4,15 @@ using UnityEngine;
 
 namespace NC_Custom_Tasks.AttackWithBallBot.Actions
 {
-    public class Move : ActionTask
+    public class RotateTo: ActionTask
     {
-        [BlackboardOnly] public BBParameter<PlayerMover> Mover;
-        [BlackboardOnly] public BBParameter<Vector3> Direction;
+        [BlackboardOnly] public BBParameter<PlayerMover> HostMover;
+        public BBParameter<Transform> Target;
 
         protected override void OnExecute()
         {
-            Mover.value.MoveLookingStraight(Direction.value);
+            HostMover.value.RotateTo(Target.value.position);
             EndAction(true);
         }
-            
     }
 }

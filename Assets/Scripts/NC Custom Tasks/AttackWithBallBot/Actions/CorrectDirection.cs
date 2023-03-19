@@ -15,6 +15,8 @@ namespace NC_Custom_Tasks.AttackWithBallBot.Actions
         [BlackboardOnly] public BBParameter<Vector3> Direction;
         [BlackboardOnly] public BBParameter<float> ThreatDistance;
         [BlackboardOnly] public BBParameter<float> CorrectionForce;
+        public float a;
+        
         protected override void OnExecute()
         {
             Vector3 currentDirection = Direction.value;
@@ -26,7 +28,6 @@ namespace NC_Custom_Tasks.AttackWithBallBot.Actions
 
                 Vector3 toOppositePlayer = (oppositePlayerPosition - playerPosition);
                 Vector3 right = Quaternion.Euler(0,NumericConstants.RightAngle,0)*Direction.value;
-                Debug.DrawRay(playerPosition, right*10, Color.red);
                 
                 float coefficient = Vector3.Dot(right*ThreatDistance.value, (oppositePlayerPosition - playerPosition))/ThreatDistance.value;
 
@@ -37,7 +38,5 @@ namespace NC_Custom_Tasks.AttackWithBallBot.Actions
             
             EndAction(true);
         }
-        
-        
     }
 }
