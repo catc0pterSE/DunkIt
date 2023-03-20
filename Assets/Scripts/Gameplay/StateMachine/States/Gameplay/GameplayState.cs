@@ -53,7 +53,6 @@ namespace Gameplay.StateMachine.States.Gameplay
                 new GameplayStateToPassTransition(playerTeam, enemyTeam, gameplayLoopStateMachine),
                 new AnyToDropBallTransition(ball, gameplayLoopStateMachine, loadingCurtain, playerTeam, enemyTeam, sceneConfig)
             };
-           
         }
 
         public override void Enter()

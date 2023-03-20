@@ -12,11 +12,19 @@ namespace Gameplay.Character.Player.StateMachine.States
             _player = player;
         }
 
-        public void Enter() =>
+        public void Enter()
+        {
             _player.EnableAIControlledAttackWithBallBrain();
+            _player.EnableCharacterController();
+        }
 
 
-        public void Exit() =>
+
+        public void Exit()
+        {
             _player.DisableAIControlledAttackWithBallBrain();
+            _player.DisableCharacterController();
+        }
+           
     }
 }

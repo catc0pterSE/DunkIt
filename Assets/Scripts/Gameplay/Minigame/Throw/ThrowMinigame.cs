@@ -12,6 +12,7 @@ using Utility.Extensions;
 namespace Gameplay.Minigame.Throw
 {
     using Ball.MonoBehavior;
+
     public class ThrowMinigame : SwitchableMonoBehaviour, IMinigame
     {
         [SerializeField] private ThrowUI _interface;
@@ -95,6 +96,7 @@ namespace Gameplay.Minigame.Throw
             CinemachineVirtualCamera ringCamera = _ring.VirtualCamera;
             _ring.RingTargetGroup.m_Targets[_cameraTargetGroupPlayerIndex].target = playerTransform;
             ringCamera.Follow = playerTransform;
+            ringCamera.LookAt = _ring.RingTargetGroup.Transform;
             CinemachineFramingTransposer framingTransposer =
                 ringCamera.GetCinemachineComponent<CinemachineFramingTransposer>()
                 ?? throw new NullReferenceException("There is no framingTransposer on RingVirtualCamera");
@@ -115,7 +117,6 @@ namespace Gameplay.Minigame.Throw
 
         private void OnGoalFailed() =>
             Lost?.Invoke();
-
 
         private void OnGoalScored() =>
             Won?.Invoke();

@@ -15,7 +15,7 @@ namespace Gameplay.Character.Player.StateMachine
                 [typeof(InputControlledDefenceState)] = new InputControlledDefenceState(player),
                 [typeof(AIControlledAttackWithBallState)] = new AIControlledAttackWithBallState(player),
                 [typeof(AIControlledAttackWithoutBallState)] = new AIControlledAttackWithoutBallState(player),
-                [typeof(AIControlledDefenceState)] = new AIControlledDefenceState(),
+                [typeof(AIControlledDefenceState)] = new AIControlledDefenceState(player),
                 [typeof(ThrowState)] = new ThrowState(player),
                 [typeof(IdleState)] = new IdleState(player),
                 [typeof(PassState)] = new PassState(player),

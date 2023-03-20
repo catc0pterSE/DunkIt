@@ -38,6 +38,7 @@ namespace Gameplay.Character.Player.MonoBehaviour
         [SerializeField] private BehaviourTreeOwner _defenceBehaviourTree;
         [SerializeField] private BehaviourTreeOwner _attackWithBallBehaviourTree;
         [SerializeField] private BehaviourTreeOwner _attackWithoutBallBehaviourTree;
+        [SerializeField] private CharacterController _characterController;
 
         private CinemachineVirtualCamera _virtualCamera;
         private PlayerStateMachine _stateMachine;
@@ -79,7 +80,7 @@ namespace Gameplay.Character.Player.MonoBehaviour
                 [BehaviourTreeVariableNames.CourtDimensionsVariableName] = sceneConfig.CourtDimensions,
                 [BehaviourTreeVariableNames.OppositeTeamVariableName] = oppositeTeam
             });
-            
+
             _attackWithBallBehaviourTree.AddBinds(new Dictionary<string, object>
             {
                 [BehaviourTreeVariableNames.AllyVariableName] = _ally,
@@ -253,7 +254,7 @@ namespace Gameplay.Character.Player.MonoBehaviour
 
         public void DisableAIControlledAttackWithoutBallBrain() =>
             _attackWithoutBallBehaviourTree.Disable();
-        
+
         public void EnableAIControlledAttackWithBallBrain() =>
             _attackWithBallBehaviourTree.Enable();
 
@@ -301,6 +302,12 @@ namespace Gameplay.Character.Player.MonoBehaviour
 
         public void DisableFightForBallTriggerZone() =>
             _fightForBallTriggerZone.Disable();
+
+        public void EnableCharacterController() =>
+            _characterController.Enable();
+
+        public void DisableCharacterController() =>
+            _characterController.Disable();
 
         public void PrioritizeCamera() =>
             _virtualCamera.Prioritize();

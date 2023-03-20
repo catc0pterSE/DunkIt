@@ -15,7 +15,6 @@ namespace NC_Custom_Tasks.AttackWithBallBot.Actions
         [BlackboardOnly] public BBParameter<Vector3> Direction;
         [BlackboardOnly] public BBParameter<float> ThreatDistance;
         [BlackboardOnly] public BBParameter<float> CorrectionForce;
-        public float a;
         
         protected override void OnExecute()
         {

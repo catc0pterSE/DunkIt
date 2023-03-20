@@ -14,6 +14,7 @@ namespace Gameplay.Character.Player.StateMachine.States
 
         public void Enter()
         {
+            _player.EnableCharacterController();
             _player.EnableInputControlledAttackBrain();
             _player.EnablePlayerMover();
             _player.PrioritizeCamera();
@@ -24,6 +25,7 @@ namespace Gameplay.Character.Player.StateMachine.States
         
         public void Exit()
         {
+            _player.DisableCharacterController();
             _player.DisablePlayerMover();
             _player.DisableInputControlledAttackBrain();
             _player.DisableDistanceTracker();

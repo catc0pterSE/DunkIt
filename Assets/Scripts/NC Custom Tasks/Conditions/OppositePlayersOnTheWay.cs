@@ -12,7 +12,7 @@ namespace NC_Custom_Tasks.AttackWithBallBot.Conditions
         [BlackboardOnly] public BBParameter<Vector3> Direction;
         [BlackboardOnly] public BBParameter<List<PlayerFacade>> PlayersToAvoid;
         [BlackboardOnly] public BBParameter<float> ThreatDistance;
-        public float CheckAngle;
+        [BlackboardOnly] public BBParameter<float> ThreatAngle;
         
         private Vector3 PlayerPosition => PlayerTransform.value.position;
 
@@ -25,7 +25,7 @@ namespace NC_Custom_Tasks.AttackWithBallBot.Conditions
                 Vector3 oppositePlayerPosition = oppositePlayer.transform.position;
                 bool oppositePlayerOnTheWay =
                     Vector3.Distance(oppositePlayerPosition, PlayerPosition) < ThreatDistance.value
-                    && Vector3.Angle(oppositePlayerPosition-PlayerPosition, Direction.value) < CheckAngle;
+                    && Vector3.Angle(oppositePlayerPosition-PlayerPosition, Direction.value) < ThreatAngle.value;
 
                 if (oppositePlayerOnTheWay)
                 {

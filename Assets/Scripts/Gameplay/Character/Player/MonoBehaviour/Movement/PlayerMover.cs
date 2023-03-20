@@ -14,9 +14,14 @@ namespace Gameplay.Character.Player.MonoBehaviour.Movement
         [SerializeField] private float _movementSpeed = 4;
         [SerializeField] private float _rotationSpeed = 50;
         [SerializeField] private float _gravityModifier = 1;
-        [SerializeField] private float _minAngle = 1;
+        [SerializeField] private float _minAngle = 5;
 
         private Coroutine _rotating;
+
+        private void OnDisable()
+        {
+            StopRotationRoutine();
+        }
 
         public void MoveLookingStraight(Vector3 movementDirection)
         {
@@ -45,10 +50,15 @@ namespace Gameplay.Character.Player.MonoBehaviour.Movement
         {
             Vector3 positionProjection = new Vector3(position.x, transform.position.y, position.z);
 
-            if (_rotating != null)
-                StopCoroutine(_rotating);
+            StopRotationRoutine();
 
             _rotating = StartCoroutine(RotateToPosition(positionProjection, callback));
+        }
+
+        private void StopRotationRoutine()
+        {
+            if (_rotating != null)
+                StopCoroutine(_rotating);
         }
 
 
@@ -69,7 +79,6 @@ namespace Gameplay.Character.Player.MonoBehaviour.Movement
 
         private IEnumerator RotateToPosition(Vector3 position, Action callback = null)
         {
-            Debug.Log($"{gameObject.name} rotateCoroutine");
             Vector3 direction = position - transform.position;
 
             while (Vector3.Angle(transform.forward, direction) > _minAngle)

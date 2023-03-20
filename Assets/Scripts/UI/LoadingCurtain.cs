@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using Modules.MonoBehaviour;
 using UnityEngine;
-using Utility.Constants;
 
 namespace UI
 {
@@ -79,6 +78,8 @@ namespace UI
                 yield return null;
             }
 
+            yield return new WaitForEndOfFrame(); // TODO: costyl2
+            
             toDoWhenFaded?.Invoke();
         }
     }

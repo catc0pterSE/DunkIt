@@ -14,12 +14,18 @@ namespace Gameplay.Character.Player.MonoBehaviour.TriggerZone
             _ally = ally;
 
         public event Action<PlayerFacade[]> FightForBallStarted;
+
         private void OnTriggerStay(Collider other)
         {
             if (other.gameObject.TryGetComponent(out PlayerFacade basketballPlayer) == false)
                 return;
+            
+            Debug.Log(basketballPlayer.name);
 
-            if ( basketballPlayer == _host || basketballPlayer == _ally)
+            if (basketballPlayer == _host)
+                return;
+
+            if (basketballPlayer == _ally)
                 return;
 
             PlayerFacade[] participants = new PlayerFacade[]

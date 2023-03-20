@@ -54,6 +54,7 @@ namespace Infrastructure.Input.InputService
             if (SimpleInput.GetMouseButtonDown(0))
                 PointerDown?.Invoke();
 
+
             if (SimpleInput.GetMouseButtonUp(0))
                 PointerUp?.Invoke();
         }

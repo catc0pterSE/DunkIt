@@ -14,6 +14,5 @@ namespace NC_Custom_Tasks.AttackWithBallBot.Actions
             Mover.value.MoveLookingStraight(Direction.value);
             EndAction(true);
         }
-            
     }
 }

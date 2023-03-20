@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Gameplay.Character;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.States.Gameplay;
@@ -7,6 +8,7 @@ using Scene;
 using UI;
 using UnityEngine;
 using Utility.Constants;
+using Utility.Extensions;
 
 namespace Gameplay.StateMachine.Transitions
 {
@@ -15,8 +17,8 @@ namespace Gameplay.StateMachine.Transitions
         private readonly Ball.MonoBehavior.Ball _ball;
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
         private readonly LoadingCurtain _loadingCurtain;
-        private readonly PlayerFacade[] _playerTeam;
-        private readonly PlayerFacade[] _enemyTeam;
+        private readonly PlayerFacade[] _leftTeam;
+        private readonly PlayerFacade[] _rightTeam;
         private readonly SceneConfig _sceneConfig;
 
         public AnyToDropBallTransition(Ball.MonoBehavior.Ball ball, GameplayLoopStateMachine gameplayLoopStateMachine,
@@ -25,8 +27,18 @@ namespace Gameplay.StateMachine.Transitions
             _ball = ball;
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
             _loadingCurtain = loadingCurtain;
-            _playerTeam = playerTeam;
-            _enemyTeam = enemyTeam;
+
+            if (playerTeam.First().LeftSide)
+            {
+                _leftTeam = playerTeam;
+                _rightTeam = enemyTeam;
+            }
+            else
+            {
+                _leftTeam = enemyTeam;
+                _rightTeam = enemyTeam;
+            }
+            
             _sceneConfig = sceneConfig;
         }
 
@@ -42,6 +54,7 @@ namespace Gameplay.StateMachine.Transitions
 
         private void OnBallLost(CharacterFacade lostCharacter)
         {
+            
             if (lostCharacter is not PlayerFacade lostPlayer)
                 throw new Exception("Ball is lost by someone who is not basketball player");
 
@@ -56,20 +69,21 @@ namespace Gameplay.StateMachine.Transitions
         private void SetDropBall(PlayerFacade lostPlayer)
         {
             PlayerFacade droppingPlayer;
-            Vector3 dropPosition;
+            Transform dropPosition;
 
             if (lostPlayer.LeftSide)
             {
-                droppingPlayer = _enemyTeam[NumericConstants.PrimaryTeamMemberIndex];
-                dropPosition = _sceneConfig.LeftDropBallPoint.transform.position;
+                droppingPlayer = _rightTeam[NumericConstants.PrimaryTeamMemberIndex];
+                dropPosition = _sceneConfig.RightDropBallPoint.transform;
             }
             else
             {
-                droppingPlayer = _playerTeam[NumericConstants.PrimaryTeamMemberIndex];
-                dropPosition = _sceneConfig.RightDropBallPoint.transform.position;
+                droppingPlayer = _leftTeam[NumericConstants.PrimaryTeamMemberIndex];
+                dropPosition = _sceneConfig.LeftDropBallPoint.transform;
             }
 
-            droppingPlayer.transform.position = dropPosition;
+            droppingPlayer.EnterNotControlledState();
+            droppingPlayer.transform.CopyValuesFrom(dropPosition, false);
             _ball.SetOwner(droppingPlayer);
         }
 

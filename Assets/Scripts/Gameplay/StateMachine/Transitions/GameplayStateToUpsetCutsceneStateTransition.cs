@@ -1,5 +1,4 @@
 ﻿using Gameplay.StateMachine.States.CutsceneStates;
-using Gameplay.StateMachine.States.Gameplay;
 using Modules.StateMachine;
 using Scene.Ring;
 
