@@ -6,9 +6,9 @@ using Scene.Ring;
 using UnityEngine;
 using Utility.Extensions;
 
-namespace NC_Custom_Tasks.AllyBot.Actions
+namespace z_Test
 {
-    public class MoveAlongAlly : ActionTask
+    /*public class MoveAlongAlly : ActionTask
     {
         [BlackboardOnly] public BBParameter<PlayerMover> Mover;
         [BlackboardOnly] public BBParameter<Ring> EnemyRing;
@@ -93,5 +93,5 @@ namespace NC_Custom_Tasks.AllyBot.Actions
             else
                 Mover.value.MoveLookingStraight(direction);
         }
-    }
+    }*/
 }

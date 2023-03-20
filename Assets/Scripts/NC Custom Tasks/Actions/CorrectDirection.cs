@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Gameplay.Character.Player.MonoBehaviour;
 using NodeCanvas.Framework;
 using UnityEngine;
 using Utility.Constants;
 using Utility.Extensions;
 
-namespace NC_Custom_Tasks.AttackWithBallBot.Actions
+namespace NC_Custom_Tasks.Actions
 {
     public class CorrectDirection: ActionTask
     {

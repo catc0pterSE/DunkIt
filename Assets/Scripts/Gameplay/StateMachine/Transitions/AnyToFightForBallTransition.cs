@@ -10,7 +10,7 @@ namespace Gameplay.StateMachine.Transitions
 {
     public class AnyToFightForBallTransition : ITransition
     {
-        private const float DelayTime = 5;
+        private const float DelayTime = 3;
 
         private readonly Ball.MonoBehavior.Ball _ball;
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;

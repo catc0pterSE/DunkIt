@@ -1,15 +1,16 @@
-﻿using Gameplay.Character.Player.MonoBehaviour.Distance;
+﻿using Gameplay.Character.Player.MonoBehaviour.TargetTracking;
 using NodeCanvas.Framework;
 
-namespace NC_Custom_Tasks.AttackWithBallBot.Actions
+namespace NC_Custom_Tasks.Actions
 {
-    public class SelectTargetToDunk : SelectTarget
+    public class SelectAttackTargetToThrow : SelectAttackTarget
     {
         [BlackboardOnly] public BBParameter<TargetTracker> TargetTracker;
         public float Delta;
+
         protected override void OnExecute()
         {
-            Distance = TargetTracker.value.MaxDunkDistance - Delta;
+            Distance = TargetTracker.value.MaxThrowDistance - Delta;
             base.OnExecute();
         }
     }

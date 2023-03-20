@@ -3,7 +3,7 @@ using Gameplay.Character.Player.MonoBehaviour;
 using NodeCanvas.Framework;
 using UnityEngine;
 
-namespace NC_Custom_Tasks.AttackWithBallBot.Conditions
+namespace NC_Custom_Tasks.Conditions
 {
     public class OppositePlayersOnTheWay : ConditionTask
     {

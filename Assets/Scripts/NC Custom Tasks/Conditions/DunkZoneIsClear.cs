@@ -1,12 +1,12 @@
 ﻿using Gameplay.Character.Player.MonoBehaviour;
-using Gameplay.Character.Player.MonoBehaviour.Distance;
+using Gameplay.Character.Player.MonoBehaviour.TargetTracking;
 using NodeCanvas.Framework;
 using Scene.Ring;
 using UnityEngine;
 using Utility.Constants;
 using Utility.Extensions;
 
-namespace NC_Custom_Tasks.AttackWithBallBot.Conditions
+namespace NC_Custom_Tasks.Conditions
 {
     public class DunkZoneIsClear : ConditionTask
     {

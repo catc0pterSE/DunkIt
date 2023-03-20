@@ -4,7 +4,7 @@ using UnityEngine;
 using Utility.Constants;
 using Vector3 = UnityEngine.Vector3;
 
-namespace NC_Custom_Tasks.AllyBot.Conditions
+namespace NC_Custom_Tasks.Conditions
 {
     public class AllyIsOnOptimalPassRange : ConditionTask
     {

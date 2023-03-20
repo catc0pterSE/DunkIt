@@ -2,7 +2,7 @@
 using Modules.MonoBehaviour;
 using UnityEngine;
 
-namespace Gameplay.Character.Player.MonoBehaviour.Distance
+namespace Gameplay.Character.Player.MonoBehaviour.TargetTracking
 {
     public class TargetTracker : SwitchableComponent
     {

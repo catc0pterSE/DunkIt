@@ -3,7 +3,7 @@ using NodeCanvas.Framework;
 using UnityEngine;
 using Utility.Extensions;
 
-namespace NC_Custom_Tasks.AttackWithBallBot.Conditions
+namespace NC_Custom_Tasks.Conditions
 {
     public class OppositePlayersAreFarEnoughToThrow : ConditionTask
     {

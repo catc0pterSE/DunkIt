@@ -6,7 +6,7 @@ using Scene.Ring;
 using UnityEngine;
 using Utility.Constants;
 
-namespace NC_Custom_Tasks.AttackWithBallBot.Actions
+namespace NC_Custom_Tasks.Actions
 {
     public class Throw : ActionTask
     {

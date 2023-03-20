@@ -2,7 +2,7 @@
 using Gameplay.Character.Player.MonoBehaviour.Brains;
 using NodeCanvas.Framework;
 
-namespace NC_Custom_Tasks.AttackWithBallBot.Actions
+namespace NC_Custom_Tasks.Actions
 {
     public class Dunk : ActionTask
     {

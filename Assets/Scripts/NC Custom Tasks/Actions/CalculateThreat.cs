@@ -3,7 +3,7 @@ using Gameplay.Character.Player.MonoBehaviour;
 using NodeCanvas.Framework;
 using UnityEngine;
 
-namespace NC_Custom_Tasks.AttackWithBallBot.Actions
+namespace NC_Custom_Tasks.Actions
 {
     public class CalculateThreat : ActionTask
     {
@@ -24,7 +24,6 @@ namespace NC_Custom_Tasks.AttackWithBallBot.Actions
             }
 
             Threat.value = threat / OppositePlayersFacades.value.Length;
-            Debug.Log(Threat.value);
             EndAction(true);
         }
     }

@@ -3,9 +3,9 @@ using Scene;
 using Scene.Ring;
 using UnityEngine;
 
-namespace NC_Custom_Tasks.AttackWithBallBot.Actions
+namespace NC_Custom_Tasks.Actions
 {
-    public abstract class SelectTarget : ActionTask
+    public abstract class SelectAttackTarget : ActionTask
     {
         [BlackboardOnly] public BBParameter<Ring> OppositeRing;
         [BlackboardOnly] public BBParameter<CourtDimensions> CourtDimensions;

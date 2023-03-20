@@ -1,7 +1,7 @@
 ﻿using Gameplay.Character.Player.MonoBehaviour;
 using NodeCanvas.Framework;
 
-namespace NC_Custom_Tasks.AttackWithBallBot.Conditions
+namespace NC_Custom_Tasks.Conditions
 {
     public class IsSomePlayerInPassDistance : ConditionTask
     {

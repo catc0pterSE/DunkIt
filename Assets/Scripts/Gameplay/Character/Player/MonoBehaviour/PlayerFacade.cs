@@ -5,8 +5,9 @@ using Gameplay.Character.Player.MonoBehaviour.BallHandle.Dunk;
 using Gameplay.Character.Player.MonoBehaviour.BallHandle.Pass;
 using Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw;
 using Gameplay.Character.Player.MonoBehaviour.Brains;
-using Gameplay.Character.Player.MonoBehaviour.Distance;
+using Gameplay.Character.Player.MonoBehaviour.Brains.InputControlled;
 using Gameplay.Character.Player.MonoBehaviour.Movement;
+using Gameplay.Character.Player.MonoBehaviour.TargetTracking;
 using Gameplay.Character.Player.MonoBehaviour.TriggerZone;
 using Gameplay.Character.Player.StateMachine;
 using Gameplay.Character.Player.StateMachine.States;
@@ -61,6 +62,7 @@ namespace Gameplay.Character.Player.MonoBehaviour
             LeftSide = leftSide;
             IsPlayable = isPlayable;
             _oppositeRing = LeftSide ? sceneConfig.RightRing : sceneConfig.LeftRing;
+            Ring playerRing = LeftSide ? sceneConfig.LeftRing : sceneConfig.RightRing;
             _dunker.Initialize(ball, _oppositeRing);
             _ally = ally;
             _inputControlledDefenceBrain.Initialize(gameplayCamera.transform, inputService);
@@ -88,6 +90,19 @@ namespace Gameplay.Character.Player.MonoBehaviour
                 [BehaviourTreeVariableNames.CourtDimensionsVariableName] = sceneConfig.CourtDimensions,
                 [BehaviourTreeVariableNames.OppositeTeamVariableName] = oppositeTeam
             });
+
+            _defenceBehaviourTree.AddBinds(new Dictionary<string, object>
+            {
+                [BehaviourTreeVariableNames.AllyVariableName] = _ally,
+                [BehaviourTreeVariableNames.PlayerRingVariableName] = playerRing,
+                [BehaviourTreeVariableNames.CourtDimensionsVariableName] = sceneConfig.CourtDimensions,
+                [BehaviourTreeVariableNames.OppositeTeamVariableName] = oppositeTeam
+            });
+        }
+
+        public void Configure(float speed)
+        {
+            _playerMover.Configure(speed);
         }
 
         private PlayerStateMachine StateMachine => _stateMachine ??= new PlayerStateMachine(this);
@@ -260,6 +275,12 @@ namespace Gameplay.Character.Player.MonoBehaviour
 
         public void DisableAIControlledAttackWithBallBrain() =>
             _attackWithBallBehaviourTree.Disable();
+
+        public void EnableAIControlledDefenceBrain() =>
+            _defenceBehaviourTree.Enable();
+
+        public void DisableAIControlledDefenceBrain() =>
+            _defenceBehaviourTree.Disable();
 
         public void EnablePlayerMover() =>
             _playerMover.Enable();

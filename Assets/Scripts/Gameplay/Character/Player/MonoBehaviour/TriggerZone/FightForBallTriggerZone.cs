@@ -19,8 +19,6 @@ namespace Gameplay.Character.Player.MonoBehaviour.TriggerZone
         {
             if (other.gameObject.TryGetComponent(out PlayerFacade basketballPlayer) == false)
                 return;
-            
-            Debug.Log(basketballPlayer.name);
 
             if (basketballPlayer == _host)
                 return;

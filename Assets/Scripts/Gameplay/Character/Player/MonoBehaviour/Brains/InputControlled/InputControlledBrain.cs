@@ -3,7 +3,7 @@ using Infrastructure.Input.InputService;
 using Modules.MonoBehaviour;
 using UnityEngine;
 
-namespace Gameplay.Character.Player.MonoBehaviour.Brains
+namespace Gameplay.Character.Player.MonoBehaviour.Brains.InputControlled
 {
     public abstract class InputControlledBrain: SwitchableComponent
     {

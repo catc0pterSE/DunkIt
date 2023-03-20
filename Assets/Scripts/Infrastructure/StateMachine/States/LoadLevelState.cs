@@ -106,8 +106,15 @@ namespace Infrastructure.StateMachine.States
             SceneConfig sceneConfig, bool isPlayable, bool leftSide, Camera camera)
         {
             if (isPlayable == false) //TODO: TEST - delete
+            {
                 team.Map(player => player.GetComponentInChildren<MeshRenderer>().material =
                     ball.GetComponentInChildren<MeshRenderer>().material);
+                team.Map(player => player.Configure(3f));
+            }
+            else
+            {
+                team.Map(player => player.Configure(4));
+            }
 
             PlayerFacade primaryPlayer = team[NumericConstants.PrimaryTeamMemberIndex];
             PlayerFacade secondaryPlayer = team[NumericConstants.SecondaryTeamMemberIndex];
@@ -126,7 +133,6 @@ namespace Infrastructure.StateMachine.States
 
         private CameraFacade SpawnCamera() =>
             _gameObjectFactory.CreateCamera();
-
 
         private Ball SpawnBall() =>
             _gameObjectFactory.CreateBall();

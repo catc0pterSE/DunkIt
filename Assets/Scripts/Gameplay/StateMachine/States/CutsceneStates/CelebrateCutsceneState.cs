@@ -1,10 +1,17 @@
-﻿using Modules.StateMachine;
+﻿using Gameplay.StateMachine.States.MinigameStates;
+using Modules.StateMachine;
 using UnityEngine;
 
 namespace Gameplay.StateMachine.States.CutsceneStates
 {
     public class CelebrateCutsceneState : IParameterlessState
     {
+        private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
+
+        public CelebrateCutsceneState(GameplayLoopStateMachine gameplayLoopStateMachine)
+        {
+            _gameplayLoopStateMachine = gameplayLoopStateMachine;
+        }
         public void Exit()
         {
            
@@ -12,7 +19,7 @@ namespace Gameplay.StateMachine.States.CutsceneStates
 
         public void Enter()
         {
-            Debug.Log("WIN");
+            _gameplayLoopStateMachine.Enter<JumpBallState>();
         }
     }
 }

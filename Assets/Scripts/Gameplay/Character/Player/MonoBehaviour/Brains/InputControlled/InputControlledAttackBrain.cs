@@ -1,8 +1,8 @@
 ﻿using System;
-using Gameplay.Character.Player.MonoBehaviour.Distance;
+using Gameplay.Character.Player.MonoBehaviour.TargetTracking;
 using UnityEngine;
 
-namespace Gameplay.Character.Player.MonoBehaviour.Brains
+namespace Gameplay.Character.Player.MonoBehaviour.Brains.InputControlled
 {
     public class InputControlledAttackBrain : InputControlledBrain, IAttackEventLauncher
 

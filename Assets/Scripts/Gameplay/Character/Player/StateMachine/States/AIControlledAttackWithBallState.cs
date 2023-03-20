@@ -16,6 +16,7 @@ namespace Gameplay.Character.Player.StateMachine.States
         {
             _player.EnableAIControlledAttackWithBallBrain();
             _player.EnableCharacterController();
+            _player.EnableFightForBallTriggerZone();
         }
 
 
@@ -24,6 +25,7 @@ namespace Gameplay.Character.Player.StateMachine.States
         {
             _player.DisableAIControlledAttackWithBallBrain();
             _player.DisableCharacterController();
+            _player.DisableFightForBallTriggerZone();
         }
            
     }

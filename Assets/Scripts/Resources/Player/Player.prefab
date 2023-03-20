@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 4617063359223777939}
   - component: {fileID: 1864448214675077806}
   - component: {fileID: -2187974916535839628}
+  - component: {fileID: -7707564925874227960}
   - component: {fileID: 7100715558482148176}
   - component: {fileID: 7822746910048078928}
   m_Layer: 0
@@ -81,10 +82,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _characterController: {fileID: 4871018274306801538}
-  _movementSpeed: 4
   _rotationSpeed: 800
   _gravityModifier: 0.5
   _minAngle: 5
+  _movementSpeed: 4
 --- !u!114 &9116447531277526744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,7 +153,7 @@ MonoBehaviour:
   _catcher: {fileID: 1497494343019081299}
   _dunker: {fileID: 4617063359223777939}
   _fightForBallTriggerZone: {fileID: 6257887091626896469}
-  _defenceBehaviourTree: {fileID: 0}
+  _defenceBehaviourTree: {fileID: -7707564925874227960}
   _attackWithBallBehaviourTree: {fileID: 7100715558482148176}
   _attackWithoutBallBehaviourTree: {fileID: 7822746910048078928}
   _characterController: {fileID: 4871018274306801538}
@@ -379,7 +380,7 @@ MonoBehaviour:
   _parentBlackboard: {fileID: 0}
   _serializedBlackboard: '{"_variables":{"HostFacade":{"_value":1,"_name":"HostFacade","_id":"53299809-bc5f-4e54-bd0c-f1b682da9846","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.PlayerFacade,
     Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostMover":{"_value":2,"_name":"HostMover","_id":"790d4d99-8c81-472f-bf8e-529c7914a64c","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Movement.PlayerMover,
-    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostTargetTracker":{"_value":3,"_name":"HostTargetTracker","_id":"3bf9efab-1ce7-47a4-8aef-708d4496cc71","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Distance.TargetTracker,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostTargetTracker":{"_value":3,"_name":"HostTargetTracker","_id":"3bf9efab-1ce7-47a4-8aef-708d4496cc71","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.TargetTracking.TargetTracker,
     Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostTransform":{"_value":4,"_name":"HostTransform","_id":"19379dd1-c14d-4603-b9a5-e58da9a72c99","$type":"NodeCanvas.Framework.Variable`1[[UnityEngine.Transform,
     UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostPasser":{"_value":5,"_name":"HostPasser","_id":"e2a56f76-e210-4ddd-9b28-9c7613fa03b0","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.BallHandle.Pass.Passer,
     Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostBallThrower":{"_value":6,"_name":"HostBallThrower","_id":"9141eb0d-330f-486a-8b41-99dc23c84bcf","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw.BallThrower,
@@ -409,7 +410,7 @@ MonoBehaviour:
     _references:
     - {fileID: 0}
     - {fileID: 3567767349144517149}
-  - _json: '{"_value":1,"_name":"HostTargetTracker","_id":"3bf9efab-1ce7-47a4-8aef-708d4496cc71","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Distance.TargetTracker,
+  - _json: '{"_value":1,"_name":"HostTargetTracker","_id":"3bf9efab-1ce7-47a4-8aef-708d4496cc71","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.TargetTracking.TargetTracker,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
     _references:
     - {fileID: 0}
@@ -444,6 +445,35 @@ MonoBehaviour:
     _references:
     - {fileID: 0}
     - {fileID: 4042918883656718937}
+--- !u!114 &-7707564925874227960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919622327166402665}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aad115aca74ce3c4891b3f6de0b4aae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _serializedExposedParameters: []
+  _boundGraphSerialization: 
+  _boundGraphObjectReferences: []
+  _boundGraphSource:
+    _version: 0
+    _category: 
+    _comments: 
+    _translation: {x: 0, y: 0}
+    _zoomFactor: 1
+  _firstActivation: 0
+  _enableAction: 0
+  _disableAction: 0
+  _lockBoundGraphPrefabOverrides: 1
+  _preInitializeSubGraphs: 0
+  _updateMode: 0
+  _graph: {fileID: 11400000, guid: 27f522e20703de345b655ee819ed39e9, type: 2}
+  _blackboard: {fileID: -2187974916535839628}
 --- !u!114 &7100715558482148176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -778,7 +808,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1679206378160196402
 Transform:
   m_ObjectHideFlags: 0

@@ -1,10 +1,10 @@
 ﻿using Gameplay.Character.Player.MonoBehaviour;
-using Gameplay.Character.Player.MonoBehaviour.Distance;
+using Gameplay.Character.Player.MonoBehaviour.TargetTracking;
 using NodeCanvas.Framework;
 using Scene.Ring;
 using UnityEngine;
 
-namespace NC_Custom_Tasks.AttackWithBallBot.Actions
+namespace NC_Custom_Tasks.Actions
 {
     public class CalculateSenseToPass : ActionTask
     {

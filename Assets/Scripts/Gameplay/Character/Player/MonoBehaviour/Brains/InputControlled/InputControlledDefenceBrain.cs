@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Gameplay.Character.Player.MonoBehaviour.Brains
+namespace Gameplay.Character.Player.MonoBehaviour.Brains.InputControlled
 {
     public class InputControlledDefenceBrain : InputControlledBrain
     {
