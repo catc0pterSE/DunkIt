@@ -2,6 +2,7 @@
 using System.Collections;
 using Gameplay.Character;
 using Gameplay.Character.Player.MonoBehaviour;
+using Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw;
 using Modules.MonoBehaviour;
 using UnityEngine;
 using Utility.Extensions;
@@ -12,18 +13,26 @@ namespace Gameplay.Ball.MonoBehavior
     {
         [SerializeField] private float _transferSpeed = 2f;
         [SerializeField] private Rigidbody _rigidBody;
+        [SerializeField] private float _lostTimeout = 5f;
 
-        private Character.CharacterFacade _owner;
-        private Coroutine _moving;
+        private CharacterFacade _owner;
+        private Coroutine _moveRoutine;
+        private Coroutine _trackLostRoutine;
+        private WaitForSeconds _waitForLostTimeout;
 
-        public Character.CharacterFacade Owner => _owner;
+        private void Awake() =>
+            _waitForLostTimeout = new WaitForSeconds(_lostTimeout);
 
-        public event Action<Character.CharacterFacade> OwnerChanged;
+        public CharacterFacade Owner => _owner;
+
+        public event Action<CharacterFacade> OwnerChanged;
+        public event Action<CharacterFacade> Lost;
 
         public float Mass => _rigidBody.mass;
 
-        public void SetOwner(Character.CharacterFacade owner)
+        public void SetOwner(CharacterFacade owner)
         {
+            StopTrackingLost();
             TurnPhysicsOf();
             RemoveOwner();
             transform.Reset(false);
@@ -32,8 +41,10 @@ namespace Gameplay.Ball.MonoBehavior
             OwnerChanged?.Invoke(_owner);
         }
 
-        public void Throw(Vector3 velocity)
+        public void Fly(Vector3 velocity)
         {
+            CharacterFacade lasrOwner = _owner;
+            StartTrackingLost(lasrOwner);
             RemoveOwner();
             TurnPhysicsOn();
             _rigidBody.AddForce(velocity, ForceMode.VelocityChange);
@@ -46,15 +57,27 @@ namespace Gameplay.Ball.MonoBehavior
             OwnerChanged?.Invoke(_owner);
         }
 
+        private void StartTrackingLost(CharacterFacade lastOwner)
+        {
+            StopTrackingLost();
+            _trackLostRoutine = StartCoroutine(TrackLost(lastOwner));
+        }
+
+        private void StopTrackingLost()
+        {
+            if (_trackLostRoutine != null)
+                StopCoroutine(_trackLostRoutine);
+        }
+
         public void MoveTo(Vector3 targetPosition, Action toDoAfter = null)
         {
             RemoveOwner();
             TurnPhysicsOf();
 
-            if (_moving != null)
-                StopCoroutine(_moving);
+            if (_moveRoutine != null)
+                StopCoroutine(_moveRoutine);
 
-            _moving = StartCoroutine(MoveRoutine(targetPosition, toDoAfter));
+            _moveRoutine = StartCoroutine(Move(targetPosition, toDoAfter));
         }
 
         public void MoveTo(Transform target, Action toDoAfter = null) =>
@@ -67,7 +90,7 @@ namespace Gameplay.Ball.MonoBehavior
                 toDoAfter?.Invoke();
             });
 
-        private IEnumerator MoveRoutine(Vector3 targetPosition, Action callback = null)
+        private IEnumerator Move(Vector3 targetPosition, Action callback = null)
         {
             while (transform.position != targetPosition)
             {
@@ -77,6 +100,14 @@ namespace Gameplay.Ball.MonoBehavior
             }
 
             callback?.Invoke();
+        }
+
+        private IEnumerator TrackLost(CharacterFacade lastOwner)
+        {
+            yield return _waitForLostTimeout;
+
+            if (_owner == null)
+                Lost?.Invoke(lastOwner);
         }
 
         private void SetParent(Transform parent) =>

@@ -14,20 +14,22 @@ namespace Gameplay.Character.Player.StateMachine.States
 
         public void Enter()
         {
-            _player.EnableInputControlledBrain();
+            _player.EnableCharacterController();
+            _player.EnableInputControlledAttackBrain();
             _player.EnablePlayerMover();
             _player.PrioritizeCamera();
-            _player.FocusOnEnemyBasket();
+            _player.FocusOnOppositeBasket();
             _player.EnableDistanceTracker();
             _player.EnableFightForBallTriggerZone();
         }
         
         public void Exit()
         {
+            _player.DisableCharacterController();
             _player.DisablePlayerMover();
-            _player.DisableInputControlledBrain();
+            _player.DisableInputControlledAttackBrain();
             _player.DisableDistanceTracker();
-            _player.DisableBallContestTriggerZone();
+            _player.DisableFightForBallTriggerZone();
         }
     }
 }

@@ -22,6 +22,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
         private void OnDisable()
         {
             _lineRenderer.enabled = false;
+            _lineRenderer.positionCount = 0;
         }
 
         public void Draw(Vector3 startPosition, Vector3 velocity)

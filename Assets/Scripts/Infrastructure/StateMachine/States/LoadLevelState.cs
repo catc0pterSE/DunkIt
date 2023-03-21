@@ -11,13 +11,12 @@ using Infrastructure.Input;
 using Infrastructure.Input.InputService;
 using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
-using Scene.Ring;
 using UI;
 using UI.HUD;
 using UI.HUD.Mobile;
 using UnityEngine;
 using Utility.Constants;
-using z_Test;
+using Utility.Extensions;
 using SceneConfig = Scene.SceneConfig;
 
 namespace Infrastructure.StateMachine.States
@@ -64,8 +63,13 @@ namespace Infrastructure.StateMachine.States
             Ball ball = SpawnBall();
             Referee referee = SpawnReferee();
             CameraFacade camera = SpawnCamera();
-            PlayerFacade[] playerTeam = SpawnPlayerTeam(camera.Camera, ball, sceneConfig, true);
-            PlayerFacade[] enemyTeam = SpawnPlayerTeam(camera.Camera, ball, sceneConfig, false);
+
+            PlayerFacade[] playerTeam = SpawnTeam();
+            PlayerFacade[] enemyTeam = SpawnTeam();
+
+            InitializeTeam(playerTeam, enemyTeam, ball, sceneConfig, true, true, camera.Camera);               //TODO: side selection
+            InitializeTeam(enemyTeam, playerTeam, ball, sceneConfig, false, false, camera.Camera);
+
             IGameplayHUD gameplayHUDView = SpawnHUD().Initialize(playerTeam.Union(enemyTeam).ToArray(), camera.Camera);
 
             GameplayLoopStateMachine gameplayLoopStateMachine =
@@ -88,29 +92,37 @@ namespace Infrastructure.StateMachine.States
             _gameStateMachine.Enter<GamePlayLoopState, GameplayLoopStateMachine>(gameplayLoopStateMachine);
         }
 
-        private PlayerFacade[] SpawnPlayerTeam(Camera camera, Ball ball, SceneConfig sceneConfig, bool isPlayable)
+        private PlayerFacade[] SpawnTeam()
         {
-            PlayerFacade[] playerTeam = new PlayerFacade[NumericConstants.PlayersInTeam];
+            PlayerFacade[] team = new PlayerFacade[NumericConstants.PlayersInTeam];
 
-            PlayerFacade primaryPlayer = _gameObjectFactory.CreatePlayer();
-            PlayerFacade secondaryPlayer = _gameObjectFactory.CreatePlayer();
+            for (int i = 0; i < team.Length; i++)
+                team[i] = _gameObjectFactory.CreatePlayer();
 
-            if (isPlayable == false) //TODO: remove. for test
+            return team;
+        }
+
+        private void InitializeTeam(PlayerFacade[] team, PlayerFacade[] oppositeTeam, Ball ball,
+            SceneConfig sceneConfig, bool isPlayable, bool leftSide, Camera camera)
+        {
+            if (isPlayable == false) //TODO: TEST - delete
             {
-                primaryPlayer.GetComponentInChildren<MeshRenderer>().material =
-                    ball.GetComponentInChildren<MeshRenderer>().material;
-                secondaryPlayer.GetComponentInChildren<MeshRenderer>().material =
-                    ball.GetComponentInChildren<MeshRenderer>().material;
+                team.Map(player => player.GetComponentInChildren<MeshRenderer>().material =
+                    ball.GetComponentInChildren<MeshRenderer>().material);
+                team.Map(player => player.Configure(3f));
+            }
+            else
+            {
+                team.Map(player => player.Configure(4));
             }
 
-            Ring enemyRing = isPlayable ? sceneConfig.EnemyRing : sceneConfig.PlayerRing;
+            PlayerFacade primaryPlayer = team[NumericConstants.PrimaryTeamMemberIndex];
+            PlayerFacade secondaryPlayer = team[NumericConstants.SecondaryTeamMemberIndex];
 
-            playerTeam[NumericConstants.PrimaryTeamMemberIndex] = primaryPlayer.Initialize(isPlayable, secondaryPlayer,
-                ball, camera, SpawnVirtualCamera(), enemyRing, _inputService);
-            playerTeam[NumericConstants.SecondaryTeamMemberIndex] = secondaryPlayer.Initialize(isPlayable,
-                primaryPlayer, ball, camera, SpawnVirtualCamera(), enemyRing, _inputService);
-
-            return playerTeam;
+            primaryPlayer.Initialize(isPlayable, secondaryPlayer, ball, oppositeTeam, camera, SpawnVirtualCamera(),
+                sceneConfig, leftSide, _inputService);
+            secondaryPlayer.Initialize(isPlayable, primaryPlayer, ball, oppositeTeam, camera, SpawnVirtualCamera(),
+                sceneConfig, leftSide, _inputService);
         }
 
         private Referee SpawnReferee()
@@ -121,7 +133,6 @@ namespace Infrastructure.StateMachine.States
 
         private CameraFacade SpawnCamera() =>
             _gameObjectFactory.CreateCamera();
-
 
         private Ball SpawnBall() =>
             _gameObjectFactory.CreateBall();

@@ -3,7 +3,7 @@ using Modules.StateMachine;
 
 namespace Gameplay.Character.Player.StateMachine.States
 {
-    public class CatchState : IParameterlessState
+    public class CatchState : IParameterState<PlayerFacade>
     {
         private readonly PlayerFacade _player;
 
@@ -12,12 +12,10 @@ namespace Gameplay.Character.Player.StateMachine.States
             _player = player;
         }
 
-        public void Enter()
+        public void Enter(PlayerFacade passingPlayer)
         {
-            _player.DisableAIControlledBrain();
-            _player.DisableInputControlledBrain();
-            _player.FocusOnBallOwner();
-            _player.RotateToBallOwner();
+            _player.FocusOn(passingPlayer.transform);
+            _player.RotateTo(passingPlayer.transform.position);
             _player.EnableCatcher();
         }
 

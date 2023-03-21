@@ -4,7 +4,7 @@ using Scene.Ring;
 
 namespace Gameplay.Character.Player.StateMachine.States
 {
-    public class DunkState: IParameterState<Ring>
+    public class DunkState: IParameterlessState
     {
         private readonly PlayerFacade _player;
 
@@ -15,11 +15,10 @@ namespace Gameplay.Character.Player.StateMachine.States
             _player = player;
         }
 
-        public void Enter(Ring ring)
+        public void Enter()
         {
-            _player.DisableInputControlledBrain();
             _player.EnableDunker();
-            _player.Dunk(ring);
+            _player.Dunk();
         }
 
         public void Exit()

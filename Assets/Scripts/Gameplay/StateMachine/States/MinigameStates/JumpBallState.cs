@@ -6,7 +6,6 @@ using Gameplay.Minigame.JumpBall;
 using Gameplay.StateMachine.States.Gameplay;
 using Infrastructure.Factory;
 using Infrastructure.Input.InputService;
-using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
 using UI.HUD;
 using Utility.Constants;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Cinemachine;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
@@ -18,7 +19,7 @@ namespace Gameplay.Minigame.JumpBall
         [SerializeField] private CinemachineVirtualCamera _ballCamera;
         [SerializeField] private CinemachineVirtualCamera _refereeCamera;
 
-        public JumpBallMinigame Initialize
+        public void Initialize
         (
             CinemachineBrain gameplayCamera,
             Referee referee,
@@ -29,21 +30,34 @@ namespace Gameplay.Minigame.JumpBall
         )
         {
             _interface.Initialize(inputService);
+
+            PlayerFacade[] leftTeam;
+            PlayerFacade[] rightTeam;
             
-            PlayerFacade player = playerTeam[NumericConstants.PrimaryTeamMemberIndex];
-            PlayerFacade enemy = enemyTeam[NumericConstants.PrimaryTeamMemberIndex];
+            if (playerTeam.First().LeftSide) //TODO: costyl
+            {
+                leftTeam = playerTeam;
+                rightTeam = enemyTeam;
+            }
+            else
+            {
+                leftTeam = enemyTeam;
+                rightTeam = playerTeam;
+            }
+            
+            PlayerFacade leftPlayer = leftTeam[NumericConstants.PrimaryTeamMemberIndex];
+            PlayerFacade rightPlayer = rightTeam[NumericConstants.PrimaryTeamMemberIndex];
 
             _ballCamera.LookAt = ball.transform;
             _refereeCamera.LookAt = referee.transform;
+            
 
             _director.BindCinemachineBrain(TimelineTrackNames.CinemachineTrackName, gameplayCamera);
-            _director.BindAnimator(TimelineTrackNames.PrimaryPlayerAnimationTrackName, player.Animator);
-            _director.BindAnimator(TimelineTrackNames.PrimaryEnemyAnimationTrackName, enemy.Animator);
+            _director.BindAnimator(TimelineTrackNames.LeftTeamPrimaryPlayerAnimationTrackName, leftPlayer.Animator);
+            _director.BindAnimator(TimelineTrackNames.RightTeamPrimaryPlayerAnimationTrackName, rightPlayer.Animator);
             _director.BindAnimator(TimelineTrackNames.RefereeAnimationTrackName, referee.Animator);
 
             ball.SetOwner(referee);
-
-            return this;
         }
         
         public event Action Won;

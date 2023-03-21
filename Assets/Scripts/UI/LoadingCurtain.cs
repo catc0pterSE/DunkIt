@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using Modules.MonoBehaviour;
 using UnityEngine;
-using Utility.Constants;
 
 namespace UI
 {
@@ -73,12 +72,14 @@ namespace UI
                 
             _curtain.alpha = startAlpha;
 
-            while (Math.Abs(_curtain.alpha - targetAlpha) > NumericConstants.MinimalDelta)
+            while (Math.Abs(_curtain.alpha - targetAlpha) > Mathf.Epsilon)
             {
                 _curtain.alpha = Mathf.MoveTowards(_curtain.alpha, targetAlpha, _fadingStep);
                 yield return null;
             }
 
+            yield return new WaitForEndOfFrame(); // TODO: costyl2
+            
             toDoWhenFaded?.Invoke();
         }
     }

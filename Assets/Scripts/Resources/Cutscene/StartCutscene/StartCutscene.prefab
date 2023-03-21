@@ -188,7 +188,7 @@ GameObject:
   - component: {fileID: 2380539561077636964}
   - component: {fileID: 2380539561077636966}
   m_Layer: 0
-  m_Name: EnemyTeamVirtualCamera
+  m_Name: RightTeamVirtualCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -357,7 +357,7 @@ GameObject:
   - component: {fileID: 2380539561563497415}
   - component: {fileID: 2380539561563497414}
   m_Layer: 0
-  m_Name: PlayerTeamTargetGroup
+  m_Name: LeftTeamTargetGroup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -483,7 +483,7 @@ GameObject:
   - component: {fileID: 2380539561699507853}
   - component: {fileID: 2380539561699507852}
   m_Layer: 0
-  m_Name: EnemyTeamTargetGroup
+  m_Name: RightTeamTargetGroup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -622,7 +622,7 @@ GameObject:
   - component: {fileID: 2380539562084464393}
   - component: {fileID: 2380539562084464395}
   m_Layer: 0
-  m_Name: PlayerTeamVirtualCamera
+  m_Name: LeftTeamVirtualCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -756,8 +756,8 @@ MonoBehaviour:
   _director: {fileID: 2380539561540788583}
   _cutsceneSkipper: {fileID: 1953511878532356503}
   _refereeCamera: {fileID: 2380539560837304686}
-  _playerTeamTargetGroup: {fileID: 2380539561563497414}
-  _enemyTeamTargetGroup: {fileID: 2380539561699507852}
+  _leftTeamTargetGroup: {fileID: 2380539561563497414}
+  _rightTeamTargetGroup: {fileID: 2380539561699507852}
 --- !u!1 &4403888258915198867
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,6 +17,8 @@ namespace Scene.Ring
         [SerializeField] private Transform _ballDunkPoint;
         [SerializeField] private CinemachineVirtualCamera[] _dunkVirtualCameras;
         [SerializeField] private CinemachineTargetGroup _ringTargetGroup;
+        [SerializeField] private bool _isFlipped;
+        [SerializeField] private Transform _ringCenter;
 
         private Coroutine _listeningToWinZone;
         private WaitForSeconds _goalTrackingWindowWait;
@@ -32,6 +34,10 @@ namespace Scene.Ring
 
         public CinemachineVirtualCamera DunkVirtualCamera =>
             _dunkVirtualCameras[Random.Range(0, _dunkVirtualCameras.Length)];
+
+        public Vector3 RingCenter => _ringCenter.transform.position;
+
+        public bool IsFlipped => _isFlipped;
 
         private void Awake()
         {

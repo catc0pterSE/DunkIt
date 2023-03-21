@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -11,12 +12,24 @@ namespace UI.HUD.Mobile
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            Down?.Invoke();
+           StartCoroutine(InvokeDown());
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
+            StartCoroutine(InvokeUp());
+        }
+
+        private IEnumerator InvokeUp()
+        {
+            yield return new WaitForEndOfFrame();
             Up?.Invoke();
+        }
+
+        private IEnumerator InvokeDown()
+        {
+            yield return new WaitForEndOfFrame();
+            Down?.Invoke();
         }
     }
 }
