@@ -35,7 +35,7 @@ namespace Gameplay.StateMachine.States.MinigameStates
             _ball = ball;
             Transitions = new ITransition[]
             {
-                new AnyToFightForBallTransition(ball, gameplayLoopStateMachine, coroutineRunner, false), 
+                /*new AnyToFightForBallTransition(ball, gameplayLoopStateMachine, coroutineRunner, false), */ //
                 new AnyToDropBallTransition(ball, gameplayLoopStateMachine, loadingCurtain, playerTeam, enemyTeam, sceneConfig)
             };
             _throwMinigame = gameObjectFactory.CreateThrowMinigame();
