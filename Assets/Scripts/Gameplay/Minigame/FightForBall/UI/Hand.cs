@@ -58,6 +58,9 @@ namespace Gameplay.Minigame.FightForBall.UI
         public void Launch() =>
             _isLaunched = true;
 
+        public void Stop() =>
+            _isLaunched = false;
+
 
         private Vector3 GetPositionToBall() =>
             Vector3.MoveTowards

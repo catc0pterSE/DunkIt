@@ -48,8 +48,11 @@ namespace Gameplay.StateMachine.States.MinigameStates
             //TODO: adjust difficulty based on player stats from data layer
         }
 
-        protected override void OnMiniGameWon()=>
+        protected override void OnMiniGameWon()
+        {
             _ball.SetOwnerSmoothly(_fightingPlayer, EnterGameplayState);
+        }
+            
 
         protected override void OnMiniGameLost()=>
             _ball.SetOwnerSmoothly(_fightingEnemy, EnterGameplayState);

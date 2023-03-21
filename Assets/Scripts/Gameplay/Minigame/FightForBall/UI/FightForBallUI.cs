@@ -68,8 +68,12 @@ namespace Gameplay.Minigame.FightForBall.UI
             });
         }
 
-        private void FinishSuccessful() =>
+        private void FinishSuccessful()
+        {
+            _hands.Map(hand => hand.Stop());
             Won?.Invoke();
+        }
+           
 
         private void FinishUnsuccessful() =>
             Lost?.Invoke();

@@ -23,7 +23,7 @@ namespace NC_Custom_Tasks.Actions
                 threat += 1 - (oppositePlayer.transform.position - playerPosition).magnitude / ThreatDistance.value;
             }
 
-            Threat.value = threat / OppositePlayersFacades.value.Length;
+            Threat.value = threat;
             EndAction(true);
         }
     }
