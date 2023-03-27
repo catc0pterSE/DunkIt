@@ -11,5 +11,5 @@ Main features:
 Currently, game is built on primitives (capsules), because i am planning to finish core mechanics first, then get to models and animation.
 I make videos with features i develop. Playlist: https://www.youtube.com/playlist?list=PLdi13vlsEuMr2YQwDRI99FKOhC-DQvvTt
 
-I develop this game trying to keep OOP approach and SOLID principles in mind. Dependency injection type - Pure DI.
+I develop this game trying to keep OOP approach and SOLID principles in mind. Dependency injection type - Pure DI (zenject is too "massive" dor WebGL which is target platform)
 Camera is maid by Cinemachine, cutscenes - by TimeLine, AI - with NodeCanvas Behavior Trees.
