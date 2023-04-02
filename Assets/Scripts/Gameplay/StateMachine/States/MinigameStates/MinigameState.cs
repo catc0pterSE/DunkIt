@@ -1,80 +1,70 @@
-﻿using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
-using Gameplay.Character.Player.MonoBehaviour;
-using Gameplay.Minigame;
+﻿using Gameplay.Minigame;
 using Modules.StateMachine;
 using UI.HUD;
-using UI.HUD.Mobile;
-using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.MinigameStates
 {
-    public abstract class MinigameState : IParameterlessState
+    public abstract class MinigameState : StateWithTransitions
     {
-        private readonly PlayerFacade[] _playerTeam;
-        private readonly EnemyFacade[] _enemyTeam;
         private readonly IGameplayHUD _gameplayHUD;
-        private readonly IMinigame _minigame;
+        protected abstract IMinigame Minigame { get; }
 
-        public MinigameState(PlayerFacade[] playerTeam, EnemyFacade[] enemyTeam, IGameplayHUD gameplayHUD,
-            IMinigame minigame)
+        protected MinigameState(IGameplayHUD gameplayHUD)
         {
-            _playerTeam = playerTeam;
-            _enemyTeam = enemyTeam;
+            
             _gameplayHUD = gameplayHUD;
-            _minigame = minigame;
         }
 
-        public virtual void Enter()
+        public override void Enter()
         {
-            DisableGameplayHUD();
+            base.Enter();
             SetCharactersStates();
+            InitializeMinigame();
+            DisableGameplayHUD();
             SubscribeOnMinigame();
             EnableMinigame();
             LaunchMinigame();
         }
 
+        protected abstract void InitializeMinigame();
+
         private void DisableGameplayHUD() =>
             _gameplayHUD.Disable();
 
 
-        public virtual void Exit()
+        public override void Exit()
         {
-            UnsubscribeOnMinigame();
+            base.Exit();
+            UnsubscribeFromMinigame();
             DisableMinigame();
         }
 
         protected abstract void OnMiniGameWon();
         protected abstract void OnMiniGameLost();
 
-        private void SetCharactersStates()
-        {
-            _playerTeam.Map(player =>
-                player.StateMachine.Enter<Character.Player.StateMachine.States.NotControlledState>());
-            _enemyTeam.Map(enemy =>
-                enemy.StateMachine.Enter<Character.NPC.EnemyPlayer.StateMachine.States.NotControlledState>());
-        }
-
+        protected abstract void SetCharactersStates();
+        
         private void SubscribeOnMinigame()
         {
-            _minigame.Won += OnMiniGameWon;
-            _minigame.Lost += OnMiniGameLost;
+            Minigame.Won += OnMiniGameWon;
+            Minigame.Lost += OnMiniGameLost;
         }
 
-        private void UnsubscribeOnMinigame()
+        private void UnsubscribeFromMinigame()
         {
-            _minigame.Won -= OnMiniGameWon;
-            _minigame.Lost -= OnMiniGameLost;
+            Minigame.Won -= OnMiniGameWon;
+            Minigame.Lost -= OnMiniGameLost;
         }
 
         private void LaunchMinigame()
         {
-            _minigame.Launch();
+            Minigame.Launch();
         }
 
         private void EnableMinigame() =>
-            _minigame.Enable();
+            Minigame.Enable();
 
         private void DisableMinigame() =>
-            _minigame.Disable();
+            Minigame.Disable();
     }
 }

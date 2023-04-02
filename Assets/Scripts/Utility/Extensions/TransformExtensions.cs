@@ -4,19 +4,22 @@ namespace Utility.Extensions
 {
     public static class TransformExtensions
     {
-        public static void Reset(this Transform transform)
+        public static void Reset(this Transform transform, bool resetScale = true)
         {
             ResetParent(transform);
             ResetPosition(transform);
             ResetRotation(transform);
-            ResetScale(transform);
+
+            if (resetScale)
+                ResetScale(transform);
         }
 
-        public static void CopyValuesFrom(this Transform transform, Transform other)
+        public static void CopyValuesFrom(this Transform transform, Transform other, bool includeScale)
         {
             transform.position = other.position;
             transform.rotation = other.rotation;
-            transform.localScale = other.localScale;
+            if (includeScale)
+                transform.localScale = other.localScale;
         }
 
         private static void ResetParent(UnityEngine.Transform transform)
@@ -25,13 +28,13 @@ namespace Utility.Extensions
                 transform.parent = null;
         }
 
-        private static void ResetPosition(UnityEngine.Transform transform) =>
+        private static void ResetPosition(Transform transform) =>
             transform.position = Vector3.zero;
 
-        private static void ResetScale(UnityEngine.Transform transform) =>
+        private static void ResetScale(Transform transform) =>
             transform.localScale = Vector3.one;
 
-        private static void ResetRotation(UnityEngine.Transform transform)
+        private static void ResetRotation(Transform transform)
         {
             Quaternion quaternion = transform.rotation;
             quaternion.eulerAngles = Vector3.zero;

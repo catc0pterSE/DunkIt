@@ -13,6 +13,9 @@ namespace UI.HUD.StateMachine.States
         
         public void Enter()
         {
+            _gameplayHUD.SetDunkAvailability(false);
+            _gameplayHUD.SetPassAvailability(false);
+            _gameplayHUD.SetThrowAvailability(false);
            _gameplayHUD.SetChangePlayerAvailability(true); 
         }
         

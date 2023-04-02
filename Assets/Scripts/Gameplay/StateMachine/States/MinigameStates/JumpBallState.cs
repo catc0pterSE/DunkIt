@@ -1,50 +1,59 @@
 ﻿using Cinemachine;
-using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
+using Gameplay.Minigame;
+using Gameplay.Minigame.JumpBall;
 using Gameplay.StateMachine.States.Gameplay;
 using Infrastructure.Factory;
-using Infrastructure.ServiceManagement;
+using Infrastructure.Input.InputService;
+using Modules.StateMachine;
 using UI.HUD;
-using UI.HUD.Mobile;
 using Utility.Constants;
 
 namespace Gameplay.StateMachine.States.MinigameStates
 {
-    using Ball.MonoBehavior;
-
-    public class JumpBallState : MinigameState
+    public class JumpBallState : MinigameState, IParameterlessState
     {
-        private readonly PlayerFacade _player;
-        private readonly EnemyFacade _enemy;
+        private readonly PlayerFacade[] _playerTeam;
+        private readonly PlayerFacade[] _enemyTeam;
         private readonly Referee _referee;
-        private readonly Ball _ball;
+        private readonly Ball.MonoBehavior.Ball _ball;
+        private readonly CinemachineBrain _gameplayCamera;
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
+        private readonly IInputService _inputService;
+        private readonly JumpBallMinigame _jumpBallMinigame;
 
         public JumpBallState
         (
             PlayerFacade[] playerTeam,
-            EnemyFacade[] enemyTeam,
+            PlayerFacade[] enemyTeam,
             Referee referee,
-            Ball ball,
+            Ball.MonoBehavior.Ball ball,
             CinemachineBrain gameplayCamera,
             IGameplayHUD gameplayHUD,
-            GameplayLoopStateMachine gameplayLoopStateMachine
+            GameplayLoopStateMachine gameplayLoopStateMachine,
+            IGameObjectFactory gameObjectFactory,
+            IInputService inputService
         ) : base
         (
-            playerTeam,
-            enemyTeam,
-            gameplayHUD,
-            Services.Container.Single<IGameObjectFactory>().CreateJumpBallMinigame()
-                .Initialize(gameplayCamera, referee, playerTeam, enemyTeam, ball)
+            gameplayHUD
         )
         {
-            _player = playerTeam[NumericConstants.PrimaryTeamMemberIndex];
-            _enemy = enemyTeam[NumericConstants.PrimaryTeamMemberIndex];
+            _playerTeam = playerTeam;
+            _enemyTeam = enemyTeam;
             _referee = referee;
             _ball = ball;
+            _gameplayCamera = gameplayCamera;
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
+            _inputService = inputService;
+            _jumpBallMinigame = gameObjectFactory.CreateJumpBallMinigame();
         }
+
+        protected override IMinigame Minigame => _jumpBallMinigame;
+        private PlayerFacade PrimaryPlayer => _playerTeam[NumericConstants.PrimaryTeamMemberIndex];
+        private PlayerFacade SecondaryPlayer => _playerTeam[NumericConstants.SecondaryTeamMemberIndex];
+        private PlayerFacade PrimaryEnemy => _enemyTeam[NumericConstants.PrimaryTeamMemberIndex];
+        private PlayerFacade SecondaryEnemy => _enemyTeam[NumericConstants.SecondaryTeamMemberIndex];
 
         public override void Enter()
         {
@@ -59,19 +68,27 @@ namespace Gameplay.StateMachine.States.MinigameStates
             _referee.Disable();
         }
 
-        protected override void OnMiniGameWon()
+        protected override void InitializeMinigame() =>
+            _jumpBallMinigame.Initialize(_gameplayCamera, _referee, _playerTeam, _enemyTeam, _ball, _inputService);
+
+
+        protected override void OnMiniGameWon() =>
+            _ball.SetOwnerSmoothly(PrimaryPlayer, EnterGameplayState);
+
+
+        protected override void OnMiniGameLost() =>
+            _ball.SetOwnerSmoothly(PrimaryEnemy, EnterGameplayState);
+
+
+        protected override void SetCharactersStates()
         {
-            _ball.SetOwner(_player);
-            EnterNextState();
+            PrimaryPlayer.EnterNotControlledState();
+            PrimaryEnemy.EnterNotControlledState();
+            SecondaryPlayer.EnterIdleState();
+            SecondaryEnemy.EnterIdleState();
         }
 
-        protected override void OnMiniGameLost()
-        {
-            _ball.SetOwner(_enemy);
-            EnterNextState();
-        }
-
-        private void EnterNextState() =>
+        private void EnterGameplayState() =>
             _gameplayLoopStateMachine.Enter<GameplayState>();
     }
 }

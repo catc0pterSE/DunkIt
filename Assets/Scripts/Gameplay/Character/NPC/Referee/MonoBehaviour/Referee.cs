@@ -4,9 +4,11 @@ using UnityEngine;
 namespace Gameplay.Character.NPC.Referee.MonoBehaviour
 {
     using Ball.MonoBehavior;
-    public class Referee : Character
+    public class Referee: CharacterFacade
     {
         [SerializeField] private Animator _animator;
         public Animator Animator => _animator;
+        
+        
     }
 }

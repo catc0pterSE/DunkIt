@@ -22,36 +22,30 @@ namespace Infrastructure.StateMachine.States
             RegisterServices();
         }
 
-        public void Enter()
-        {
+        public void Enter() =>
             _sceneLoader.LoadScene(SceneNames.Initial, onLoaded: EnterLoadLevel);
-        }
 
         public void Exit()
         {
         }
 
-        private void EnterLoadLevel()
-        {
+        private void EnterLoadLevel() =>
             _stateMachine.Enter<LoadLevelState, string>(SceneNames.Scene);
-        }
 
         private void RegisterServices()
         {
-            RegisterInputService();
             _services.RegisterSingle<IAssetProvider>(new AssetProvider());
-            _services.RegisterSingle<IGameObjectFactory>(
-                new GameObjectFactory(Services.Container.Single<IAssetProvider>()));
+            _services.RegisterSingle<IGameObjectFactory>(new GameObjectFactory(_services.Single<IAssetProvider>()));
+            RegisterInputService();
         }
 
-        private void RegisterInputService() //TODO: for different platforms
-        {
+        private void RegisterInputService() => //TODO: for different platforms
             RegisterMobileInputService();
-        }
+
 
         private void RegisterMobileInputService()
         {
-            MobileInputService mobileInputService = new MobileInputService();
+            MobileInputService mobileInputService = _services.Single<IGameObjectFactory>().CreateMobileInputService();
             _services.RegisterSingle<IInputService>(mobileInputService);
             _services.RegisterSingle<IUIInputController>(mobileInputService);
         }

@@ -1,36 +1,41 @@
-﻿using Infrastructure.Input;
+﻿using Gameplay.Character.Player.MonoBehaviour;
+using Infrastructure.Input;
 using Infrastructure.ServiceManagement;
 using Modules.MonoBehaviour;
 using UI.HUD.StateMachine;
+using UI.Indication;
 using UnityEngine;
-using UnityEngine.UI;
+using z_Test;
 
 namespace UI.HUD.Mobile
 {
     public class MobileGameplayHUD : SwitchableMonoBehaviour, IGameplayHUD
     {
-        [SerializeField] private Button _throwButton;
-        [SerializeField] private Button _dunkButton;
-        [SerializeField] private Button _passButton;
-        [SerializeField] private Button _changePlayerButton;
+        [SerializeField] private ButtonSimulation _throwButton;
+        [SerializeField] private ButtonSimulation _dunkButton;
+        [SerializeField] private ButtonSimulation _passButton;
+        [SerializeField] private ButtonSimulation _changePlayerButton;
+        [SerializeField] private OffScreenIndicationRenderer _offScreenIndicationRenderer;
 
         private IUIInputController _uiInputController;
         private GameplayHUDStateMachine _stateMachine;
 
-        private IUIInputController UIInputController =>
-            _uiInputController ??= Services.Container.Single<IUIInputController>();
-
         public GameplayHUDStateMachine StateMachine => _stateMachine ??= new GameplayHUDStateMachine(this);
 
-        private void OnEnable()
-        {
+        private void OnEnable() =>
             SubscribeUIInputControllerOnButtons();
+
+        private void OnDisable() =>
+            UnsubscribeUIInputControllerFromButtons();
+
+        public IGameplayHUD Initialize(PlayerFacade[] indicationTargets, Camera gameplayCamera)
+        {
+            _offScreenIndicationRenderer.Initialize(indicationTargets, gameplayCamera);
+            return this;
         }
 
-        private void OnDisable()
-        {
-            UnsubscribeUIInputControllerOnButtons();
-        }
+        public void SetUiInputController(IUIInputController uiInputController) =>
+            _uiInputController = uiInputController;
 
         public void SetThrowAvailability(bool isAvailable) =>
             _throwButton.gameObject.SetActive(isAvailable);
@@ -46,18 +51,32 @@ namespace UI.HUD.Mobile
 
         private void SubscribeUIInputControllerOnButtons()
         {
-            _throwButton.onClick.AddListener(UIInputController.OnUIThrowButtonClicked);
-            _dunkButton.onClick.AddListener(UIInputController.OnUIDunkButtonClicked);
-            _passButton.onClick.AddListener(UIInputController.OnUIPassButtonClicked);
-            _changePlayerButton.onClick.AddListener(UIInputController.OnUIChangePlayerButtonClicked);
+            _throwButton.Down += _uiInputController.OnUIThrowButtonDown;
+            _throwButton.Up += _uiInputController.OnUIThrowButtonUp;
+
+            _dunkButton.Down += _uiInputController.OnUIDunkButtonDown;
+            _dunkButton.Up += _uiInputController.OnUIDunkButtonUp;
+
+            _passButton.Down += _uiInputController.OnUIPassButtonDown;
+            _passButton.Up += _uiInputController.OnUIPassButtonUp;
+
+            _changePlayerButton.Down += _uiInputController.OnUIChangePlayerButtonDown;
+            _changePlayerButton.Up += _uiInputController.OnUIChangePlayerButtonUp;
         }
 
-        private void UnsubscribeUIInputControllerOnButtons()
+        private void UnsubscribeUIInputControllerFromButtons()
         {
-            _throwButton.onClick.RemoveListener(UIInputController.OnUIThrowButtonClicked);
-            _dunkButton.onClick.RemoveListener(UIInputController.OnUIDunkButtonClicked);
-            _passButton.onClick.RemoveListener(UIInputController.OnUIPassButtonClicked);
-            _changePlayerButton.onClick.AddListener(UIInputController.OnUIChangePlayerButtonClicked);
+            _throwButton.Down -= _uiInputController.OnUIThrowButtonDown;
+            _throwButton.Up -= _uiInputController.OnUIThrowButtonUp;
+
+            _dunkButton.Down -= _uiInputController.OnUIDunkButtonDown;
+            _dunkButton.Up -= _uiInputController.OnUIDunkButtonUp;
+
+            _passButton.Down -= _uiInputController.OnUIPassButtonDown;
+            _passButton.Up -= _uiInputController.OnUIPassButtonUp;
+
+            _changePlayerButton.Down -= _uiInputController.OnUIChangePlayerButtonDown;
+            _changePlayerButton.Up -= _uiInputController.OnUIChangePlayerButtonUp;
         }
     }
 }

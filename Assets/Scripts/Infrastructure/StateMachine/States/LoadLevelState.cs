@@ -1,19 +1,23 @@
-﻿using Cinemachine;
+﻿using System.Linq;
+using Cinemachine;
 using Gameplay.Ball.MonoBehavior;
 using Gameplay.Camera;
-using Gameplay.Character.NPC.EnemyPlayer.MonoBehaviour;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine;
 using Infrastructure.CoroutineRunner;
 using Infrastructure.Factory;
+using Infrastructure.Input;
+using Infrastructure.Input.InputService;
+using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
-using Scene;
 using UI;
 using UI.HUD;
 using UI.HUD.Mobile;
 using UnityEngine;
 using Utility.Constants;
+using Utility.Extensions;
+using SceneConfig = Scene.SceneConfig;
 
 namespace Infrastructure.StateMachine.States
 {
@@ -23,16 +27,20 @@ namespace Infrastructure.StateMachine.States
         private readonly SceneLoader _sceneLoader;
         private readonly IGameObjectFactory _gameObjectFactory;
         private readonly ICoroutineRunner _coroutineRunner;
+        private readonly Services _serviceContainer;
+        private readonly IInputService _inputService;
 
         private LoadingCurtain _loadingCurtain;
 
         public LoadLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
-            IGameObjectFactory gameObjectFactory, ICoroutineRunner coroutineRunner)
+            ICoroutineRunner coroutineRunner, Services serviceContainer)
         {
-            _gameObjectFactory = gameObjectFactory;
             _coroutineRunner = coroutineRunner;
+            _serviceContainer = serviceContainer;
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
+            _gameObjectFactory = serviceContainer.Single<IGameObjectFactory>();
+            _inputService = serviceContainer.Single<IInputService>();
         }
 
         private LoadingCurtain LoadingCurtain => _loadingCurtain ??=
@@ -46,53 +54,75 @@ namespace Infrastructure.StateMachine.States
 
         public void Exit()
         {
-            LoadingCurtain.Hide();
+            LoadingCurtain.FadeOut();
         }
 
         private void OnLoaded()
         {
-            IGameplayHUD gameplayHUDView = SpawnHUD();
             SceneConfig sceneConfig = GameObject.FindObjectOfType<SceneConfig>();
-            CameraFacade camera = SpawnCamera();
             Ball ball = SpawnBall();
-            PlayerFacade[] playerTeam = SpawnPlayerTeam(camera.Camera, ball, sceneConfig);
-            EnemyFacade[] enemyTeam = SpawnEnemyTeam();
             Referee referee = SpawnReferee();
+            CameraFacade camera = SpawnCamera();
+
+            PlayerFacade[] playerTeam = SpawnTeam();
+            PlayerFacade[] enemyTeam = SpawnTeam();
+
+            InitializeTeam(playerTeam, enemyTeam, ball, sceneConfig, true, true, camera.Camera);               //TODO: side selection
+            InitializeTeam(enemyTeam, playerTeam, ball, sceneConfig, false, false, camera.Camera);
+
+            IGameplayHUD gameplayHUDView = SpawnHUD().Initialize(playerTeam.Union(enemyTeam).ToArray(), camera.Camera);
 
             GameplayLoopStateMachine gameplayLoopStateMachine =
-                new GameplayLoopStateMachine(playerTeam, enemyTeam, referee, camera, gameplayHUDView, ball, sceneConfig,
-                    _coroutineRunner, _gameStateMachine);
+                new GameplayLoopStateMachine
+                (
+                    playerTeam,
+                    enemyTeam,
+                    referee,
+                    camera,
+                    gameplayHUDView,
+                    ball,
+                    sceneConfig,
+                    LoadingCurtain,
+                    _coroutineRunner,
+                    _gameObjectFactory,
+                    _inputService,
+                    _gameStateMachine
+                );
 
             _gameStateMachine.Enter<GamePlayLoopState, GameplayLoopStateMachine>(gameplayLoopStateMachine);
         }
 
-        private PlayerFacade[] SpawnPlayerTeam(Camera camera, Ball ball, SceneConfig sceneConfig)
+        private PlayerFacade[] SpawnTeam()
         {
-            PlayerFacade[] playerTeam = new PlayerFacade[NumericConstants.PlayersInTeam];
+            PlayerFacade[] team = new PlayerFacade[NumericConstants.PlayersInTeam];
 
-            for (int i = 0; i < playerTeam.Length; i++)
-            {
-                PlayerFacade player = _gameObjectFactory.CreatePlayer().GetComponent<PlayerFacade>();
-                CinemachineVirtualCamera virtualCamera = SpawnVirtualCamera();
-                player.Initialize(ball, camera, virtualCamera, sceneConfig);
+            for (int i = 0; i < team.Length; i++)
+                team[i] = _gameObjectFactory.CreatePlayer();
 
-                playerTeam[i] = player;
-            }
-
-            return playerTeam;
+            return team;
         }
 
-        private EnemyFacade[] SpawnEnemyTeam()
+        private void InitializeTeam(PlayerFacade[] team, PlayerFacade[] oppositeTeam, Ball ball,
+            SceneConfig sceneConfig, bool isPlayable, bool leftSide, Camera camera)
         {
-            EnemyFacade[] enemyTeam = new EnemyFacade[NumericConstants.PlayersInTeam];
-
-            for (int i = 0; i < enemyTeam.Length; i++)
+            if (isPlayable == false) //TODO: TEST - delete
             {
-                EnemyFacade enemy = _gameObjectFactory.CreateEnemy().GetComponent<EnemyFacade>();
-                enemyTeam[i] = enemy;
+                team.Map(player => player.GetComponentInChildren<MeshRenderer>().material =
+                    ball.GetComponentInChildren<MeshRenderer>().material);
+                team.Map(player => player.Configure(3f));
+            }
+            else
+            {
+                team.Map(player => player.Configure(4));
             }
 
-            return enemyTeam;
+            PlayerFacade primaryPlayer = team[NumericConstants.PrimaryTeamMemberIndex];
+            PlayerFacade secondaryPlayer = team[NumericConstants.SecondaryTeamMemberIndex];
+
+            primaryPlayer.Initialize(isPlayable, secondaryPlayer, ball, oppositeTeam, camera, SpawnVirtualCamera(),
+                sceneConfig, leftSide, _inputService);
+            secondaryPlayer.Initialize(isPlayable, primaryPlayer, ball, oppositeTeam, camera, SpawnVirtualCamera(),
+                sceneConfig, leftSide, _inputService);
         }
 
         private Referee SpawnReferee()
@@ -104,18 +134,20 @@ namespace Infrastructure.StateMachine.States
         private CameraFacade SpawnCamera() =>
             _gameObjectFactory.CreateCamera();
 
-
         private Ball SpawnBall() =>
             _gameObjectFactory.CreateBall();
 
+        private IGameplayHUD SpawnHUD() //TODO different for different platforms
+        {
+            return SpawnMobileHUD();
+        }
 
-        private IGameplayHUD SpawnHUD()  //TODO different for different platforms
+        private IGameplayHUD SpawnMobileHUD()
         {
             MobileGameplayHUD mobileGameplayHUD = _gameObjectFactory.CreateMobileHUD();
+            mobileGameplayHUD.SetUiInputController(_serviceContainer.Single<IUIInputController>());
             return mobileGameplayHUD;
         }
-            
-
 
         private CinemachineVirtualCamera SpawnVirtualCamera() =>
             _gameObjectFactory.CreateCinemachineVirtualCamera();

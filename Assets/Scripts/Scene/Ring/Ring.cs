@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using Cinemachine;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Scene.Ring
 {
@@ -11,12 +13,31 @@ namespace Scene.Ring
         [SerializeField] private RingCap _cap;
         [SerializeField] private WinZone _winZone;
         [SerializeField] private CinemachineVirtualCamera _virtualCamera;
+        [SerializeField] private Transform[] _dunkPoints;
+        [SerializeField] private Transform _ballDunkPoint;
+        [SerializeField] private CinemachineVirtualCamera[] _dunkVirtualCameras;
+        [SerializeField] private CinemachineTargetGroup _ringTargetGroup;
+        [SerializeField] private bool _isFlipped;
+        [SerializeField] private Transform _ringCenter;
 
         private Coroutine _listeningToWinZone;
         private WaitForSeconds _goalTrackingWindowWait;
         public event Action Goal;
 
+        public CinemachineTargetGroup RingTargetGroup => _ringTargetGroup;
+        
+        public Transform[] DunkPoints => _dunkPoints.ToArray();
+
+        public Transform BallDunkPoint => _ballDunkPoint;
+
         public CinemachineVirtualCamera VirtualCamera => _virtualCamera;
+
+        public CinemachineVirtualCamera DunkVirtualCamera =>
+            _dunkVirtualCameras[Random.Range(0, _dunkVirtualCameras.Length)];
+
+        public Vector3 RingCenter => _ringCenter.transform.position;
+
+        public bool IsFlipped => _isFlipped;
 
         private void Awake()
         {
@@ -37,7 +58,7 @@ namespace Scene.Ring
         {
             if (_listeningToWinZone != null)
                 StopCoroutine(_listeningToWinZone);
-            
+
             StartCoroutine(ListenToWinZone());
         }
 
@@ -52,7 +73,7 @@ namespace Scene.Ring
         {
             if (_listeningToWinZone != null)
                 StopCoroutine(_listeningToWinZone);
-            
+
             Goal?.Invoke();
         }
     }

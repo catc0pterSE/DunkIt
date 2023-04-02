@@ -1,4 +1,4 @@
-using System.Collections;
+using Agava.YandexGames;
 using Infrastructure.CoroutineRunner;
 using Infrastructure.ServiceManagement;
 using Infrastructure.StateMachine;
@@ -13,13 +13,16 @@ namespace Infrastructure
 
         private void Awake()
         {
-           _stateMachine =  new GameStateMachine(
-               new SceneLoader(),
-               Services.Container,
-               this
-           );
-           _stateMachine.Enter<BootstrapState>();
+            YandexGamesSdk.Initialize();
             
+            _stateMachine = new GameStateMachine(
+                new SceneLoader(),
+                Services.Container,
+                this
+            );
+            _stateMachine.Enter<BootstrapState>();
+            
+
             DontDestroyOnLoad(this);
         }
     }

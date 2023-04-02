@@ -17,25 +17,30 @@ namespace UI.HUD.StateMachine.States
         public void Enter(PlayerFacade player)
         {
             _player = player;
+            _gameplayHUD.SetChangePlayerAvailability(false);
             SubscribeHudOnCurrentPlayer();
         }
 
         public void Exit()
         {
-            UnsubscribeHudOnCurrentPlayer();
+            UnsubscribeHudFromCurrentPlayer();
+            _gameplayHUD.SetDunkAvailability(false);
+            _gameplayHUD.SetPassAvailability(false);
+            _gameplayHUD.SetThrowAvailability(false);
         }
         
         private void SubscribeHudOnCurrentPlayer()
         {
-            Debug.Log(_player.gameObject.name);
             _player.ThrowReached += _gameplayHUD.SetThrowAvailability;
             _player.DunkReached += _gameplayHUD.SetDunkAvailability;
+            _player.PassReached += _gameplayHUD.SetPassAvailability;
         }
 
-        private void UnsubscribeHudOnCurrentPlayer()
+        private void UnsubscribeHudFromCurrentPlayer()
         {
             _player.ThrowReached -= _gameplayHUD.SetThrowAvailability;
             _player.DunkReached -= _gameplayHUD.SetDunkAvailability;
+            _player.PassReached -= _gameplayHUD.SetPassAvailability;
         }
     }
 }

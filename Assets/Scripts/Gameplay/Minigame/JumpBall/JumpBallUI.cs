@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace Gameplay.Minigame.JumpBall
 {
-    public class JumpBallUI: SwitchableMonoBehaviour
+    public class JumpBallUI : SwitchableMonoBehaviour
     {
         [SerializeField] private Slider _slider;
         [SerializeField] private float _speed;
@@ -18,16 +18,23 @@ namespace Gameplay.Minigame.JumpBall
         private IInputService _inputService;
         private Coroutine _running;
 
-        private IInputService InputService => _inputService ??= Services.Container.Single<IInputService>();
+        public void Initialize(IInputService inputService) =>
+            _inputService = inputService;
+
+        public event Action Won;
+        public event Action Lost;
 
         private void OnEnable()
         {
             Reset();
             Launch();
+            SubscribeOnTouch();
         }
 
-        public event Action Won;
-        public event Action Lost;
+        private void OnDisable()
+        {
+            UnsubscribeFromTouch();
+        }
 
         private void Launch()
         {
@@ -36,7 +43,7 @@ namespace Gameplay.Minigame.JumpBall
             if (_running != null)
                 StopCoroutine(_running);
 
-            StartCoroutine(Run());
+            _running = StartCoroutine(Run());
         }
 
         private void Start()
@@ -50,26 +57,29 @@ namespace Gameplay.Minigame.JumpBall
             {
                 _slider.value = Mathf.MoveTowards(_slider.value, _slider.maxValue, _speed * Time.deltaTime);
 
-                if (InputService.Clicked)
-                    Finish();
-
                 yield return null;
             }
 
             Finish();
         }
 
+        private void SubscribeOnTouch() =>
+            _inputService.PointerDown += Finish;
+
+        private void UnsubscribeFromTouch() =>
+            _inputService.PointerDown -= Finish;
+
         private void Reset() =>
             _slider.value = _slider.minValue;
 
         private void Finish()
         {
+            StopCoroutine(_running);
+
             if (_handle.IsInZone)
                 Won?.Invoke();
             else
                 Lost?.Invoke();
-            
-            Disable();
-        }  
+        }
     }
 }
