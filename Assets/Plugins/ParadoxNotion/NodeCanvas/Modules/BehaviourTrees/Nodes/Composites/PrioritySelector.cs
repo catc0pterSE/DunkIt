@@ -75,6 +75,7 @@ namespace NodeCanvas.BehaviourTrees
 
         ///----------------------------------------------------------------------------------------------
 
+        public bool dynamic;
         [AutoSortWithChildrenConnections]
         public List<Desire> desires;
 
@@ -89,6 +90,24 @@ namespace NodeCanvas.BehaviourTrees
         public override void OnChildDisconnected(int index) { desires.RemoveAt(index); }
 
         protected override Status OnExecute(Component agent, IBlackboard blackboard) {
+
+            if ( dynamic ) {
+                var highestPriority = float.NegativeInfinity;
+                var best = 0;
+                for ( var i = 0; i < outConnections.Count; i++ ) {
+                    var priority = desires[i].GetCompoundUtility();
+                    if ( priority > highestPriority ) {
+                        highestPriority = priority;
+                        best = i;
+                    }
+                }
+
+                if ( best != current ) {
+                    outConnections[current].Reset();
+                    current = best;
+                }
+                return outConnections[current].Execute(agent, blackboard);
+            }
 
             if ( status == Status.Resting ) {
                 orderedConnections = outConnections.OrderBy(c => desires[outConnections.IndexOf(c)].GetCompoundUtility()).ToArray();
@@ -146,6 +165,10 @@ namespace NodeCanvas.BehaviourTrees
             EditorUtils.Separator();
         }
 
+        protected override void OnNodeGUI() {
+            if ( dynamic ) { GUILayout.Label("<b>DYNAMIC</b>"); }
+        }
+
         //..
         protected override void OnNodeInspectorGUI() {
 
@@ -153,6 +176,11 @@ namespace NodeCanvas.BehaviourTrees
                 GUILayout.Label("Make some connections first");
                 return;
             }
+
+            dynamic = UnityEditor.EditorGUILayout.Toggle("Dynamic", dynamic);
+
+            EditorUtils.Separator();
+            EditorUtils.CoolLabel("Considerations");
 
             var optionsA = new EditorUtils.ReorderableListOptions();
             optionsA.allowAdd = false;
