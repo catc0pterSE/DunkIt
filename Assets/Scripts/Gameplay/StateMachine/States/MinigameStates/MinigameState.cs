@@ -27,6 +27,9 @@ namespace Gameplay.StateMachine.States.MinigameStates
         }
 
         protected abstract void InitializeMinigame();
+        protected abstract void OnMiniGameWon();
+        protected abstract void OnMiniGameLost();
+        protected abstract void SetCharactersStates();
 
         private void DisableGameplayHUD() =>
             _gameplayHUD.Disable();
@@ -39,11 +42,6 @@ namespace Gameplay.StateMachine.States.MinigameStates
             DisableMinigame();
         }
 
-        protected abstract void OnMiniGameWon();
-        protected abstract void OnMiniGameLost();
-
-        protected abstract void SetCharactersStates();
-        
         private void SubscribeOnMinigame()
         {
             Minigame.Won += OnMiniGameWon;

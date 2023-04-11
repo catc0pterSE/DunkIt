@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Modules.MonoBehaviour;
 using UnityEngine;
+using Utility.Extensions;
 
 namespace Gameplay.Character.Player.MonoBehaviour.TargetTracking
 {
@@ -11,34 +13,52 @@ namespace Gameplay.Character.Player.MonoBehaviour.TargetTracking
         [SerializeField] private float _maxPassDistance;
 
         private Vector3 _enemyRingPosition;
-        private Transform _allyTransform;
+        private PlayerFacade[] _allies;
 
+       
+
+        public void Initialize(Vector3 enemyRingPosition, PlayerFacade[] allies)
+        {
+            _allies = allies;
+            _enemyRingPosition = enemyRingPosition;
+        }
+        
         public event Action<bool> PassReached;
         public event Action<bool> ThrowReached;
         public event Action<bool> DunkReached;
 
+        
         public bool IsInThrowDistance => DistanceToEnemyRing < _maxThrowDistance && DistanceToEnemyRing > _maxDunkDistance;
         public bool IsInDunkDistance => DistanceToEnemyRing < _maxDunkDistance;
-        public bool IsInPassDistance => DistanceToAlly < _maxPassDistance;
-
         public float DistanceToEnemyRing => Vector3.Distance(transform.position, _enemyRingPosition);
-        public float DistanceToAlly => Vector3.Distance(transform.position, _allyTransform.position);
 
         public float MaxPassDistance => _maxPassDistance;
         public float MaxThrowDistance => _maxThrowDistance;
         public float MaxDunkDistance => _maxDunkDistance;
 
-        public void Initialize(Vector3 enemyRingPosition, Transform allyTransform)
-        {
-            _allyTransform = allyTransform;
-            _enemyRingPosition = enemyRingPosition;
-        }
-
         private void Update()
         {
             DunkReached?.Invoke(IsInDunkDistance);
             ThrowReached?.Invoke(IsInThrowDistance);
-            PassReached?.Invoke(IsInPassDistance);
+            PassReached?.Invoke(TrySelectAllyToPass(out _));
+            
+            //TODO: pass target highlite
+        }
+
+        public bool TrySelectAllyToPass(out PlayerFacade passTarget)
+        {
+           passTarget = null;
+           
+           Vector3 playerPosition = transform.position;
+           PlayerFacade[] alliesInPassRange = _allies.Where(ally =>
+                Vector3.Distance(playerPosition, ally.transform.position) <= _maxPassDistance).ToArray();
+
+            if (alliesInPassRange.Any() == false)
+                return false;
+
+            passTarget = alliesInPassRange.FindClosestToDirection(transform.forward, playerPosition);
+            
+            return true;
         }
     }
 }

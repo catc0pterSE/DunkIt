@@ -52,7 +52,7 @@ namespace z_Test
         }*/
     }
 
-    public class SceneConfig: UnityEngine.MonoBehaviour
+    /*public class SceneConfig: UnityEngine.MonoBehaviour
     {
 
         private bool _isSimulationSceneInitialized = false;
@@ -85,5 +85,5 @@ namespace z_Test
 
             return simulationScene;
         }
-    }
+    }*/
 }

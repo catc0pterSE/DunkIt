@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Modules.MonoBehaviour;
 using UnityEngine;
 
@@ -8,10 +9,10 @@ namespace Gameplay.Character.Player.MonoBehaviour.TriggerZone
     {
         [SerializeField] private PlayerFacade _host;
 
-        private PlayerFacade _ally;
+        private PlayerFacade[] _allies;
 
-        public void Initialize(PlayerFacade ally) =>
-            _ally = ally;
+        public void Initialize(PlayerFacade[] allies) =>
+            _allies = allies;
 
         public event Action<PlayerFacade[]> FightForBallStarted;
 
@@ -23,7 +24,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.TriggerZone
             if (basketballPlayer == _host)
                 return;
 
-            if (basketballPlayer == _ally)
+            if (_allies.Contains(basketballPlayer))
                 return;
 
             PlayerFacade[] participants = new PlayerFacade[]

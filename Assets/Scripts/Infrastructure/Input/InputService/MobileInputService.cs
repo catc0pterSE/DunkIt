@@ -7,7 +7,6 @@ namespace Infrastructure.Input.InputService
     {
         private const string HorizontalAxisName = "Horizontal";
         private const string VerticalAxisName = "Vertical";
-        private const string ThrowCurveAxisName = "ThrowCurve";
         private const string MouseXAxisName = "Mouse X";
         private const string MouseYAxisName = "Mouse Y";
 
@@ -30,7 +29,6 @@ namespace Infrastructure.Input.InputService
         public bool ChangePlayerButtonHeldDown { get; private set; }
 
         public Vector3 PointerPosition => UnityEngine.Input.mousePosition;
-        public float ThrowCurve => SimpleInput.GetAxis(ThrowCurveAxisName);
 
         public event Action PointerDown;
         public event Action ThrowButtonDown;

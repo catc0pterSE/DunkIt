@@ -105,7 +105,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Dunk
 
         private void ThrowBall(Vector3 ballThrowPoint)
         {
-            _ball.MoveTo(ballThrowPoint, () =>
+            _ball.StartMovingTo(ballThrowPoint, () =>
             {
                 Vector3 throwDirection =
                     new Vector3

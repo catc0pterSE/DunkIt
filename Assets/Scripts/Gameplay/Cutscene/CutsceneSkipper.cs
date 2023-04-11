@@ -13,14 +13,24 @@ namespace Gameplay.Cutscene
         [SerializeField] private PlayableDirector _director;
         private IInputService _inputService;
 
-        public void Initialize(IInputService inputService) =>
+        public void Initialize(IInputService inputService)
+        {
             _inputService = inputService;
+        }
+            
 
-        private void OnEnable() =>
-            _inputService.PointerDown += SkipCutscene;
+        private void OnEnable()
+        {
+            _inputService.PointerDown += SkipCutscene; 
+        }
+            
 
-        private void OnDisable() =>
+        private void OnDisable() 
+        {
+            
             _inputService.PointerDown -= SkipCutscene;
+        }
+            
 
         private void SkipCutscene() =>
             _director.Stop();

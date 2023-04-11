@@ -12,14 +12,12 @@ namespace Gameplay.Character.Player.StateMachine.States
             _player = player;
         }
 
-        public void Enter(PlayerFacade opponent)
+        public void Enter(PlayerFacade otherPlayer)
         {
-            _player.FocusOn(opponent.transform);
+            _player.FocusOn(otherPlayer.transform);
 
-            if (_player.IsPlayable)
+            if (_player.CanBeLocalControlled)
                 _player.PrioritizeCamera();
-            
-            //play fight for ball animation
         }
 
         public void Exit()

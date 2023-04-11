@@ -5,68 +5,42 @@ using Gameplay.StateMachine.States.MinigameStates;
 using Infrastructure.CoroutineRunner;
 using Modules.StateMachine;
 using UnityEngine;
+using Utility.Extensions;
 
 namespace Gameplay.StateMachine.Transitions
 {
     public class AnyToFightForBallTransition : ITransition
     {
-        private const float DelayTime = 4f;
-
-        private readonly Ball.MonoBehavior.Ball _ball;
+        private readonly PlayerFacade[] _players;
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
         private readonly ICoroutineRunner _coroutineRunner;
-        private readonly bool _isDelayable;
-        private readonly WaitForSeconds _waitForDelay = new WaitForSeconds(DelayTime);
+        private readonly float _delaySeconds;
 
-        private PlayerFacade _currentBallOwner;
         private Coroutine _delayRoutine;
         private bool _isOnDelay;
 
-        public AnyToFightForBallTransition(Ball.MonoBehavior.Ball ball,
-            GameplayLoopStateMachine gameplayLoopStateMachine, ICoroutineRunner coroutineRunner, bool isDelayable)
+        public AnyToFightForBallTransition(PlayerFacade[] players, GameplayLoopStateMachine gameplayLoopStateMachine,
+            ICoroutineRunner coroutineRunner, float delaySeconds = 0)
         {
-            _ball = ball;
+            _players = players;
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
             _coroutineRunner = coroutineRunner;
-            _isDelayable = isDelayable;
+            _delaySeconds = delaySeconds;
         }
 
         public void Enable()
         {
-            _isOnDelay = false;
-            
-            if (_isDelayable)
-                StartDelay();
-            
-            SubscribeOnBall();
-            OnBallOwnerChanged(_ball.Owner);
+            StartDelay();
+            SubscribeOnPlayers();
         }
 
-        public void Disable()
-        {
-            UnsubscribeFromBall();
-            UnsubscribeFromCurrentBallOwner();
-        }
-
-        private void SubscribeOnBall() =>
-            _ball.OwnerChanged += OnBallOwnerChanged;
-
-        private void UnsubscribeFromBall() =>
-            _ball.OwnerChanged -= OnBallOwnerChanged;
-
-        private void OnBallOwnerChanged(CharacterFacade newOwner)
-        {
-            UnsubscribeFromCurrentBallOwner();
-
-            if (newOwner is not PlayerFacade basketballPlayer)
-                return;
-
-            _currentBallOwner = basketballPlayer;
-            SubscribeOnCurrentBallOwner();
-        }
+        public void Disable() =>
+            UnsubscribeFromPlayers();
 
         private void StartDelay()
         {
+            _isOnDelay = false;
+            
             if (_delayRoutine != null)
                 _coroutineRunner.StopCoroutine(_delayRoutine);
 
@@ -76,22 +50,18 @@ namespace Gameplay.StateMachine.Transitions
         private IEnumerator Delay()
         {
             _isOnDelay = true;
-            yield return _waitForDelay;
+            yield return new WaitForSeconds(_delaySeconds);
             _isOnDelay = false;
         }
 
-        private void SubscribeOnCurrentBallOwner() =>
-            _currentBallOwner.FightForBallStarted += MoveToFightForBallState;
+        private void SubscribeOnPlayers() =>
+            _players.Map(player => player.FightForBallStarted += OnFightForBallInitiated);
 
 
-        private void UnsubscribeFromCurrentBallOwner()
-        {
-            if (_currentBallOwner != null)
-                _currentBallOwner.FightForBallStarted -= MoveToFightForBallState;
-        }
+        private void UnsubscribeFromPlayers() =>
+            _players.Map(player => player.FightForBallStarted -= OnFightForBallInitiated);
 
-
-        private void MoveToFightForBallState(PlayerFacade[] participants)
+        private void OnFightForBallInitiated(PlayerFacade[] participants)
         {
             if (_isOnDelay == false)
                 _gameplayLoopStateMachine.Enter<FightForBallState, PlayerFacade[]>(participants);

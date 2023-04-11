@@ -12,8 +12,11 @@ namespace UI.HUD.StateMachine
         {
             States = new Dictionary<Type, IState>()
             {
-                [typeof(AttackState)] = new AttackState(gameplayHUD),
-                [typeof(DefenceState)] = new DefenceState(gameplayHUD)
+                [typeof(AttackWithBallState)] = new AttackWithBallState(gameplayHUD),
+                [typeof(DefenceState)] = new DefenceState(gameplayHUD),
+                [typeof(BallChasingState)] = new BallChasingState(gameplayHUD),
+                [typeof(DropBallState)] = new DropBallState(gameplayHUD),
+                [typeof(ThrowState)] = new ThrowState(gameplayHUD)
             };
         }
     }

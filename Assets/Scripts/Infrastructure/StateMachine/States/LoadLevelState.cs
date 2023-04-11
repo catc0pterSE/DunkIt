@@ -9,15 +9,19 @@ using Infrastructure.CoroutineRunner;
 using Infrastructure.Factory;
 using Infrastructure.Input;
 using Infrastructure.Input.InputService;
+using Infrastructure.Mediator;
+using Infrastructure.PlayerService;
 using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
+using Scene;
 using UI;
 using UI.HUD;
 using UI.HUD.Mobile;
+using UI.HUD.StateMachine;
+using UI.HUD.StateMachine.States;
 using UnityEngine;
 using Utility.Constants;
 using Utility.Extensions;
-using SceneConfig = Scene.SceneConfig;
 
 namespace Infrastructure.StateMachine.States
 {
@@ -46,10 +50,10 @@ namespace Infrastructure.StateMachine.States
         private LoadingCurtain LoadingCurtain => _loadingCurtain ??=
             _gameObjectFactory.CreateLoadingCurtain().GetComponent<LoadingCurtain>();
 
-        public void Enter(string name)
+        public void Enter(string payload)
         {
             LoadingCurtain.Show();
-            _sceneLoader.LoadScene(name, OnLoaded);
+            _sceneLoader.LoadScene(payload, OnLoaded);
         }
 
         public void Exit()
@@ -59,29 +63,43 @@ namespace Infrastructure.StateMachine.States
 
         private void OnLoaded()
         {
-            SceneConfig sceneConfig = GameObject.FindObjectOfType<SceneConfig>();
+            SceneInitials sceneInitials = GameObject.FindObjectOfType<SceneInitials>();
             Ball ball = SpawnBall();
+            ball.Initialize(sceneInitials);
             Referee referee = SpawnReferee();
+            referee.Initialize(ball);
             CameraFacade camera = SpawnCamera();
 
-            PlayerFacade[] playerTeam = SpawnTeam();
-            PlayerFacade[] enemyTeam = SpawnTeam();
+            PlayerFacade[] leftTeam = SpawnTeam();
+            PlayerFacade[] rightTeam = SpawnTeam();
 
-            InitializeTeam(playerTeam, enemyTeam, ball, sceneConfig, true, true, camera.Camera);               //TODO: side selection
-            InitializeTeam(enemyTeam, playerTeam, ball, sceneConfig, false, false, camera.Camera);
+            TeamsMediator teamsMediator = new TeamsMediator
+            (
+                leftTeam,
+                rightTeam,
+                ball,
+                camera,
+                sceneInitials,
+                _serviceContainer.Single<IInputService>(),
+                _serviceContainer.Single<IPlayerService>()
+            );
 
-            IGameplayHUD gameplayHUDView = SpawnHUD().Initialize(playerTeam.Union(enemyTeam).ToArray(), camera.Camera);
+            leftTeam.Map(player => player.Initialize(teamsMediator, true, false, SpawnVirtualCamera()));
+            rightTeam.Map(player => player.Initialize(teamsMediator, false, true, SpawnVirtualCamera()));
+            _serviceContainer.Single<IPlayerService>().Set(leftTeam.First()); //TODO: move somewhere
+
+            IGameplayHUD gameplayHUDView = SpawnHUD().Initialize(leftTeam.Union(rightTeam).ToArray(), camera.Camera, _serviceContainer.Single<IHUDStateController>());
 
             GameplayLoopStateMachine gameplayLoopStateMachine =
                 new GameplayLoopStateMachine
                 (
-                    playerTeam,
-                    enemyTeam,
+                    leftTeam,
+                    rightTeam,
                     referee,
                     camera,
                     gameplayHUDView,
                     ball,
-                    sceneConfig,
+                    sceneInitials,
                     LoadingCurtain,
                     _coroutineRunner,
                     _gameObjectFactory,
@@ -100,29 +118,6 @@ namespace Infrastructure.StateMachine.States
                 team[i] = _gameObjectFactory.CreatePlayer();
 
             return team;
-        }
-
-        private void InitializeTeam(PlayerFacade[] team, PlayerFacade[] oppositeTeam, Ball ball,
-            SceneConfig sceneConfig, bool isPlayable, bool leftSide, Camera camera)
-        {
-            if (isPlayable == false) //TODO: TEST - delete
-            {
-                team.Map(player => player.GetComponentInChildren<MeshRenderer>().material =
-                    ball.GetComponentInChildren<MeshRenderer>().material);
-                team.Map(player => player.Configure(3f));
-            }
-            else
-            {
-                team.Map(player => player.Configure(4));
-            }
-
-            PlayerFacade primaryPlayer = team[NumericConstants.PrimaryTeamMemberIndex];
-            PlayerFacade secondaryPlayer = team[NumericConstants.SecondaryTeamMemberIndex];
-
-            primaryPlayer.Initialize(isPlayable, secondaryPlayer, ball, oppositeTeam, camera, SpawnVirtualCamera(),
-                sceneConfig, leftSide, _inputService);
-            secondaryPlayer.Initialize(isPlayable, primaryPlayer, ball, oppositeTeam, camera, SpawnVirtualCamera(),
-                sceneConfig, leftSide, _inputService);
         }
 
         private Referee SpawnReferee()

@@ -2,6 +2,7 @@
 using Gameplay.Character.Player.MonoBehaviour;
 using UnityEngine;
 using UnityEngine.UI;
+using Utility.Constants;
 using Utility.Extensions;
 
 namespace UI.Indication
@@ -11,7 +12,7 @@ namespace UI.Indication
         [SerializeField] private Color _allyColor;
         [SerializeField] private Color _enemyColor;
         [SerializeField] private float _offset = 10;
-        [SerializeField] private Image[] _indicators;
+        [SerializeField] private Image[] _indicators = new Image[NumericConstants.PlayersInTeam];
 
         private Camera _camera;
         private PlayerFacade[] _targets;
@@ -31,7 +32,7 @@ namespace UI.Indication
             {
                 Image indicator = _indicators[i];
                 PlayerFacade target = targets[i];
-                indicator.color = target.IsPlayable ? _allyColor : _enemyColor;
+                indicator.color = target.CanBeLocalControlled ? _allyColor : _enemyColor;
                 _dedicatedIndicators[target] = indicator;
             }
         }
@@ -69,10 +70,8 @@ namespace UI.Indication
             bool isBehindScreen = roughPosition.z < 0;
 
             if (isBehindScreen)
-            {
                 roughPosition = GetMirroredPosition(roughPosition);
-            }
-            
+
             float positionX = Mathf.Clamp(roughPosition.x, _offset, Screen.width - _offset);
             float positionY = Mathf.Clamp(roughPosition.y, _offset, Screen.height - _offset);
 
@@ -87,9 +86,8 @@ namespace UI.Indication
 
         private void RotateIndicator(Image indicator)
         {
-            PlayerFacade controlledPlayer = _targets.FindFirstOrNull(target => target.IsControlled);
-            Vector3 controlledPlayerScreenPosition = _camera.WorldToScreenPoint(controlledPlayer.transform.position);
-            Vector3 direction = (indicator.rectTransform.position - controlledPlayerScreenPosition).normalized;
+            Vector3 screenCenter = new Vector3(Screen.width*NumericConstants.Half, Screen.height*NumericConstants.Half);
+            Vector3 direction = (indicator.rectTransform.position - screenCenter).normalized;
 
             indicator.transform.right = -direction;
         }

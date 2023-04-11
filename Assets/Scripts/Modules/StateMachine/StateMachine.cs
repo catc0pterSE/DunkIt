@@ -21,6 +21,12 @@ namespace Modules.StateMachine
             if (TryChangeState(out TState state))
                 state.Enter(payload);
         }
+        
+        public void Enter<TState, TPayLoad1, TPayLoad2>(TPayLoad1 payLoad1, TPayLoad2 payLoad2) where TState : class, IParameterState<TPayLoad1, TPayLoad2>
+        {
+            if (TryChangeState(out TState state))
+                state.Enter(payLoad1, payLoad2);
+        }
 
         private TState GetState<TState>() where TState : class, IState =>
             States[typeof(TState)] as TState;

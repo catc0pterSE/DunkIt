@@ -1,80 +1,41 @@
 ﻿using Cinemachine;
 using Gameplay.Character.Player.MonoBehaviour;
-using Gameplay.StateMachine.States.CutsceneStates;
+using Gameplay.StateMachine.Transitions;
 using Modules.StateMachine;
+using Scene;
 using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.Gameplay
 {
-    public class DunkState : IParameterState<PlayerFacade>
+    using Ball.MonoBehavior;
+    public class DunkState : StateWithTransitions, IParameterState<PlayerFacade>
     {
-        private readonly PlayerFacade[] _playerTeam;
-        private readonly PlayerFacade[] _enemyTeam;
-        private readonly Ball.MonoBehavior.Ball _ball;
-        private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
+        private readonly Ball _ball;
 
         private CinemachineVirtualCamera _dunkVirtualCamera;
 
-        private PlayerFacade _jumpingPlayer;
-
-        public DunkState(PlayerFacade[] playerTeam, PlayerFacade[] enemyTeam, Ball.MonoBehavior.Ball ball,
-            GameplayLoopStateMachine gameplayLoopStateMachine)
+        public DunkState(PlayerFacade[] leftTeam, PlayerFacade[] rightTeam, SceneInitials sceneInitials, Ball ball, GameplayLoopStateMachine gameplayLoopStateMachine)
         {
-            _playerTeam = playerTeam;
-            _enemyTeam = enemyTeam;
             _ball = ball;
-            _gameplayLoopStateMachine = gameplayLoopStateMachine;
+
+            Transitions = new ITransition[]
+            {
+                new AnyToBallChasingStateTransition(ball, gameplayLoopStateMachine),
+            };
         }
 
-        public void Enter(PlayerFacade player)
+        public void Enter(PlayerFacade dunkingPlayer)
         {
-            _jumpingPlayer = player;
+            base.Enter();
+            _dunkVirtualCamera = dunkingPlayer.OppositeRing.DunkVirtualCamera;
             SetUpDunkCamera();
-            SetCharactersStates();
-            SubscribeOnJumpingPlayer();
-        }
-
-        public void Exit()
-        {
-            UnsubscribeFromJumpingPlayer();
-            UnsubscribeFromGoalScored();
+            dunkingPlayer.EnterDunkState();
         }
 
         private void SetUpDunkCamera()
         {
-            _dunkVirtualCamera = _jumpingPlayer.OppositeRing.DunkVirtualCamera;
             _dunkVirtualCamera.Prioritize();
             _dunkVirtualCamera.LookAt = _ball.transform;
-        }
-
-        private void SubscribeOnJumpingPlayer() =>
-            _jumpingPlayer.DunkPointReached += OnDunkPointReached;
-
-        private void UnsubscribeFromJumpingPlayer() =>
-            _jumpingPlayer.DunkPointReached -= OnDunkPointReached;
-
-        private void SubscribeOnGoalScored() =>
-            _jumpingPlayer.OppositeRing.Goal += MoveToCelebrateCutscene;
-
-        private void UnsubscribeFromGoalScored() =>
-            _jumpingPlayer.OppositeRing.Goal += MoveToCelebrateCutscene;
-
-        private void MoveToCelebrateCutscene()
-        {
-            _gameplayLoopStateMachine.Enter<CelebrateCutsceneState>();
-        }
-
-        private void OnDunkPointReached()
-        {
-            SubscribeOnGoalScored();
-        }
-
-        private void SetCharactersStates()
-        {
-            PlayerFacade otherPlayer = _playerTeam.FindFirstOrNull(player => player != _jumpingPlayer);
-            otherPlayer.EnterIdleState();
-            _enemyTeam.Map(enemy => enemy.EnterIdleState());
-            _jumpingPlayer.EnterDunkState();
         }
     }
 }

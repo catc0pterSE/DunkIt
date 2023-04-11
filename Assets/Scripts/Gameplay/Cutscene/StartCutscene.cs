@@ -31,45 +31,30 @@ namespace Gameplay.Cutscene
         public StartCutscene Initialize
         (
             CinemachineBrain gameplayCamera,
-            PlayerFacade[] playerTeam,
-            PlayerFacade[] enemyTeam,
+            PlayerFacade[] leftTeam,
+            PlayerFacade[] rightTeam,
             Referee referee,
             IInputService inputService
         )
         {
             _cutsceneSkipper.Initialize(inputService);
 
-            PlayerFacade[] leftTeam;
-            PlayerFacade[] rightTeam;
-            
-            if (playerTeam.First().LeftSide) //TODO: costyl
-            {
-                leftTeam = playerTeam;
-                rightTeam = enemyTeam;
-            }
-            else
-            {
-                leftTeam = enemyTeam;
-                rightTeam = playerTeam;
-            }
-
-
-            PlayerFacade leftPlayer1 = leftTeam[NumericConstants.PrimaryTeamMemberIndex];
-            PlayerFacade leftPlayer2 = leftTeam[NumericConstants.SecondaryTeamMemberIndex];
-            PlayerFacade rightPlayer1 = rightTeam[NumericConstants.PrimaryTeamMemberIndex];
-            PlayerFacade rightPlayer2 = rightTeam[NumericConstants.SecondaryTeamMemberIndex];
-
             _refereeCamera.LookAt = referee.transform;
-            _leftTeamTargetGroup.m_Targets[NumericConstants.PrimaryTeamMemberIndex].target = leftPlayer1.transform;
-            _leftTeamTargetGroup.m_Targets[NumericConstants.SecondaryTeamMemberIndex].target = leftPlayer2.transform;
-            _rightTeamTargetGroup.m_Targets[NumericConstants.PrimaryTeamMemberIndex].target = rightPlayer1.transform;
-            _rightTeamTargetGroup.m_Targets[NumericConstants.SecondaryTeamMemberIndex].target = rightPlayer2.transform;
+
+            for (int i = 0; i < NumericConstants.PlayersInTeam; i++)
+            {
+                _leftTeamTargetGroup.m_Targets[i].target = leftTeam[i].transform;
+                _rightTeamTargetGroup.m_Targets[i].target = rightTeam[i].transform;
+            }
 
             _director.BindCinemachineBrain(TimelineTrackNames.CinemachineTrackName, gameplayCamera);
-            _director.BindAnimator(TimelineTrackNames.LeftTeamPrimaryPlayerAnimationTrackName, leftPlayer1.Animator);
-            _director.BindAnimator(TimelineTrackNames.LeftTeamSecondaryPlayerAnimationTrackName, leftPlayer2.Animator);
-            _director.BindAnimator(TimelineTrackNames.RightTeamPrimaryPlayerAnimationTrackName, rightPlayer1.Animator);
-            _director.BindAnimator(TimelineTrackNames.RightTeamSecondaryEnemyAnimationTrackName, rightPlayer2.Animator);
+
+            for (int i = 0; i < NumericConstants.PlayersInTeam; i++)
+            {
+                _director.BindAnimator(TimelineTrackNames.GetRightTeamAnimationTrackName(i), rightTeam[i].Animator);
+                _director.BindAnimator(TimelineTrackNames.GetLeftTeamAnimationTrackName(i), leftTeam[i].Animator);
+            }
+            
             _director.BindAnimator(TimelineTrackNames.RefereeAnimationTrackName, referee.Animator);
 
             return this;

@@ -1,9 +1,11 @@
 ﻿using Infrastructure.Factory;
 using Infrastructure.Input;
 using Infrastructure.Input.InputService;
+using Infrastructure.PlayerService;
 using Infrastructure.Provider;
 using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
+using UI.HUD.StateMachine;
 using Utility.Constants;
 
 namespace Infrastructure.StateMachine.States
@@ -36,6 +38,8 @@ namespace Infrastructure.StateMachine.States
         {
             _services.RegisterSingle<IAssetProvider>(new AssetProvider());
             _services.RegisterSingle<IGameObjectFactory>(new GameObjectFactory(_services.Single<IAssetProvider>()));
+            RegisterPlayerService();
+            RegisterHudStateController();
             RegisterInputService();
         }
 
@@ -49,5 +53,11 @@ namespace Infrastructure.StateMachine.States
             _services.RegisterSingle<IInputService>(mobileInputService);
             _services.RegisterSingle<IUIInputController>(mobileInputService);
         }
+
+        private void RegisterPlayerService() =>
+            _services.RegisterSingle<IPlayerService>(new PlayerService.PlayerService());
+        
+        private void RegisterHudStateController() =>
+            _services.RegisterSingle(_services.Single<IPlayerService>() as IHUDStateController) ;
     }
 }

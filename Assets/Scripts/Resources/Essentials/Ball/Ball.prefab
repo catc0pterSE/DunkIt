@@ -133,6 +133,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _transferSpeed: 5
   _rigidBody: {fileID: 6293566453616136138}
+  _freeTimeoutSeconds: 0.1
 --- !u!54 &6293566453616136138
 Rigidbody:
   m_ObjectHideFlags: 0

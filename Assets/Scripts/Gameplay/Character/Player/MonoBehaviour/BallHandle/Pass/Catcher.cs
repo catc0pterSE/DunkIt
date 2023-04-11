@@ -15,11 +15,8 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Pass
             if (other.gameObject.TryGetComponent(out Ball.MonoBehavior.Ball ball) == false)
                 return;
             
-            ball.MoveTo(_host.BallPosition.position, () =>
-            {
-                ball.SetOwner(_host);
-                CaughtBall?.Invoke();
-            });
+            ball.SetOwner(_host);
+            CaughtBall?.Invoke();
         }
     }
 }

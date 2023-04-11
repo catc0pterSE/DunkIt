@@ -1,12 +1,12 @@
 ﻿using Gameplay.Character.Player.MonoBehaviour;
-using Infrastructure.Input;
+using Infrastructure.PlayerService;
 using Modules.MonoBehaviour;
 using UI.HUD.StateMachine;
 using UnityEngine;
 
 namespace UI.HUD
 {
-    public interface IGameplayHUD: ISwitchable
+    public interface IGameplayHUD : ISwitchable
     {
         public void SetThrowAvailability(bool isAvailable);
 
@@ -16,8 +16,6 @@ namespace UI.HUD
 
         public void SetChangePlayerAvailability(bool isAvailable);
 
-        public GameplayHUDStateMachine StateMachine { get; }
-
-        public IGameplayHUD Initialize(PlayerFacade[] indicationTargets, Camera gameplayCamera);
+        public IGameplayHUD Initialize(PlayerFacade[] indicationTargets, Camera gameplayCamera, IHUDStateController hudStateController);
     }
 }

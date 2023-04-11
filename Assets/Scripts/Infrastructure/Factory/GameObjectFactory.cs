@@ -7,7 +7,6 @@ using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Cutscene;
 using Gameplay.Minigame.FightForBall;
 using Gameplay.Minigame.JumpBall;
-using Gameplay.Minigame.Throw;
 using Infrastructure.Input.InputService;
 using Infrastructure.Provider;
 using UI;
@@ -77,12 +76,6 @@ namespace Infrastructure.Factory
         {
             return _assetProvider.Instantiate(ResourcesPathes.JumpBallMinigamePath).GetComponent<JumpBallMinigame>()
                    ??  throw new NullReferenceException("No JumpBallMinigame component on JumpBallMinigame prefab");
-        }
-
-        public ThrowMinigame CreateThrowMinigame()
-        {
-            return _assetProvider.Instantiate(ResourcesPathes.ThrowMinigamePath).GetComponent<ThrowMinigame>()
-                   ??  throw new NullReferenceException("No ThrowMinigame component on ThrowMinigame prefab");
         }
 
         public FightForBallMinigame CreateFightForBallMinigame()

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a686a47eee2fa44cb0a34b5d86e4d5e, type: 3}
+  m_Name: DefenceAI
+  m_EditorClassIdentifier: 
+  _serializedGraph: '{"type":"NodeCanvas.BehaviourTrees.BehaviourTree","nodes":[],"connections":[],"canvasGroups":[],"localBlackboard":{"_variables":{"DynamicData":{"_value":{},"_name":"DynamicData","_id":"d0ee12eb-5a32-4238-bccf-61d81e24a194","$type":"NodeCanvas.Framework.Variable`1[[NodeCanvas.Framework.VariableSeperator,
+    ParadoxNotion, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"Target":{"_name":"Target","_id":"4b001f56-7b97-4476-bf74-c52f8a796b47","$type":"NodeCanvas.Framework.Variable`1[[UnityEngine.Vector3,
+    UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"OppositePlayerWithoutBall":{"_name":"OppositePlayerWithoutBall","_id":"559ee9fd-dcc1-4926-ab86-2ca7447612fb","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.PlayerFacade,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"OppositePlayerWithBall":{"_name":"OppositePlayerWithBall","_id":"eb743da3-ab97-4cc7-93d1-8b19c80562e7","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.PlayerFacade,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"Direction":{"_name":"Direction","_id":"b7d1fad7-d56d-4455-8dd8-3efdaab5d369","$type":"NodeCanvas.Framework.Variable`1[[UnityEngine.Vector3,
+    UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"Dependencies":{"_value":{},"_name":"Dependencies","_id":"520570e8-9e35-47d9-8f76-144f0a7b8b00","$type":"NodeCanvas.Framework.Variable`1[[NodeCanvas.Framework.VariableSeperator,
+    ParadoxNotion, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}}},"derivedData":{"repeat":true,"$type":"NodeCanvas.BehaviourTrees.BehaviourTree+DerivedSerializationData"}}'
+  _objectReferences: []
+  _graphSource:
+    _version: 3.25
+    _category: 
+    _comments: 
+    _translation: {x: 1007, y: 834}
+    _zoomFactor: 0.83122885
+  _haltSerialization: 0

@@ -1,8 +1,9 @@
-﻿using Modules.StateMachine;
+﻿using Gameplay.Character.Player.MonoBehaviour;
+using Modules.StateMachine;
 
 namespace UI.HUD.StateMachine.States
 {
-    public class DefenceState: IParameterlessState
+    public class DefenceState : IParameterState<PlayerFacade>
     {
         private readonly IGameplayHUD _gameplayHUD;
 
@@ -10,18 +11,15 @@ namespace UI.HUD.StateMachine.States
         {
             _gameplayHUD = gameplayHUD;
         }
-        
-        public void Enter()
+
+        public void Enter(PlayerFacade playerFacade)
         {
-            _gameplayHUD.SetDunkAvailability(false);
-            _gameplayHUD.SetPassAvailability(false);
-            _gameplayHUD.SetThrowAvailability(false);
-           _gameplayHUD.SetChangePlayerAvailability(true); 
+            _gameplayHUD.SetChangePlayerAvailability(true);
         }
-        
+
         public void Exit()
         {
-            _gameplayHUD.SetChangePlayerAvailability(false); 
+            _gameplayHUD.SetChangePlayerAvailability(false);
         }
     }
 }

@@ -1,103 +1,88 @@
 ﻿using System;
-using System.Collections.Generic;
 using Cinemachine;
 using Gameplay.Character.Player.MonoBehaviour.BallHandle.Dunk;
 using Gameplay.Character.Player.MonoBehaviour.BallHandle.Pass;
 using Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw;
-using Gameplay.Character.Player.MonoBehaviour.Brains;
-using Gameplay.Character.Player.MonoBehaviour.Brains.InputControlled;
+using Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw.DropBall;
+using Gameplay.Character.Player.MonoBehaviour.Brains.AIControlled;
+using Gameplay.Character.Player.MonoBehaviour.Brains.LocalControlled;
+using Gameplay.Character.Player.MonoBehaviour.Events;
 using Gameplay.Character.Player.MonoBehaviour.Movement;
+using Gameplay.Character.Player.MonoBehaviour.PlayerSwapping;
 using Gameplay.Character.Player.MonoBehaviour.TargetTracking;
 using Gameplay.Character.Player.MonoBehaviour.TriggerZone;
 using Gameplay.Character.Player.StateMachine;
 using Gameplay.Character.Player.StateMachine.States;
 using Infrastructure.Input.InputService;
-using NodeCanvas.BehaviourTrees;
+using Infrastructure.Mediator;
+using Infrastructure.PlayerService;
 using Scene;
 using Scene.Ring;
 using UnityEngine;
-using Utility.Constants;
 using Utility.Extensions;
 
 namespace Gameplay.Character.Player.MonoBehaviour
 {
-    using Ball.MonoBehavior;
-
     public class PlayerFacade : CharacterFacade
     {
-        [SerializeField] private InputControlledDefenceBrain _inputControlledDefenceBrain;
-        [SerializeField] private InputControlledAttackBrain _inputControlledAttackBrain;
-        [SerializeField] private AIControlledEventLauncher _aiControlledEventLauncher;
+        [SerializeField] private PlayerEventLauncher _playerEventLauncher;
+        [SerializeField] private AIControlledBallDropper _aiControlledBallDropper;
+        [SerializeField] private LocalControlledBallDropper _localControlledBallDropper;
+        [SerializeField] private AIControlledBrain _aiControlledBrain;
+        [SerializeField] private LocalControlledBrain _localControlledBrain;
+        [SerializeField] private PlayerSwapper _playerSwapper;
         [SerializeField] private PlayerMover _playerMover;
         [SerializeField] private Animator _animator;
         [SerializeField] private BallThrower _ballThrower;
+        [SerializeField] private LocalControlledThrowing _localControlledThrowing;
+        [SerializeField] private AIControlledThrowing _aiControlledThrowing;
         [SerializeField] private TargetTracker _targetTracker;
         [SerializeField] private Passer _passer;
         [SerializeField] private Catcher _catcher;
         [SerializeField] private Dunker _dunker;
         [SerializeField] private FightForBallTriggerZone _fightForBallTriggerZone;
-        [SerializeField] private BehaviourTreeOwner _defenceBehaviourTree;
-        [SerializeField] private BehaviourTreeOwner _attackWithBallBehaviourTree;
-        [SerializeField] private BehaviourTreeOwner _attackWithoutBallBehaviourTree;
         [SerializeField] private CharacterController _characterController;
 
+        private TeamsMediator _teamsMediator;
         private CinemachineVirtualCamera _virtualCamera;
         private PlayerStateMachine _stateMachine;
-        private PlayerFacade _ally;
-        private Ring _oppositeRing;
 
         public void Initialize
         (
-            bool isPlayable,
-            PlayerFacade ally,
-            Ball ball,
-            PlayerFacade[] oppositeTeam,
-            UnityEngine.Camera gameplayCamera,
-            CinemachineVirtualCamera virtualCamera,
-            SceneConfig sceneConfig,
-            bool leftSide,
-            IInputService inputService
+            TeamsMediator teamsMediator,
+            bool canBeLocalControlled,
+            bool isAIOnlyControlled,
+            CinemachineVirtualCamera virtualCamera
         )
         {
-            LeftSide = leftSide;
-            IsPlayable = isPlayable;
-            _oppositeRing = LeftSide ? sceneConfig.RightRing : sceneConfig.LeftRing;
-            Ring playerRing = LeftSide ? sceneConfig.LeftRing : sceneConfig.RightRing;
-            _dunker.Initialize(ball, _oppositeRing);
-            _ally = ally;
-            _inputControlledDefenceBrain.Initialize(gameplayCamera.transform, inputService);
-            _inputControlledAttackBrain.Initialize(gameplayCamera.transform, inputService);
-            _ballThrower.Initialize(ball, gameplayCamera, inputService);
-            _targetTracker.Initialize(_oppositeRing.transform.position, ally.transform);
-            Ball = ball;
+            CanBeLocalControlled = canBeLocalControlled;
+            IsAIOnlyControlled = isAIOnlyControlled;
+            _teamsMediator = teamsMediator;
             _virtualCamera = virtualCamera;
+            Ball = _teamsMediator.GetBall();
+
+            IPlayerService playerService = _teamsMediator.GetPlayerService();
+            _stateMachine = new PlayerStateMachine(this, Ball, playerService);
+
+            UnityEngine.Camera gameplayCamera = _teamsMediator.GetCamera();
+            IInputService inputService = teamsMediator.GetInputService();
+            PlayerFacade[] allies = teamsMediator.GetAllies(this);
+            PlayerFacade[] oppositeTeam = teamsMediator.GetOppositeTeamPlayers(this);
+            Ring playerRing = teamsMediator.GetPlayersRing(this);
+            OppositeRing = teamsMediator.GetOppositeRing(this);
+            CourtDimensions courtDimensions = teamsMediator.GetCourtDimensions();
+
+            _playerEventLauncher.Initialize(inputService, teamsMediator);
+            _dunker.Initialize(Ball, OppositeRing);
+            _localControlledBrain.Initialize(gameplayCamera.transform, inputService);
+            _ballThrower.Initialize(Ball);
+            _aiControlledThrowing.Initialize(OppositeRing);
+            _localControlledThrowing.Initialize(gameplayCamera, inputService, OppositeRing);
+            _targetTracker.Initialize(OppositeRing.transform.position, allies);
             _virtualCamera.Follow = transform;
-            _passer.Initialize(ball, _ally);
-            _fightForBallTriggerZone.Initialize(ally);
-
-            _attackWithoutBallBehaviourTree.AddBinds(new Dictionary<string, object>
-            {
-                [BehaviourTreeVariableNames.AllyVariableName] = _ally,
-                [BehaviourTreeVariableNames.OppositeRingVariableName] = _oppositeRing,
-                [BehaviourTreeVariableNames.CourtDimensionsVariableName] = sceneConfig.CourtDimensions,
-                [BehaviourTreeVariableNames.OppositeTeamVariableName] = oppositeTeam
-            });
-
-            _attackWithBallBehaviourTree.AddBinds(new Dictionary<string, object>
-            {
-                [BehaviourTreeVariableNames.AllyVariableName] = _ally,
-                [BehaviourTreeVariableNames.OppositeRingVariableName] = _oppositeRing,
-                [BehaviourTreeVariableNames.CourtDimensionsVariableName] = sceneConfig.CourtDimensions,
-                [BehaviourTreeVariableNames.OppositeTeamVariableName] = oppositeTeam
-            });
-
-            _defenceBehaviourTree.AddBinds(new Dictionary<string, object>
-            {
-                [BehaviourTreeVariableNames.AllyVariableName] = _ally,
-                [BehaviourTreeVariableNames.PlayerRingVariableName] = playerRing,
-                [BehaviourTreeVariableNames.CourtDimensionsVariableName] = sceneConfig.CourtDimensions,
-                [BehaviourTreeVariableNames.OppositeTeamVariableName] = oppositeTeam
-            });
+            _passer.Initialize(Ball);
+            _fightForBallTriggerZone.Initialize(allies);
+            _aiControlledBrain.Initialize(allies, OppositeRing, playerRing, courtDimensions, oppositeTeam);
         }
 
         public void Configure(float speed)
@@ -105,67 +90,33 @@ namespace Gameplay.Character.Player.MonoBehaviour
             _playerMover.Configure(speed);
         }
 
-        private PlayerStateMachine StateMachine => _stateMachine ??= new PlayerStateMachine(this);
-        private Type CurrentState => StateMachine.CurrentState;
         public Animator Animator => _animator;
-        public bool IsPlayable { get; private set; }
-        public bool LeftSide { get; private set; }
+        public bool CanBeLocalControlled { get; private set; }
+        public Ring OppositeRing { get; private set; }
 
-        public bool IsControlled => CurrentState == typeof(InputControlledAttackState) ||
-                                    CurrentState == typeof(InputControlledDefenceState);
-
-        public Ring OppositeRing => _oppositeRing;
         public float MaxPassDistance => _targetTracker.MaxPassDistance;
-        public bool IsInPassDistance => _targetTracker.IsInPassDistance;
         public bool IsInThrowDistance => _targetTracker.IsInThrowDistance;
         public bool IsInDunkDistance => _targetTracker.IsInDunkDistance;
+        public bool IsAIOnlyControlled { get; private set; }
 
-        public event Action ChangePlayerInitiated
-        {
-            add => _inputControlledDefenceBrain.ChangePlayerInitiated += value;
-            remove => _inputControlledDefenceBrain.ChangePlayerInitiated -= value;
-        }
+        public Type CurrentStateType => _stateMachine.CurrentState;
 
-        public event Action<PlayerFacade> PassInitiated
+        public event Action<PlayerFacade, PlayerFacade> PassInitiated
         {
-            add
-            {
-                _aiControlledEventLauncher.PassInitiated += value;
-                _inputControlledAttackBrain.PassInitiated += value;
-            }
-            remove
-            {
-                _aiControlledEventLauncher.PassInitiated -= value;
-                _inputControlledAttackBrain.PassInitiated -= value;
-            }
+            add => _playerEventLauncher.PassInitiated+=value;
+            remove =>_playerEventLauncher.PassInitiated-=value;
         }
 
         public event Action<PlayerFacade> ThrowInitiated
         {
-            add
-            {
-                _inputControlledAttackBrain.ThrowInitiated += value;
-                _aiControlledEventLauncher.ThrowInitiated += value;
-            }
-            remove
-            {
-                _inputControlledAttackBrain.ThrowInitiated -= value;
-                _aiControlledEventLauncher.ThrowInitiated -= value;
-            }
+            add => _playerEventLauncher.ThrowInitiated += value;
+            remove => _playerEventLauncher.ThrowInitiated -= value;
         }
 
         public event Action<PlayerFacade> DunkInitiated
         {
-            add
-            {
-                _inputControlledAttackBrain.DunkInitiated += value;
-                _aiControlledEventLauncher.DunkInitiated += value;
-            }
-            remove
-            {
-                _inputControlledAttackBrain.DunkInitiated -= value;
-                _aiControlledEventLauncher.DunkInitiated -= value;
-            }
+            add => _playerEventLauncher.DunkInitiated+=value;
+            remove => _playerEventLauncher.DunkInitiated-=value;
         }
 
         public event Action<bool> ThrowReached
@@ -216,83 +167,98 @@ namespace Gameplay.Character.Player.MonoBehaviour
             remove => _fightForBallTriggerZone.FightForBallStarted -= value;
         }
 
-        public void EnterInputControlledAttackState() =>
-            StateMachine.Enter<InputControlledAttackState>();
-
-        public void EnterInputControlledDefenceState() =>
-            StateMachine.Enter<InputControlledDefenceState>();
-
-        public void EnterAIControlledAttackWithBallState() =>
-            StateMachine.Enter<AIControlledAttackWithBallState>();
-
-        public void EnterAIControlledAttackWithoutBallState() =>
-            StateMachine.Enter<AIControlledAttackWithoutBallState>();
-
-        public void EnterAIControlledDefenceState() =>
-            StateMachine.Enter<AIControlledDefenceState>();
-
         public void EnterThrowState() =>
-            StateMachine.Enter<ThrowState>();
+            _stateMachine.Enter<ThrowState>();
 
         public void EnterIdleState() =>
-            StateMachine.Enter<IdleState>();
+            _stateMachine.Enter<IdleState>();
+        
+        public void EnterDropBallState() =>
+            _stateMachine.Enter<DropBallState>();
 
-        public void EnterPassState() =>
-            StateMachine.Enter<PassState>();
-
-        public void EnterCatchState(PlayerFacade passingPlayer) =>
-            StateMachine.Enter<CatchState, PlayerFacade>(passingPlayer);
+        public void EnterPassState(PlayerFacade passTarget) =>
+            _stateMachine.Enter<PassState, PlayerFacade>(passTarget);
 
         public void EnterDunkState() =>
-            StateMachine.Enter<DunkState>();
+            _stateMachine.Enter<DunkState>();
 
         public void EnterFightForBallState(PlayerFacade opponent) =>
-            StateMachine.Enter<FightForBallState, PlayerFacade>(opponent);
+            _stateMachine.Enter<FightForBallState, PlayerFacade>(opponent);
 
         public void EnterNotControlledState() =>
-            StateMachine.Enter<NotControlledState>();
+            _stateMachine.Enter<NotControlledState>();
 
-        public void EnableInputControlledDefenceBrain() =>
-            _inputControlledDefenceBrain.Enable();
+        public void EnterAttackWithBallState() =>
+            _stateMachine.Enter<AttackWithBallState>();
 
-        public void DisableInputControlledDefenceBrain() =>
-            _inputControlledDefenceBrain.Disable();
+        public void EnterAttackWithoutBallState() =>
+            _stateMachine.Enter<AttackWithoutBallState>();
 
-        public void EnableInputControlledAttackBrain() =>
-            _inputControlledAttackBrain.Enable();
+        public void EnterDefenceState() =>
+            _stateMachine.Enter<DefenceState>();
 
-        public void DisableInputControlledAttackBrain() =>
-            _inputControlledAttackBrain.Disable();
+        public void EnterBallChasingState() =>
+            _stateMachine.Enter<BallChasingState>();
 
-        public void EnableAIControlledAttackWithoutBallBrain() =>
-            _attackWithoutBallBehaviourTree.Enable();
+        public void EnableLocalControlledBrain() =>
+            _localControlledBrain.Enable();
 
-        public void DisableAIControlledAttackWithoutBallBrain() =>
-            _attackWithoutBallBehaviourTree.Disable();
+        public void DisableLocalControlledBrain() =>
+            _localControlledBrain.Disable();
 
-        public void EnableAIControlledAttackWithBallBrain() =>
-            _attackWithBallBehaviourTree.Enable();
+        public void SubscribeOnThrowInput() =>
+            _playerEventLauncher.SubscribeOnThrowInput();
 
-        public void DisableAIControlledAttackWithBallBrain() =>
-            _attackWithBallBehaviourTree.Disable();
+        public void SubscribeOnPassInput() =>
+            _playerEventLauncher.SubscribeOnPassInput();
 
-        public void EnableAIControlledDefenceBrain() =>
-            _defenceBehaviourTree.Enable();
+        public void SubscribeOnDunkInput() =>
+            _playerEventLauncher.SubscribeOnDunkInput();
 
-        public void DisableAIControlledDefenceBrain() =>
-            _defenceBehaviourTree.Disable();
+        public void SubscribeOnChangePlayerInput() =>
+            _playerEventLauncher.SubscribeOnChangePlayerInput();
 
-        public void EnablePlayerMover() =>
-            _playerMover.Enable();
+        public void UnsubscribeFromThrowInput() =>
+            _playerEventLauncher.UnsubscribeFromThrowInput();
 
-        public void DisablePlayerMover() =>
-            _playerMover.Disable();
+        public void UnsubscribeFromPassInput() =>
+            _playerEventLauncher.UnsubscribeFromPassInput();
 
-        public void EnableBallThrower() =>
-            _ballThrower.Enable();
+        public void UnsubscribeFromDunkInput() =>
+            _playerEventLauncher.UnsubscribeFromDunkInput();
 
-        public void DisableBallThrower() =>
-            _ballThrower.Disable();
+        public void UnsubscribeFromChangePlayerInput() =>
+            _playerEventLauncher.UnsubscribeFromChangePlayerInput();
+
+        public void EnableAIControlledBrain(AI aiType) =>
+            _aiControlledBrain.Enable(aiType);
+
+        public void DisableAIControlledBrain() =>
+            _aiControlledBrain.Disable();
+
+        public void EnableLocalControlledBallThrower() =>
+            _localControlledThrowing.Enable();
+
+        public void DisableLocalControlledBallThrower() =>
+            _localControlledThrowing.Disable();
+
+        public void EnableAIControlledBallThrower() =>
+            _aiControlledThrowing.Enable();
+
+        public void DisableAIControlledBallThrower() =>
+            _aiControlledThrowing.Disable();
+        
+        public void EnableLocalControlledBallDropper() =>
+            _localControlledBallDropper.Enable();
+
+        public void DisableLocalControlledBallDropper() =>
+            _localControlledBallDropper.Disable();
+
+        public void EnableAIControlledBallDropper() =>
+            _aiControlledBallDropper.Enable();
+
+        public void DisableAIControlledBallDropper() =>
+            _aiControlledBallDropper.Disable();
 
         public void EnableDistanceTracker() =>
             _targetTracker.Enable();
@@ -300,23 +266,11 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public void DisableDistanceTracker() =>
             _targetTracker.Disable();
 
-        public void EnablePasser() =>
-            _passer.Enable();
-
-        public void DisablePasser() =>
-            _passer.Disable();
-
         public void EnableCatcher() =>
             _catcher.Enable();
 
         public void DisableCatcher() =>
             _catcher.Disable();
-
-        public void EnableDunker() =>
-            _dunker.Enable();
-
-        public void DisableDunker() =>
-            _dunker.Disable();
 
         public void EnableFightForBallTriggerZone() =>
             _fightForBallTriggerZone.Enable();
@@ -333,35 +287,14 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public void PrioritizeCamera() =>
             _virtualCamera.Prioritize();
 
-        public void FocusOnOppositeBasket() =>
-            _virtualCamera.LookAt = _oppositeRing.transform;
-
-        public void FocusOnBall() =>
-            _virtualCamera.LookAt = Ball.transform;
-
-        public void FocusOnAlly() =>
-            _virtualCamera.LookAt = _ally.transform;
-
-        public void FocusOnBallOwner() =>
-            _virtualCamera.LookAt = Ball.Owner.transform;
-
         public void FocusOn(Transform target) =>
             _virtualCamera.LookAt = target;
 
         public void RotateTo(Vector3 position, Action todoAfter = null) =>
             _playerMover.RotateTo(position, todoAfter);
 
-        public void RotateToAlly(Action todoAfter = null) =>
-            _playerMover.RotateTo(_ally.transform.position, todoAfter);
-
-        public void RotateToBallOwner(Action todoAfter = null) =>
-            _playerMover.RotateTo(Ball.Owner.transform.position, todoAfter);
-
-        public void RotateToRing(Action todoAfter = null) =>
-            _playerMover.RotateTo(_oppositeRing.transform.position, todoAfter);
-
-        public void Pass() =>
-            _passer.Pass();
+        public void Pass(PlayerFacade to) =>
+            _passer.Pass(to);
 
         public void Dunk() =>
             _dunker.Dunk();

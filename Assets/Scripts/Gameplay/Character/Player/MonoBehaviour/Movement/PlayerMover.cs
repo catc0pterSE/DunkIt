@@ -10,7 +10,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.Movement
         [SerializeField] private CharacterController _characterController;
         [SerializeField] private float _rotationSpeed = 50;
         [SerializeField] private float _gravityModifier = 1;
-        [SerializeField] private float _minAngle = 5;
+        [SerializeField] private float _minAngle = 10;
         [SerializeField] private float _movementSpeed = 4;
 
         private Coroutine _rotating;
@@ -32,13 +32,13 @@ namespace Gameplay.Character.Player.MonoBehaviour.Movement
             Move(movementDirection);
         }
 
-        public void MoveLookingAt(Vector3 movementDirection, Vector3 lookAt)
+        /*public void MoveLookingAt(Vector3 movementDirection, Vector3 lookAt) //TODO : do i need it?
         {
             Vector3 positionProjection = new Vector3(lookAt.x, transform.position.y, lookAt.z);
 
             Rotate(positionProjection - transform.position);
             Move(movementDirection);
-        }
+        }*/
 
         private void Move(Vector3 movementDirection)
         {

@@ -3,6 +3,7 @@ using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Minigame;
 using Gameplay.Minigame.FightForBall;
 using Gameplay.StateMachine.States.Gameplay;
+using Gameplay.StateMachine.Transitions;
 using Infrastructure.Factory;
 using Modules.StateMachine;
 using UI.HUD;
@@ -21,8 +22,9 @@ namespace Gameplay.StateMachine.States.MinigameStates
         private PlayerFacade _fightingPlayer;
         private PlayerFacade _fightingEnemy;
 
-        public FightForBallState(PlayerFacade[] playerTeam, PlayerFacade[] enemyTeam, Ball.MonoBehavior.Ball ball, IGameplayHUD gameplayHUD,
-            GameplayLoopStateMachine gameplayLoopStateMachine, IGameObjectFactory gameObjectFactory)
+        public FightForBallState(PlayerFacade[] playerTeam, PlayerFacade[] enemyTeam, Ball.MonoBehavior.Ball ball,
+            IGameplayHUD gameplayHUD, GameplayLoopStateMachine gameplayLoopStateMachine,
+            IGameObjectFactory gameObjectFactory)
             : base(gameplayHUD)
         {
             _playerTeam = playerTeam;
@@ -30,14 +32,20 @@ namespace Gameplay.StateMachine.States.MinigameStates
             _ball = ball;
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
             _fightForBallMinigame = gameObjectFactory.CreateFightForBallMinigame();
+
+            Transitions = new ITransition[]
+            {
+                new AnyToAttackDefenceStateTransition(ball, gameplayLoopStateMachine)
+            };
         }
 
-        public void Enter(PlayerFacade[] participants)
+        public void Enter(PlayerFacade[] payload)
         {
-            _fightingPlayer = participants.FindFirstOrNull(participant => participant.IsPlayable)
-                      ?? throw new NullReferenceException("Theres is no playable player in participants");
-            _fightingEnemy = participants.FindFirstOrNull(participant => participant.IsPlayable == false)
-                     ?? throw new NullReferenceException("Theres is no enemy player in participants");
+            _fightingPlayer = payload.FindFirstOrNull(participant => participant.CanBeLocalControlled)
+                              ?? throw new NullReferenceException(
+                                  "Theres is no playable playable player in participants");
+            _fightingEnemy = payload.FindFirstOrNull(participant => participant.CanBeLocalControlled == false)
+                             ?? throw new NullReferenceException("Theres is no npc player in participants");
             base.Enter();
         }
 
@@ -45,18 +53,15 @@ namespace Gameplay.StateMachine.States.MinigameStates
 
         protected override void InitializeMinigame()
         {
-            //TODO: adjust difficulty based on player stats from data layer
         }
 
-        protected override void OnMiniGameWon()
-        {
-            _ball.SetOwnerSmoothly(_fightingPlayer, EnterGameplayState);
-        }
-            
+        protected override void OnMiniGameWon() =>
+            _ball.SetOwner(_fightingPlayer);
 
-        protected override void OnMiniGameLost()=>
-            _ball.SetOwnerSmoothly(_fightingEnemy, EnterGameplayState);
-            
+
+        protected override void OnMiniGameLost() =>
+            _ball.SetOwner(_fightingEnemy);
+
 
         protected override void SetCharactersStates()
         {
@@ -65,11 +70,5 @@ namespace Gameplay.StateMachine.States.MinigameStates
             _fightingPlayer.EnterFightForBallState(_fightingEnemy);
             _fightingEnemy.EnterFightForBallState(_fightingPlayer);
         }
-
-        private void EnterGameplayState()
-        {
-            _gameplayLoopStateMachine.Enter<GameplayState>();
-        }
-            
     }
 }

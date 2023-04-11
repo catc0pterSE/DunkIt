@@ -3,7 +3,7 @@ using Modules.StateMachine;
 
 namespace Gameplay.Character.Player.StateMachine.States
 {
-    public class PassState : IParameterlessState
+    public class PassState : IParameterState<PlayerFacade>
     {
         private readonly PlayerFacade _player;
 
@@ -12,28 +12,12 @@ namespace Gameplay.Character.Player.StateMachine.States
             _player = player;
         }
 
-        public void Enter()
+        public void Enter(PlayerFacade passTarget)
         {
-            _player.FocusOnAlly();
-            _player.RotateToAlly(Pass);
+            _player.FocusOn(passTarget.transform);
+            _player.RotateTo(passTarget.transform.position, ()=> _player.Pass(passTarget));
         }
 
-        private void Pass()
-        {
-            _player.EnablePasser();
-            _player.Pass();
-            _player.PassedBall += OnPassedBall;
-        }
-
-        private void OnPassedBall()
-        {
-            _player.PassedBall -= OnPassedBall;
-            _player.FocusOnBall();
-        }
-
-        public void Exit()
-        {
-            _player.DisablePasser();
-        }
+        public void Exit() {}
     }
 }

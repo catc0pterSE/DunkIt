@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Gameplay.Camera;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
@@ -19,13 +20,15 @@ namespace Gameplay.StateMachine
 {
     public class GameplayLoopStateMachine : Modules.StateMachine.StateMachine
     {
-        public GameplayLoopStateMachine(PlayerFacade[] playerTeam,
-            PlayerFacade[] enemyTeam,
+        public GameplayLoopStateMachine
+        (
+            PlayerFacade[] leftTeam,
+            PlayerFacade[] rightTeam,
             Referee referee,
             CameraFacade camera,
             IGameplayHUD gameplayHUD,
             Ball.MonoBehavior.Ball ball,
-            SceneConfig sceneConfig,
+            SceneInitials sceneInitials,
             LoadingCurtain loadingCurtain,
             ICoroutineRunner coroutineRunner,
             IGameObjectFactory gameObjectFactory,
@@ -33,18 +36,35 @@ namespace Gameplay.StateMachine
             GameStateMachine gameStateMachine
         )
         {
+            PlayerFacade[] playableTeam;
+            PlayerFacade[] notPlayableTeam;
+            
+            if (leftTeam.All(player => player.CanBeLocalControlled) && rightTeam.All((player => player.CanBeLocalControlled == false)))   //TODO: only for minigames temporary
+            {
+                playableTeam = leftTeam;
+                notPlayableTeam = rightTeam;
+            }
+            else if (leftTeam.All(player => player.CanBeLocalControlled == false) && rightTeam.All(player => player.CanBeLocalControlled))
+            {
+                playableTeam = rightTeam;
+                notPlayableTeam = leftTeam;
+            }
+            else
+            {
+                throw new ArgumentException("could not identify controlled and npc team");
+            }
+
             States = new Dictionary<Type, IState>
             {
-                [typeof(StartCutsceneState)] = new StartCutsceneState(playerTeam, enemyTeam, referee,
-                    camera.CinemachineBrain, ball, gameplayHUD, this, gameObjectFactory, inputService),
-                [typeof(JumpBallState)] = new JumpBallState(playerTeam, enemyTeam, referee, ball, camera.CinemachineBrain, gameplayHUD, this, gameObjectFactory, inputService),
-                [typeof(GameplayState)] = new GameplayState(playerTeam, enemyTeam, ball, sceneConfig, gameplayHUD, this, loadingCurtain, coroutineRunner),
-                [typeof(PassState)] = new PassState(playerTeam, enemyTeam, this),
-                [typeof(DunkState)] = new DunkState(playerTeam, enemyTeam, ball,  this),
-                [typeof(ThrowState)] = new ThrowState(gameplayHUD, sceneConfig, this, enemyTeam, enemyTeam, ball, loadingCurtain, coroutineRunner, gameObjectFactory),
-                [typeof(FightForBallState)] = new FightForBallState(playerTeam, enemyTeam, ball, gameplayHUD, this, gameObjectFactory),
-                [typeof(CelebrateCutsceneState)] = new CelebrateCutsceneState(this),
-                [typeof(UpsetCutsceneState)] = new UpsetCutsceneState(this)
+                [typeof(StartCutsceneState)] = new StartCutsceneState(leftTeam, rightTeam, referee, camera.CinemachineBrain, ball, gameplayHUD, this, gameObjectFactory, inputService),
+                [typeof(JumpBallState)] = new JumpBallState(leftTeam, rightTeam, playableTeam, notPlayableTeam, referee, ball, camera.CinemachineBrain, gameplayHUD, this, gameObjectFactory, inputService),
+                [typeof(AttackDefenceState)] = new AttackDefenceState(leftTeam, rightTeam, ball, sceneInitials, gameplayHUD, this, coroutineRunner),
+                [typeof(BallChasingState)] = new BallChasingState(leftTeam, rightTeam, gameplayHUD, ball, sceneInitials, this),
+                [typeof(PassState)] = new PassState(ball, gameplayHUD, this),
+                [typeof(DunkState)] = new DunkState( leftTeam, rightTeam, sceneInitials, ball,  this),
+                [typeof(ThrowState)] = new ThrowState(ball, this),
+                [typeof(DropBallState)] = new DropBallState(leftTeam, rightTeam, ball, sceneInitials, loadingCurtain, this),
+                [typeof(FightForBallState)] = new FightForBallState(playableTeam, notPlayableTeam, ball, gameplayHUD, this, gameObjectFactory)
             };
         }
 

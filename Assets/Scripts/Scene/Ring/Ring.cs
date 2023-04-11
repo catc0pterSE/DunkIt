@@ -22,10 +22,11 @@ namespace Scene.Ring
 
         private Coroutine _listeningToWinZone;
         private WaitForSeconds _goalTrackingWindowWait;
+        
         public event Action Goal;
 
         public CinemachineTargetGroup RingTargetGroup => _ringTargetGroup;
-        
+
         public Transform[] DunkPoints => _dunkPoints.ToArray();
 
         public Transform BallDunkPoint => _ballDunkPoint;

@@ -10,7 +10,6 @@ namespace Infrastructure.Input.InputService
         public Vector2 MovementInput { get; }
         public Vector2 PointerMovement { get; }
         public Vector3 PointerPosition { get; }
-        public float ThrowCurve { get; }
         public bool PointerHeldDown { get; }
         public bool ThrowButtonHeldDown { get;  }
         public bool PassButtonHeldDown { get;  }

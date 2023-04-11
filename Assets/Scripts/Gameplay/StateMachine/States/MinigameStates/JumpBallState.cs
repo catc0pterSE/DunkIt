@@ -1,32 +1,36 @@
-﻿using Cinemachine;
+﻿using System.Linq;
+using Cinemachine;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Minigame;
 using Gameplay.Minigame.JumpBall;
-using Gameplay.StateMachine.States.Gameplay;
+using Gameplay.StateMachine.Transitions;
 using Infrastructure.Factory;
 using Infrastructure.Input.InputService;
 using Modules.StateMachine;
 using UI.HUD;
-using Utility.Constants;
+using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.MinigameStates
 {
     public class JumpBallState : MinigameState, IParameterlessState
     {
-        private readonly PlayerFacade[] _playerTeam;
-        private readonly PlayerFacade[] _enemyTeam;
+        private readonly PlayerFacade[] _rightTeam;
+        private readonly PlayerFacade[] _leftTeam;
+        private readonly PlayerFacade _playablePlayer;
+        private readonly PlayerFacade _notPlayablePlayer;
         private readonly Referee _referee;
         private readonly Ball.MonoBehavior.Ball _ball;
         private readonly CinemachineBrain _gameplayCamera;
-        private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
         private readonly IInputService _inputService;
         private readonly JumpBallMinigame _jumpBallMinigame;
 
         public JumpBallState
         (
-            PlayerFacade[] playerTeam,
-            PlayerFacade[] enemyTeam,
+            PlayerFacade[] leftTeam,
+            PlayerFacade[] rightTeam,
+            PlayerFacade[] playableTeam,
+            PlayerFacade[] notPlayableTeam,
             Referee referee,
             Ball.MonoBehavior.Ball ball,
             CinemachineBrain gameplayCamera,
@@ -39,21 +43,24 @@ namespace Gameplay.StateMachine.States.MinigameStates
             gameplayHUD
         )
         {
-            _playerTeam = playerTeam;
-            _enemyTeam = enemyTeam;
+            Transitions = new ITransition[]
+            {
+                new AnyToAttackDefenceStateTransition(ball, gameplayLoopStateMachine),
+            };
+
+            _rightTeam = rightTeam;
+            _leftTeam = leftTeam;
+            _playablePlayer = playableTeam.First();
+            _notPlayablePlayer = notPlayableTeam.First();
             _referee = referee;
             _ball = ball;
             _gameplayCamera = gameplayCamera;
-            _gameplayLoopStateMachine = gameplayLoopStateMachine;
             _inputService = inputService;
             _jumpBallMinigame = gameObjectFactory.CreateJumpBallMinigame();
         }
 
         protected override IMinigame Minigame => _jumpBallMinigame;
-        private PlayerFacade PrimaryPlayer => _playerTeam[NumericConstants.PrimaryTeamMemberIndex];
-        private PlayerFacade SecondaryPlayer => _playerTeam[NumericConstants.SecondaryTeamMemberIndex];
-        private PlayerFacade PrimaryEnemy => _enemyTeam[NumericConstants.PrimaryTeamMemberIndex];
-        private PlayerFacade SecondaryEnemy => _enemyTeam[NumericConstants.SecondaryTeamMemberIndex];
+
 
         public override void Enter()
         {
@@ -69,26 +76,19 @@ namespace Gameplay.StateMachine.States.MinigameStates
         }
 
         protected override void InitializeMinigame() =>
-            _jumpBallMinigame.Initialize(_gameplayCamera, _referee, _playerTeam, _enemyTeam, _ball, _inputService);
-
+            _jumpBallMinigame.Initialize(_leftTeam, _rightTeam, _gameplayCamera, _referee, _ball, _inputService); //TODO: adjust difficulty based on PlayerData
 
         protected override void OnMiniGameWon() =>
-            _ball.SetOwnerSmoothly(PrimaryPlayer, EnterGameplayState);
-
+            _ball.SetOwner(_playablePlayer);
 
         protected override void OnMiniGameLost() =>
-            _ball.SetOwnerSmoothly(PrimaryEnemy, EnterGameplayState);
+            _ball.SetOwner(_notPlayablePlayer);
 
 
         protected override void SetCharactersStates()
         {
-            PrimaryPlayer.EnterNotControlledState();
-            PrimaryEnemy.EnterNotControlledState();
-            SecondaryPlayer.EnterIdleState();
-            SecondaryEnemy.EnterIdleState();
+            _leftTeam.Map(player => player.EnterNotControlledState());
+            _rightTeam.Map(player => player.EnterNotControlledState());
         }
-
-        private void EnterGameplayState() =>
-            _gameplayLoopStateMachine.Enter<GameplayState>();
     }
 }

@@ -69,6 +69,34 @@ namespace Utility.Extensions
 
             return array[Random.Range(0, array.Length)];
         }
+        
+        public static T FindClosestToDirection<T>(this IEnumerable<T> enumerable, Vector3 direction, Vector3 position) where T: MonoBehaviour
+        {
+            var array = enumerable as T[] ?? enumerable.ToArray();
+            
+            if (array.Length == 0)
+                throw new Exception("Array is empty");
+            
+            if (array == null)
+                throw new NullReferenceException("Array is not initialized");
+            
+            float minAngle = Single.MaxValue;
+            T closest = null;
+
+            foreach (T element in array)
+            {
+                
+                float angle = Vector3.Angle(direction, element.transform.position - position);
+
+                if (angle < minAngle)
+                {
+                    closest = element;
+                    minAngle = angle;
+                }
+            }
+            
+            return closest;
+        }
 
         public static Vector3 FindClosest(this IEnumerable<Vector3> enumerable, Vector3 position)
         {

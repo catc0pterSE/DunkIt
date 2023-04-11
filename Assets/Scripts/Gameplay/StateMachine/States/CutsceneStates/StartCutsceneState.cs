@@ -1,4 +1,5 @@
-﻿using Cinemachine;
+﻿using System.Linq;
+using Cinemachine;
 using Gameplay.Character.NPC.Referee.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.States.MinigameStates;
@@ -6,6 +7,7 @@ using Infrastructure.Factory;
 using Infrastructure.Input.InputService;
 using Modules.StateMachine;
 using UI.HUD;
+using UnityEngine;
 
 namespace Gameplay.StateMachine.States.CutsceneStates
 {
@@ -16,8 +18,9 @@ namespace Gameplay.StateMachine.States.CutsceneStates
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
 
         public StartCutsceneState
-        (PlayerFacade[] playerTeam,
-            PlayerFacade[] enemyTeam,
+        (
+            PlayerFacade[] leftTeam,
+            PlayerFacade[] rightTeam,
             Referee referee,
             CinemachineBrain camera,
             Ball.MonoBehavior.Ball ball,
@@ -27,10 +30,10 @@ namespace Gameplay.StateMachine.States.CutsceneStates
             IInputService inputService
         ) : base
         (
-            playerTeam,
-            enemyTeam,
+            
+            leftTeam.Union(rightTeam).ToArray(),
             gameplayHUD,
-            gameObjectFactory.CreateStartCutscene().Initialize(camera, playerTeam, enemyTeam, referee, inputService)
+            gameObjectFactory.CreateStartCutscene().Initialize(camera, leftTeam, rightTeam, referee, inputService)
         )
         {
             _referee = referee;

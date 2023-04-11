@@ -1,92 +1,83 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Gameplay.Character;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.States.Gameplay;
 using Modules.StateMachine;
 using Scene;
-using UI;
-using UnityEngine;
-using Utility.Constants;
-using Utility.Extensions;
+using Scene.Ring;
 
 namespace Gameplay.StateMachine.Transitions
 {
+    using Ball.MonoBehavior;
+    
     public class AnyToDropBallTransition : ITransition
     {
-        private readonly Ball.MonoBehavior.Ball _ball;
-        private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
-        private readonly LoadingCurtain _loadingCurtain;
+        private readonly Ball _ball;
         private readonly PlayerFacade[] _leftTeam;
         private readonly PlayerFacade[] _rightTeam;
-        private readonly SceneConfig _sceneConfig;
+        private readonly Ring _leftRing;
+        private readonly Ring _ringRing;
+        private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
 
-        public AnyToDropBallTransition(Ball.MonoBehavior.Ball ball, GameplayLoopStateMachine gameplayLoopStateMachine,
-            LoadingCurtain loadingCurtain, PlayerFacade[] playerTeam, PlayerFacade[] enemyTeam, SceneConfig sceneConfig)
+        public AnyToDropBallTransition(Ball ball, PlayerFacade[] leftTeam, PlayerFacade[] rightTeam, SceneInitials sceneInitials, GameplayLoopStateMachine gameplayLoopStateMachine)
         {
             _ball = ball;
+            _leftTeam = leftTeam;
+            _rightTeam = rightTeam;
+            _leftRing = sceneInitials.LeftRing;
+            _ringRing = sceneInitials.RightRing;
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
-            _loadingCurtain = loadingCurtain;
-
-            if (playerTeam.First().LeftSide)
-            {
-                _leftTeam = playerTeam;
-                _rightTeam = enemyTeam;
-            }
-            else
-            {
-                _leftTeam = enemyTeam;
-                _rightTeam = enemyTeam;
-            }
-            
-            _sceneConfig = sceneConfig;
         }
 
         public void Enable()
         {
-            _ball.Lost += OnBallLost;
+            SubscribeOnRings();
+            SubscribeOnBall();
         }
-        
+
         public void Disable()
         {
+            UnsubscribeFromRings();
+            UnsubscribeFromBall();
+        }
+
+        private void SubscribeOnBall() =>
+            _ball.Lost += OnBallLost;
+
+        private void UnsubscribeFromBall() =>
             _ball.Lost -= OnBallLost;
+
+        private void SubscribeOnRings()
+        {
+            _leftRing.Goal += OnLeftRingGoalScored;
+            _ringRing.Goal += OnRightRingGoalScored;
         }
 
-        private void OnBallLost(CharacterFacade lostCharacter)
+        private void UnsubscribeFromRings()
         {
+            _leftRing.Goal -= OnLeftRingGoalScored;
+            _ringRing.Goal -= OnRightRingGoalScored;
+        }
+
+        private void OnLeftRingGoalScored() =>
+            EnterLeftTeamDropsBall();
+
+        private void OnRightRingGoalScored() =>
+            EnterRightTeamDropsBall();
+
+        private void OnBallLost(CharacterFacade lastOwner)
+        {
+            if (_leftTeam.Contains(lastOwner))
+                EnterRightTeamDropsBall();
             
-            if (lostCharacter is not PlayerFacade lostPlayer)
-                throw new Exception("Ball is lost by someone who is not basketball player");
-
-            _loadingCurtain.FadeInFadeOut(
-                () =>
-                {
-                    SetDropBall(lostPlayer);
-                    EnterGameplayState();
-                });
+            if (_rightTeam.Contains(lastOwner))
+                EnterLeftTeamDropsBall();
         }
-
-        private void SetDropBall(PlayerFacade lostPlayer)
-        {
-            PlayerFacade droppingPlayer;
-            Transform dropPosition;
-
-            if (lostPlayer.LeftSide)
-            {
-                droppingPlayer = _rightTeam[NumericConstants.PrimaryTeamMemberIndex];
-                dropPosition = _sceneConfig.RightDropBallPoint.transform;
-            }
-            else
-            {
-                droppingPlayer = _leftTeam[NumericConstants.PrimaryTeamMemberIndex];
-                dropPosition = _sceneConfig.LeftDropBallPoint.transform;
-            }
-
-            droppingPlayer.EnterNotControlledState();
-            droppingPlayer.transform.CopyValuesFrom(dropPosition, false);
-            _ball.SetOwner(droppingPlayer);
-        }
-
-        private void EnterGameplayState() => _gameplayLoopStateMachine.Enter<GameplayState>();
+        
+        private void EnterLeftTeamDropsBall() =>
+            _gameplayLoopStateMachine.Enter<DropBallState, PlayerFacade>(_leftTeam.First());
+        
+        private void EnterRightTeamDropsBall() =>
+            _gameplayLoopStateMachine.Enter<DropBallState, PlayerFacade>(_rightTeam.First());
     }
 }

@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a686a47eee2fa44cb0a34b5d86e4d5e, type: 3}
+  m_Name: AttackWithoutBallAI
+  m_EditorClassIdentifier: 
+  _serializedGraph: '{"type":"NodeCanvas.BehaviourTrees.BehaviourTree","nodes":[],"connections":[],"canvasGroups":[],"localBlackboard":{"_variables":{"Threat&DirectionCorrection":{"_value":{},"_name":"Threat&DirectionCorrection","_id":"8351b3ab-f033-4f6f-be5a-db4416e63960","$type":"NodeCanvas.Framework.Variable`1[[NodeCanvas.Framework.VariableSeperator,
+    ParadoxNotion, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"(Static)Threat
+    Angle":{"_value":180.0,"_name":"(Static)Threat Angle","_id":"b801dc66-62c9-4ddb-ad0e-46c4cded2728","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"(Static)DirectionCorrectionForce":{"_value":60.0,"_name":"(Static)DirectionCorrectionForce","_id":"e4d8b2af-51c7-456f-8933-c8003f746963","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"ThreatDistance":{"_value":3.0,"_name":"ThreatDistance","_id":"02384c06-2cce-4d7c-bb87-b6380a98d49e","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"Dynamic":{"_value":{},"_name":"Dynamic","_id":"a210b2ca-f3fd-4633-9394-d92ae9a41011","$type":"NodeCanvas.Framework.Variable`1[[NodeCanvas.Framework.VariableSeperator,
+    ParadoxNotion, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"Direction":{"_name":"Direction","_id":"bc181500-f72e-4018-bd2b-7de285edf998","$type":"NodeCanvas.Framework.Variable`1[[UnityEngine.Vector3,
+    UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"TargetAlongAlly":{"_name":"TargetAlongAlly","_id":"73558afc-97b0-4aa9-8691-656c6076f78d","$type":"NodeCanvas.Framework.Variable`1[[UnityEngine.Vector3,
+    UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"PlayersToAvoid":{"_value":[],"_name":"PlayersToAvoid","_id":"f0984fac-b80c-432b-87a0-46618ae9787d","$type":"NodeCanvas.Framework.Variable`1[[System.Collections.Generic.List`1[[Gameplay.Character.Player.MonoBehaviour.PlayerFacade,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib,
+    Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"OffsetAngle":{"_name":"OffsetAngle","_id":"d4f12602-e59c-4bd0-9a27-d8f245f3b0ca","$type":"NodeCanvas.Framework.Variable`1[[System.Single,
+    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"Dependancies":{"_value":{},"_name":"Dependancies","_id":"4b232d3a-2684-4cdf-a4c0-5dca4f917c2f","$type":"NodeCanvas.Framework.Variable`1[[NodeCanvas.Framework.VariableSeperator,
+    ParadoxNotion, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}}},"derivedData":{"repeat":true,"$type":"NodeCanvas.BehaviourTrees.BehaviourTree+DerivedSerializationData"}}'
+  _objectReferences: []
+  _graphSource:
+    _version: 3.25
+    _category: 
+    _comments: 
+    _translation: {x: 876, y: 457}
+    _zoomFactor: 0.25000933
+  _haltSerialization: 0

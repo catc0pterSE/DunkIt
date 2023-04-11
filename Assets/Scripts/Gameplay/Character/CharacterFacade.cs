@@ -9,7 +9,7 @@ namespace Gameplay.Character
     {
         [SerializeField] private Transform _ballPosition;
 
-        protected Ball Ball;
+        protected Ball Ball { get; set; }
 
         public bool OwnsBall => Ball.Owner == this;
 

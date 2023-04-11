@@ -1,14 +1,17 @@
-﻿using Gameplay.Character.Player.MonoBehaviour;
+﻿using System;
+using Gameplay.Character.Player.MonoBehaviour;
 using Infrastructure.Input;
-using Infrastructure.ServiceManagement;
+using Infrastructure.PlayerService;
 using Modules.MonoBehaviour;
 using UI.HUD.StateMachine;
+using UI.HUD.StateMachine.States;
 using UI.Indication;
 using UnityEngine;
-using z_Test;
 
 namespace UI.HUD.Mobile
 {
+    using Modules.StateMachine;
+
     public class MobileGameplayHUD : SwitchableMonoBehaviour, IGameplayHUD
     {
         [SerializeField] private ButtonSimulation _throwButton;
@@ -19,8 +22,7 @@ namespace UI.HUD.Mobile
 
         private IUIInputController _uiInputController;
         private GameplayHUDStateMachine _stateMachine;
-
-        public GameplayHUDStateMachine StateMachine => _stateMachine ??= new GameplayHUDStateMachine(this);
+        private IHUDStateController _ihudStateContoller;
 
         private void OnEnable() =>
             SubscribeUIInputControllerOnButtons();
@@ -28,9 +30,12 @@ namespace UI.HUD.Mobile
         private void OnDisable() =>
             UnsubscribeUIInputControllerFromButtons();
 
-        public IGameplayHUD Initialize(PlayerFacade[] indicationTargets, Camera gameplayCamera)
+        public IGameplayHUD Initialize(PlayerFacade[] indicationTargets, Camera gameplayCamera, IHUDStateController hudStateController)
         {
+            _ihudStateContoller = hudStateController;
             _offScreenIndicationRenderer.Initialize(indicationTargets, gameplayCamera);
+            _stateMachine = new GameplayHUDStateMachine(this);
+            ObserveStateController();
             return this;
         }
 
@@ -78,5 +83,11 @@ namespace UI.HUD.Mobile
             _changePlayerButton.Down -= _uiInputController.OnUIChangePlayerButtonDown;
             _changePlayerButton.Up -= _uiInputController.OnUIChangePlayerButtonUp;
         }
+
+        private void ObserveStateController() =>
+            _ihudStateContoller.HudStateSelection.Observe(OnCurrentCurrentPlayerDataChanged);
+
+        private void OnCurrentCurrentPlayerDataChanged(Action<GameplayHUDStateMachine> action) =>
+            action.Invoke(_stateMachine);
     }
 }

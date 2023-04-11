@@ -9,23 +9,26 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8078427120944833169}
+  - component: {fileID: 5054484669908984701}
+  - component: {fileID: 1388355857346884750}
+  - component: {fileID: 415919587842545316}
+  - component: {fileID: 5622137588025261266}
   - component: {fileID: 4871018274306801538}
   - component: {fileID: 3567767349144517149}
-  - component: {fileID: 9116447531277526744}
-  - component: {fileID: -7506919795947792106}
   - component: {fileID: -1168070809799237236}
-  - component: {fileID: 5054484669908984701}
+  - component: {fileID: 3939451195494545525}
+  - component: {fileID: 563479863507566973}
+  - component: {fileID: 7881249151936593322}
   - component: {fileID: 5437166744856396153}
   - component: {fileID: 4538433228081721433}
   - component: {fileID: 4157564897576991621}
   - component: {fileID: -8693731189481653844}
   - component: {fileID: -2012806606389975634}
   - component: {fileID: 4617063359223777939}
+  - component: {fileID: 141573223507947478}
   - component: {fileID: 1864448214675077806}
-  - component: {fileID: -2187974916535839628}
   - component: {fileID: -7707564925874227960}
-  - component: {fileID: 7100715558482148176}
-  - component: {fileID: 7822746910048078928}
+  - component: {fileID: -2187974916535839628}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -46,11 +49,80 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4042918882263731118}
+  - {fileID: 4042918883656718937}
   - {fileID: 1679206378160196402}
   - {fileID: 6686152275885002867}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5054484669908984701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919622327166402665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cebd0ab98b44fe2a1b50661e68fb3a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ballPosition: {fileID: 4042918883656718937}
+  _playerEventLauncher: {fileID: 5622137588025261266}
+  _aiControlledBallDropper: {fileID: 563479863507566973}
+  _localControlledBallDropper: {fileID: 7881249151936593322}
+  _aiControlledBrain: {fileID: -1168070809799237236}
+  _localControlledBrain: {fileID: 3939451195494545525}
+  _playerSwapper: {fileID: 415919587842545316}
+  _playerMover: {fileID: 3567767349144517149}
+  _animator: {fileID: 5437166744856396153}
+  _ballThrower: {fileID: 1388355857346884750}
+  _localControlledThrowing: {fileID: 1864448214675077806}
+  _aiControlledThrowing: {fileID: 141573223507947478}
+  _targetTracker: {fileID: -8693731189481653844}
+  _passer: {fileID: -2012806606389975634}
+  _catcher: {fileID: 1497494343019081299}
+  _dunker: {fileID: 4617063359223777939}
+  _fightForBallTriggerZone: {fileID: 6257887091626896469}
+  _characterController: {fileID: 4871018274306801538}
+--- !u!114 &1388355857346884750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919622327166402665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30ade7287cf548c9821af01975d058f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &415919587842545316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919622327166402665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d169788733404ae5ac6f3d922fb9bfb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5622137588025261266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919622327166402665}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7288a73d0b4c47849b81eb096b735282, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _targetTracker: {fileID: -8693731189481653844}
+  _host: {fileID: 5054484669908984701}
 --- !u!143 &4871018274306801538
 CharacterController:
   m_ObjectHideFlags: 0
@@ -60,7 +132,7 @@ CharacterController:
   m_GameObject: {fileID: 1919622327166402665}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Height: 2
   m_Radius: 0.5
@@ -76,7 +148,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1919622327166402665}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2f0008a9fe78e5d438fd208127afa53b, type: 3}
   m_Name: 
@@ -86,35 +158,6 @@ MonoBehaviour:
   _gravityModifier: 0.5
   _minAngle: 5
   _movementSpeed: 4
---- !u!114 &9116447531277526744
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1919622327166402665}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c9ef004d9ff41a1b848dd4111bf5705, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mover: {fileID: 3567767349144517149}
-  _host: {fileID: 5054484669908984701}
---- !u!114 &-7506919795947792106
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1919622327166402665}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2693a30a7d0a443a9b3c9a070f89fce2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mover: {fileID: 3567767349144517149}
-  _host: {fileID: 5054484669908984701}
-  _targetTracker: {fileID: -8693731189481653844}
 --- !u!114 &-1168070809799237236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,14 +165,27 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1919622327166402665}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9a0d1b71e3e34e31b1b6ffba71ad92b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _targetTracker: {fileID: -8693731189481653844}
+  _behaviourTreeOwner: {fileID: -7707564925874227960}
+--- !u!114 &3939451195494545525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919622327166402665}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fc762fbe8814d109f38ba09d5cd3e41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mover: {fileID: 3567767349144517149}
   _host: {fileID: 5054484669908984701}
---- !u!114 &5054484669908984701
+--- !u!114 &563479863507566973
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -138,25 +194,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 1919622327166402665}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cebd0ab98b44fe2a1b50661e68fb3a3, type: 3}
+  m_Script: {fileID: 11500000, guid: e3bec60793604afbb522940de13bcab6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ballPosition: {fileID: 4042918883656718937}
-  _inputControlledDefenceBrain: {fileID: 9116447531277526744}
-  _inputControlledAttackBrain: {fileID: -7506919795947792106}
-  _aiControlledEventLauncher: {fileID: -1168070809799237236}
-  _playerMover: {fileID: 3567767349144517149}
-  _animator: {fileID: 5437166744856396153}
-  _ballThrower: {fileID: 1864448214675077806}
-  _targetTracker: {fileID: -8693731189481653844}
-  _passer: {fileID: -2012806606389975634}
-  _catcher: {fileID: 1497494343019081299}
-  _dunker: {fileID: 4617063359223777939}
-  _fightForBallTriggerZone: {fileID: 6257887091626896469}
-  _defenceBehaviourTree: {fileID: -7707564925874227960}
-  _attackWithBallBehaviourTree: {fileID: 7100715558482148176}
-  _attackWithoutBallBehaviourTree: {fileID: 7822746910048078928}
-  _characterController: {fileID: 4871018274306801538}
+--- !u!114 &7881249151936593322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919622327166402665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a47f4b91b7a44baadf5ba2f6f78c1ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &5437166744856396153
 Animator:
   serializedVersion: 4
@@ -329,7 +381,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ballPosition: {fileID: 4042918883656718937}
-  _ballThrower: {fileID: 0}
   _flightTimeCoefficient: 0.5
 --- !u!114 &4617063359223777939
 MonoBehaviour:
@@ -349,6 +400,24 @@ MonoBehaviour:
   _highestPoint: 1
   _timeToHighestPoint: 0.5
   _dunkThrowForce: 5
+--- !u!114 &141573223507947478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919622327166402665}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30127c5682af49e684fac8c1e0737bff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ballThrower: {fileID: 0}
+  _ballHolder: {fileID: 0}
+  _minBallSpeed: 0
+  _maxBallSpeed: 0
+  _minAimDeviation: 0
+  _maxAimDeviation: 0
 --- !u!114 &1864448214675077806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -365,86 +434,9 @@ MonoBehaviour:
   _trajectoryDrawer: {fileID: 4538433228081721433}
   _launchVelocityXSense: 60
   _launchVelocityYSense: 60
---- !u!114 &-2187974916535839628
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1919622327166402665}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b98a6db0b653f764eac834f85857a9dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _parentBlackboard: {fileID: 0}
-  _serializedBlackboard: '{"_variables":{"HostFacade":{"_value":1,"_name":"HostFacade","_id":"53299809-bc5f-4e54-bd0c-f1b682da9846","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.PlayerFacade,
-    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostMover":{"_value":2,"_name":"HostMover","_id":"790d4d99-8c81-472f-bf8e-529c7914a64c","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Movement.PlayerMover,
-    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostTargetTracker":{"_value":3,"_name":"HostTargetTracker","_id":"3bf9efab-1ce7-47a4-8aef-708d4496cc71","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.TargetTracking.TargetTracker,
-    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostTransform":{"_value":4,"_name":"HostTransform","_id":"19379dd1-c14d-4603-b9a5-e58da9a72c99","$type":"NodeCanvas.Framework.Variable`1[[UnityEngine.Transform,
-    UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostPasser":{"_value":5,"_name":"HostPasser","_id":"e2a56f76-e210-4ddd-9b28-9c7613fa03b0","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.BallHandle.Pass.Passer,
-    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostBallThrower":{"_value":6,"_name":"HostBallThrower","_id":"9141eb0d-330f-486a-8b41-99dc23c84bcf","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw.BallThrower,
-    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostAIControlledEventLauncher":{"_value":7,"_name":"HostAIControlledEventLauncher","_id":"63fbd99e-58e1-4f25-a71f-adce4802e84d","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Brains.AIControlledEventLauncher,
-    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostDunker":{"_value":8,"_name":"HostDunker","_id":"2cbdb2d1-d81e-4b99-8c73-f3716c7d1d07","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.BallHandle.Dunk.Dunker,
-    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"HostBallHolder":{"_value":9,"_name":"HostBallHolder","_id":"62da6bac-6102-4eb6-9150-e626ef7f4eeb","$type":"NodeCanvas.Framework.Variable`1[[UnityEngine.Transform,
-    UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}}}'
-  _objectReferences:
-  - {fileID: 0}
-  - {fileID: 5054484669908984701}
-  - {fileID: 3567767349144517149}
-  - {fileID: -8693731189481653844}
-  - {fileID: 8078427120944833169}
-  - {fileID: -2012806606389975634}
-  - {fileID: 1864448214675077806}
-  - {fileID: -1168070809799237236}
-  - {fileID: 4617063359223777939}
-  - {fileID: 4042918883656718937}
-  _serializedVariables:
-  - _json: '{"_value":1,"_name":"HostFacade","_id":"53299809-bc5f-4e54-bd0c-f1b682da9846","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.PlayerFacade,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
-    _references:
-    - {fileID: 0}
-    - {fileID: 5054484669908984701}
-  - _json: '{"_value":1,"_name":"HostMover","_id":"790d4d99-8c81-472f-bf8e-529c7914a64c","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Movement.PlayerMover,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
-    _references:
-    - {fileID: 0}
-    - {fileID: 3567767349144517149}
-  - _json: '{"_value":1,"_name":"HostTargetTracker","_id":"3bf9efab-1ce7-47a4-8aef-708d4496cc71","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.TargetTracking.TargetTracker,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
-    _references:
-    - {fileID: 0}
-    - {fileID: -8693731189481653844}
-  - _json: '{"_value":1,"_name":"HostTransform","_id":"19379dd1-c14d-4603-b9a5-e58da9a72c99","$type":"NodeCanvas.Framework.Variable`1[[UnityEngine.Transform,
-      UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
-    _references:
-    - {fileID: 0}
-    - {fileID: 8078427120944833169}
-  - _json: '{"_value":1,"_name":"HostPasser","_id":"e2a56f76-e210-4ddd-9b28-9c7613fa03b0","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.BallHandle.Pass.Passer,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
-    _references:
-    - {fileID: 0}
-    - {fileID: -2012806606389975634}
-  - _json: '{"_value":1,"_name":"HostBallThrower","_id":"9141eb0d-330f-486a-8b41-99dc23c84bcf","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw.BallThrower,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
-    _references:
-    - {fileID: 0}
-    - {fileID: 1864448214675077806}
-  - _json: '{"_value":1,"_name":"HostAIControlledEventLauncher","_id":"63fbd99e-58e1-4f25-a71f-adce4802e84d","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Brains.AIControlledEventLauncher,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
-    _references:
-    - {fileID: 0}
-    - {fileID: -1168070809799237236}
-  - _json: '{"_value":1,"_name":"HostDunker","_id":"2cbdb2d1-d81e-4b99-8c73-f3716c7d1d07","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.BallHandle.Dunk.Dunker,
-      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
-    _references:
-    - {fileID: 0}
-    - {fileID: 4617063359223777939}
-  - _json: '{"_value":1,"_name":"HostBallHolder","_id":"62da6bac-6102-4eb6-9150-e626ef7f4eeb","$type":"NodeCanvas.Framework.Variable`1[[UnityEngine.Transform,
-      UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
-    _references:
-    - {fileID: 0}
-    - {fileID: 4042918883656718937}
+  _ballThrower: {fileID: 1388355857346884750}
+  _defaultCameraXOffset: 10
+  _mover: {fileID: 3567767349144517149}
 --- !u!114 &-7707564925874227960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -472,66 +464,24 @@ MonoBehaviour:
   _lockBoundGraphPrefabOverrides: 1
   _preInitializeSubGraphs: 0
   _updateMode: 0
-  _graph: {fileID: 11400000, guid: 27f522e20703de345b655ee819ed39e9, type: 2}
+  _graph: {fileID: 11400000, guid: c5c4d7ff1fe9765479c7e5c86bc81f89, type: 2}
   _blackboard: {fileID: -2187974916535839628}
---- !u!114 &7100715558482148176
+--- !u!114 &-2187974916535839628
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1919622327166402665}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aad115aca74ce3c4891b3f6de0b4aae8, type: 3}
+  m_Script: {fileID: 11500000, guid: b98a6db0b653f764eac834f85857a9dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _serializedExposedParameters: []
-  _boundGraphSerialization: 
-  _boundGraphObjectReferences: []
-  _boundGraphSource:
-    _version: 0
-    _category: 
-    _comments: 
-    _translation: {x: 0, y: 0}
-    _zoomFactor: 1
-  _firstActivation: 0
-  _enableAction: 0
-  _disableAction: 0
-  _lockBoundGraphPrefabOverrides: 1
-  _preInitializeSubGraphs: 0
-  _updateMode: 0
-  _graph: {fileID: 11400000, guid: a14c5726ebb7bf24ba59b0f201a2d01c, type: 2}
-  _blackboard: {fileID: -2187974916535839628}
---- !u!114 &7822746910048078928
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1919622327166402665}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aad115aca74ce3c4891b3f6de0b4aae8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _serializedExposedParameters: []
-  _boundGraphSerialization: 
-  _boundGraphObjectReferences: []
-  _boundGraphSource:
-    _version: 0
-    _category: 
-    _comments: 
-    _translation: {x: 0, y: 0}
-    _zoomFactor: 1
-  _firstActivation: 0
-  _enableAction: 0
-  _disableAction: 0
-  _lockBoundGraphPrefabOverrides: 1
-  _preInitializeSubGraphs: 0
-  _updateMode: 0
-  _graph: {fileID: 11400000, guid: efb474594d736b64fbacf739bf50147d, type: 2}
-  _blackboard: {fileID: -2187974916535839628}
+  _parentBlackboard: {fileID: 0}
+  _serializedBlackboard: '{"_variables":{}}'
+  _objectReferences: []
+  _serializedVariables: []
 --- !u!1 &4042918882263731115
 GameObject:
   m_ObjectHideFlags: 0
@@ -563,7 +513,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4042918882956708977}
-  - {fileID: 4042918883656718937}
   m_Father: {fileID: 8078427120944833169}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -723,12 +672,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4042918883656718918}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 0.62, z: 1.457}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.62, z: 1.4569998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4042918882263731118}
+  m_Father: {fileID: 8078427120944833169}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7789709571627010022
@@ -762,7 +711,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8078427120944833169}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &670492884037608625
 CapsuleCollider:
@@ -808,7 +757,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1679206378160196402
 Transform:
   m_ObjectHideFlags: 0
@@ -822,7 +771,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8078427120944833169}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &5194296133853449263
 CapsuleCollider:

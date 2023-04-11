@@ -1,4 +1,5 @@
-﻿using Gameplay.Character.Player.MonoBehaviour;
+﻿using System.Linq;
+using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Cutscene;
 using Modules.StateMachine;
 using UI.HUD;
@@ -8,21 +9,18 @@ namespace Gameplay.StateMachine.States.CutsceneStates
 {
     public abstract class CutsceneState : StateWithTransitions
     {
-        private readonly PlayerFacade[] _playerTeam;
-        private readonly PlayerFacade[] _enemyTeam;
+        private readonly PlayerFacade[] _players;
         private readonly IGameplayHUD _gameplayHUD;
         private readonly ICutscene _cutscene;
 
         protected CutsceneState
         (
-            PlayerFacade[] playerTeam,
-            PlayerFacade[] enemyTeam,
+            PlayerFacade[] players,
             IGameplayHUD gameplayHUD,
             ICutscene cutscene
         )
         {
-            _playerTeam = playerTeam;
-            _enemyTeam = enemyTeam;
+            _players = players;
             _gameplayHUD = gameplayHUD;
             _cutscene = cutscene;
         }
@@ -52,13 +50,9 @@ namespace Gameplay.StateMachine.States.CutsceneStates
 
         protected abstract void EnterNextState();
 
-        private void SetCharactersStates()
-        {
-            _playerTeam.Map(player =>
-                player.EnterNotControlledState());
-            _enemyTeam.Map(enemy =>
-                enemy.EnterNotControlledState());
-        }
+        private void SetCharactersStates() =>
+            _players.Map(player => player.EnterNotControlledState());
+
 
         private void SubscribeOnCutscene() =>
             _cutscene.Finished += EnterNextState;

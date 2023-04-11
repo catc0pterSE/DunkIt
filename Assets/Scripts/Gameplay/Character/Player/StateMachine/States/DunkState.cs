@@ -17,13 +17,9 @@ namespace Gameplay.Character.Player.StateMachine.States
 
         public void Enter()
         {
-            _player.EnableDunker();
             _player.Dunk();
         }
 
-        public void Exit()
-        {
-            _player.DisableDunker();
-        }
+        public void Exit() { }
     }
 }

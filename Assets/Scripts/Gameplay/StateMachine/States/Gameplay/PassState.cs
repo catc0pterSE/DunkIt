@@ -1,53 +1,33 @@
-﻿using System.Linq;
-using Gameplay.Character.Player.MonoBehaviour;
+﻿using Gameplay.Character.Player.MonoBehaviour;
+using Gameplay.StateMachine.Transitions;
 using Modules.StateMachine;
-using Utility.Extensions;
+using UI.HUD;
 
 namespace Gameplay.StateMachine.States.Gameplay
 {
-    public class PassState : IParameterState<PlayerFacade>
+    using Ball.MonoBehavior;
+    public class PassState : StateWithTransitions, IParameterState<PlayerFacade, PlayerFacade>
     {
         private readonly PlayerFacade[] _players;
-        private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
+        private readonly IGameplayHUD _gameplayHUD;
 
-        private PlayerFacade _passingPlayer;
-        private PlayerFacade[] _catchingPlayers;
-
-        public PassState(PlayerFacade[] playerTeam, PlayerFacade[] enemyTeam,
-            GameplayLoopStateMachine gameplayLoopStateMachine)
+        public PassState(Ball ball, IGameplayHUD gameplayHUD, GameplayLoopStateMachine gameplayLoopStateMachine)
         {
-            _players = playerTeam.Union(enemyTeam).ToArray();
-            _gameplayLoopStateMachine = gameplayLoopStateMachine;
+            _gameplayHUD = gameplayHUD;
+            Transitions = new ITransition[]
+            {
+                new AnyToBallChasingStateTransition(ball, gameplayLoopStateMachine)
+            };
         }
 
-        public void Enter(PlayerFacade passingPlayer)
+        public void Enter(PlayerFacade passingPlayer, PlayerFacade passTarget)
         {
-            _passingPlayer = passingPlayer;
-            _catchingPlayers = _players.Where(player => player != _passingPlayer).ToArray();
-
-            SetPlayersStates();
-            SubscribeOnCatchingPlayers();
+            base.Enter();
+            SetPlayersStates(passingPlayer, passTarget);
+            _gameplayHUD.Disable();
         }
 
-        private void SubscribeOnCatchingPlayers() =>
-            _catchingPlayers.Map(player => player.CaughtBall += MoveToGameplayState);
-
-
-        private void UnsubscribeFromCatchingPlayers() =>
-            _catchingPlayers.Map(player => player.CaughtBall -= MoveToGameplayState);
-
-
-        private void SetPlayersStates()
-        {
-            _passingPlayer.EnterPassState();
-            _catchingPlayers.Map(player => player.EnterCatchState(_passingPlayer));
-        }
-
-        private void MoveToGameplayState() =>
-            _gameplayLoopStateMachine.Enter<GameplayState>();
-
-
-        public void Exit() =>
-            UnsubscribeFromCatchingPlayers();
+        private void SetPlayersStates(PlayerFacade passingPlayer, PlayerFacade passTarget) =>
+            passingPlayer.EnterPassState(passTarget);
     }
 }

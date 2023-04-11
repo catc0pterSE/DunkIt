@@ -12,9 +12,9 @@ namespace Infrastructure.StateMachine.States
             _gameStateMachine = gameStateMachine;
         }
 
-        public void Enter(GameplayLoopStateMachine gameplayLoopStateMachine)
+        public void Enter(GameplayLoopStateMachine payload)
         {
-            gameplayLoopStateMachine.Run();
+            payload.Run();
         }
 
         public void Exit()

@@ -1,6 +1,5 @@
 ﻿using Gameplay.Character.Player.MonoBehaviour;
 using Modules.StateMachine;
-using UnityEngine;
 
 namespace Gameplay.Character.Player.StateMachine.States
 {
@@ -15,32 +14,16 @@ namespace Gameplay.Character.Player.StateMachine.States
 
         public void Enter()
         {
-            _player.EnableFightForBallTriggerZone();
-            _player.RotateToRing( StartThrow);
-        }
-
-        private void StartThrow()
-        {
-            _player.DisablePlayerMover();
-            _player.EnableBallThrower();
-            SubscribeOnBallThrown();
+            if (_player.CanBeLocalControlled)
+                _player.EnableLocalControlledBallThrower();
+            else
+                _player.EnableAIControlledBallThrower();
         }
 
         public void Exit()
         {
-            _player.DisableBallThrower();
-            UnsubscribeFromBallThrown();
-        }
-
-        private void SubscribeOnBallThrown() =>
-            _player.BallThrown += OnBallThrown;
-        
-        private void UnsubscribeFromBallThrown() =>
-            _player.BallThrown -= OnBallThrown;
-
-        private void OnBallThrown()
-        {
-            _player.DisableBallThrower();
+            _player.DisableLocalControlledBallThrower();
+            _player.DisableAIControlledBallThrower();
         }
     }
 }
