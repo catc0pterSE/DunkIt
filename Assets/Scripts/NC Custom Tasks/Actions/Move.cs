@@ -11,7 +11,8 @@ namespace NC_Custom_Tasks.Actions
 
         protected override void OnExecute()
         {
-            Mover.value.MoveLookingStraight(Direction.value);
+            Mover.value.Move(Direction.value);
+            Mover.value.Rotate(Direction.value);
             EndAction(true);
         }
     }

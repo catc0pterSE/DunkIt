@@ -63,7 +63,7 @@ namespace Gameplay.StateMachine
                 [typeof(PassState)] = new PassState(ball, gameplayHUD, this),
                 [typeof(DunkState)] = new DunkState( leftTeam, rightTeam, sceneInitials, ball,  this),
                 [typeof(ThrowState)] = new ThrowState(ball, this),
-                [typeof(DropBallState)] = new DropBallState(leftTeam, rightTeam, ball, sceneInitials, loadingCurtain, this),
+                [typeof(DropBallState)] = new DropBallState(leftTeam, rightTeam, ball, sceneInitials, gameplayHUD, loadingCurtain, this),
                 [typeof(FightForBallState)] = new FightForBallState(playableTeam, notPlayableTeam, ball, gameplayHUD, this, gameObjectFactory)
             };
         }

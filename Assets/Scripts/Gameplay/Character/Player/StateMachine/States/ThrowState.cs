@@ -14,10 +14,13 @@ namespace Gameplay.Character.Player.StateMachine.States
 
         public void Enter()
         {
-            if (_player.CanBeLocalControlled)
-                _player.EnableLocalControlledBallThrower();
-            else
-                _player.EnableAIControlledBallThrower();
+            _player.RotateTo(_player.OppositeRing.transform.position, () =>
+            {
+                if (_player.CanBeLocalControlled)
+                    _player.EnableLocalControlledBallThrower();
+                else
+                    _player.EnableAIControlledBallThrower();
+            });
         }
 
         public void Exit()

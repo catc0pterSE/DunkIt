@@ -9,7 +9,7 @@ namespace Modules.StateMachine
         protected Dictionary<Type, IState> States;
 
         public Type CurrentState => _currentState.GetType();
-        
+
         public void Enter<TState>() where TState : class, IParameterlessState
         {
             if (TryChangeState(out TState state))

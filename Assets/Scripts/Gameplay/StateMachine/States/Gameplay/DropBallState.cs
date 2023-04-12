@@ -4,6 +4,7 @@ using Gameplay.StateMachine.Transitions;
 using Modules.StateMachine;
 using Scene;
 using UI;
+using UI.HUD;
 using Utility.Constants;
 using Utility.Extensions;
 
@@ -20,10 +21,12 @@ namespace Gameplay.StateMachine.States.Gameplay
         private readonly LoadingCurtain _loadingCurtain;
 
         private PlayerFacade _droppingPlayer;
+        private IGameplayHUD _gameplayHUD;
 
-        public DropBallState(PlayerFacade[] leftTeam, PlayerFacade[] rightTeam, Ball ball, SceneInitials sceneInitials,
+        public DropBallState(PlayerFacade[] leftTeam, PlayerFacade[] rightTeam, Ball ball, SceneInitials sceneInitials, IGameplayHUD gameplayHUD,
             LoadingCurtain loadingCurtain, GameplayLoopStateMachine gameplayLoopStateMachine)
         {
+            _gameplayHUD = gameplayHUD;
             _leftTeam = leftTeam;
             _rightTeam = rightTeam;
             _ball = ball;
@@ -46,6 +49,13 @@ namespace Gameplay.StateMachine.States.Gameplay
                 _ball.SetOwner(_droppingPlayer);
                 SetPlayersStates();
             });
+            
+            _gameplayHUD.Enable();
+        }
+
+        public override void Exit()
+        {
+            _gameplayHUD.Disable();
         }
 
         private void ArrangePlayers()
@@ -64,7 +74,7 @@ namespace Gameplay.StateMachine.States.Gameplay
                 if (player == _droppingPlayer)
                     player.EnterDropBallState();
                 else
-                    player.EnterIdleState();
+                    player.EnterIdleState(_ball.Owner.transform.position);
             });
         }
     }

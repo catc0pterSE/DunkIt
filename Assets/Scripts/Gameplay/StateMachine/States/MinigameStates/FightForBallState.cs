@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Minigame;
 using Gameplay.Minigame.FightForBall;
@@ -65,8 +66,7 @@ namespace Gameplay.StateMachine.States.MinigameStates
 
         protected override void SetCharactersStates()
         {
-            _playerTeam.Map(player => player.EnterIdleState());
-            _enemyTeam.Map(enemy => enemy.EnterIdleState());
+            _playerTeam.Union(_enemyTeam).Map(player => player.EnterIdleState(_ball.Owner.transform.position));
             _fightingPlayer.EnterFightForBallState(_fightingEnemy);
             _fightingEnemy.EnterFightForBallState(_fightingPlayer);
         }

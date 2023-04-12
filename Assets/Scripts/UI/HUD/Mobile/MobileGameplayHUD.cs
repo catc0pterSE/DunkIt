@@ -1,24 +1,22 @@
 ﻿using System;
 using Gameplay.Character.Player.MonoBehaviour;
 using Infrastructure.Input;
-using Infrastructure.PlayerService;
 using Modules.MonoBehaviour;
 using UI.HUD.StateMachine;
-using UI.HUD.StateMachine.States;
 using UI.Indication;
 using UnityEngine;
 
 namespace UI.HUD.Mobile
 {
-    using Modules.StateMachine;
-
     public class MobileGameplayHUD : SwitchableMonoBehaviour, IGameplayHUD
     {
         [SerializeField] private ButtonSimulation _throwButton;
         [SerializeField] private ButtonSimulation _dunkButton;
         [SerializeField] private ButtonSimulation _passButton;
         [SerializeField] private ButtonSimulation _changePlayerButton;
+        [SerializeField] private GameObject _joystick;
         [SerializeField] private OffScreenIndicationRenderer _offScreenIndicationRenderer;
+        
 
         private IUIInputController _uiInputController;
         private GameplayHUDStateMachine _stateMachine;
@@ -30,6 +28,7 @@ namespace UI.HUD.Mobile
         private void OnDisable() =>
             UnsubscribeUIInputControllerFromButtons();
 
+        
         public IGameplayHUD Initialize(PlayerFacade[] indicationTargets, Camera gameplayCamera, IHUDStateController hudStateController)
         {
             _ihudStateContoller = hudStateController;
@@ -53,6 +52,9 @@ namespace UI.HUD.Mobile
 
         public void SetChangePlayerAvailability(bool isAvailable) =>
             _changePlayerButton.gameObject.SetActive(isAvailable);
+
+        public void SetMovementAvailability(bool isAvailable) =>
+            _joystick.gameObject.SetActive(isAvailable);
 
         private void SubscribeUIInputControllerOnButtons()
         {

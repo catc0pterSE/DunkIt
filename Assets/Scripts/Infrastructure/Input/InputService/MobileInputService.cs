@@ -10,13 +10,7 @@ namespace Infrastructure.Input.InputService
         private const string MouseXAxisName = "Mouse X";
         private const string MouseYAxisName = "Mouse Y";
 
-        public Vector2 MovementInput => new Vector2
-        (
-            SimpleInput.GetAxis(HorizontalAxisName),
-            SimpleInput.GetAxis(VerticalAxisName)
-        );
-
-        public Vector2 PointerMovement => new Vector2
+       public Vector2 PointerMovement => new Vector2
         (
             SimpleInput.GetAxis(MouseXAxisName),
             SimpleInput.GetAxis(MouseYAxisName)
@@ -27,9 +21,9 @@ namespace Infrastructure.Input.InputService
         public bool PassButtonHeldDown { get; private set; }
         public bool DunkButtonHeldDown { get; private set; }
         public bool ChangePlayerButtonHeldDown { get; private set; }
-
         public Vector3 PointerPosition => UnityEngine.Input.mousePosition;
 
+        public event Action<Vector2> MovementInputReceived;
         public event Action PointerDown;
         public event Action ThrowButtonDown;
         public event Action DunkButtonDown;
@@ -49,6 +43,16 @@ namespace Infrastructure.Input.InputService
 
         private void Update()
         {
+            float xMovement = SimpleInput.GetAxis(HorizontalAxisName);
+            float zMovement = SimpleInput.GetAxis(VerticalAxisName);
+            
+            if (Mathf.Abs(xMovement) > Mathf.Epsilon || Mathf.Abs(zMovement) > Mathf.Epsilon )
+                MovementInputReceived?.Invoke(new Vector2
+                (
+                    SimpleInput.GetAxis(HorizontalAxisName),
+                    SimpleInput.GetAxis(VerticalAxisName)
+                ));
+
             if (SimpleInput.GetMouseButtonDown(0))
                 PointerDown?.Invoke();
 

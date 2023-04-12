@@ -7,7 +7,6 @@ namespace Infrastructure.Input.InputService
 {
     public interface IInputService : IService
     {
-        public Vector2 MovementInput { get; }
         public Vector2 PointerMovement { get; }
         public Vector3 PointerPosition { get; }
         public bool PointerHeldDown { get; }
@@ -15,7 +14,8 @@ namespace Infrastructure.Input.InputService
         public bool PassButtonHeldDown { get;  }
         public bool DunkButtonHeldDown { get;  }
         public bool ChangePlayerButtonHeldDown { get; }
-        
+
+        public event Action<Vector2> MovementInputReceived;
         public event Action PointerDown;
         public event Action PointerUp;
         public event Action ThrowButtonDown;

@@ -22,12 +22,12 @@ namespace Gameplay.Character.Player.StateMachine
                 [typeof(ThrowState)] = new ThrowState(player),
                 [typeof(PassState)] = new PassState(player),
                 [typeof(DunkState)] = new DunkState(player),
-                [typeof(DropBallState)] = new DropBallState(player),
+                [typeof(DropBallState)] = new DropBallState(player, playerService),
                 [typeof(FightForBallState)] = new FightForBallState(player),
-                [typeof(IdleState)] = new IdleState(player),
+                [typeof(IdleState)] = new IdleState(player, playerService, ball),
                 [typeof(NotControlledState)] = new NotControlledState(player)
             };
-            
+
             Enter<BallChasingState>();
         }
     }

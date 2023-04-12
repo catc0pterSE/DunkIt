@@ -21,7 +21,8 @@ namespace Infrastructure.PlayerService
                 [typeof(DefenceState)] = (stateMachine) => stateMachine.Enter<UI.HUD.StateMachine.States.DefenceState, PlayerFacade>(CurrentControlled),
                 [typeof(BallChasingState)] = (stateMachine) => stateMachine.Enter<UI.HUD.StateMachine.States.BallChasingState, PlayerFacade>(CurrentControlled),
                 [typeof(ThrowState)] = (stateMachine) => stateMachine.Enter<UI.HUD.StateMachine.States.ThrowState, PlayerFacade>(CurrentControlled),
-                [typeof(DropBallState)] = (stateMachine) => stateMachine.Enter<UI.HUD.StateMachine.States.DropBallState, PlayerFacade>(CurrentControlled)
+                [typeof(DropBallState)] = (stateMachine) => stateMachine.Enter<UI.HUD.StateMachine.States.DropBallState, PlayerFacade>(CurrentControlled),
+                [typeof(IdleState)] = (stateMachine) => stateMachine.Enter<UI.HUD.StateMachine.States.IdleState, PlayerFacade>(CurrentControlled)
             };
         }
 

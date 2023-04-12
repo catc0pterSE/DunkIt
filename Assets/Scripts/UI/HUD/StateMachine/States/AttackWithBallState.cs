@@ -17,6 +17,7 @@ namespace UI.HUD.StateMachine.States
         public void Enter(PlayerFacade payload)
         {
             _player = payload;
+            _gameplayHUD.SetMovementAvailability(true);
             SubscribeHudOnCurrentPlayer();
         }
 
@@ -26,6 +27,7 @@ namespace UI.HUD.StateMachine.States
             _gameplayHUD.SetDunkAvailability(false);
             _gameplayHUD.SetPassAvailability(false);
             _gameplayHUD.SetThrowAvailability(false);
+            _gameplayHUD.SetMovementAvailability(false);
         }
         
         private void SubscribeHudOnCurrentPlayer()

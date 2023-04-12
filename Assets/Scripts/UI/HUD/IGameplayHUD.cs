@@ -15,6 +15,8 @@ namespace UI.HUD
         public void SetPassAvailability(bool isAvailable);
 
         public void SetChangePlayerAvailability(bool isAvailable);
+        
+        public void SetMovementAvailability(bool isAvailable);
 
         public IGameplayHUD Initialize(PlayerFacade[] indicationTargets, Camera gameplayCamera, IHUDStateController hudStateController);
     }

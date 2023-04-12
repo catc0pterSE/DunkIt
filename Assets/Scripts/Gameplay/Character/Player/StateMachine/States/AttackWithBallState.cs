@@ -1,5 +1,6 @@
 ﻿using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour.Brains.AIControlled;
+using Gameplay.Character.Player.MonoBehaviour.Brains.LocalControlled;
 using Infrastructure.PlayerService;
 using Modules.StateMachine;
 
@@ -18,9 +19,9 @@ namespace Gameplay.Character.Player.StateMachine.States
 
         public void Enter()
         {
-            _player.EnableCharacterController();
+            _player.EnableMover();
             _player.EnableFightForBallTriggerZone();
-            _player.EnableDistanceTracker();
+            _player.EnableTargetTracker();
 
             if (_player.CanBeLocalControlled)
                 EnableInputControlledPreset();
@@ -32,10 +33,7 @@ namespace Gameplay.Character.Player.StateMachine.States
         private void EnableInputControlledPreset()
         {
             _playerService.Set(_player);
-            _player.EnableLocalControlledBrain();
-            _player.SubscribeOnDunkInput();
-            _player.SubscribeOnPassInput();
-            _player.SubscribeOnThrowInput();
+            _player.EnableLocalControlledBrain(new [] { LocalAction.Dunk , LocalAction.Pass, LocalAction.Throw, LocalAction.Move, LocalAction.Rotate});
             _player.PrioritizeCamera();
             _player.FocusOn(_player.OppositeRing.transform);
         }
@@ -45,14 +43,11 @@ namespace Gameplay.Character.Player.StateMachine.States
 
         public void Exit()
         {
-            _player.DisableCharacterController();
+            _player.DisableMover();
             _player.DisableLocalControlledBrain();
-            _player.UnsubscribeFromDunkInput();
-            _player.UnsubscribeFromPassInput();
-            _player.UnsubscribeFromThrowInput();
             _player.DisableAIControlledBrain();
             _player.DisableFightForBallTriggerZone();
-            _player.DisableDistanceTracker();
+            _player.DisableTargetTracker();
         }
     }
 }

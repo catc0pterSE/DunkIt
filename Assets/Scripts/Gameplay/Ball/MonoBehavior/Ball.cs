@@ -70,6 +70,7 @@ namespace Gameplay.Ball.MonoBehavior
 
         public void StartMovingTo(Vector3 targetPosition, Action toDoAfter = null)
         {
+            RemoveOwner();
             TurnPhysicsOf();
             StopMovingRoutine();
             _moveRoutine = StartCoroutine(MoveTo(targetPosition, toDoAfter));

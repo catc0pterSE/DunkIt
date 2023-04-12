@@ -1,8 +1,10 @@
 ﻿using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour.Brains.AIControlled;
+using Gameplay.Character.Player.MonoBehaviour.Brains.LocalControlled;
 using Infrastructure.PlayerService;
 using Modules.StateMachine;
-using UI.HUD.StateMachine.States;
+using NC_Custom_Tasks.Actions;
+using UnityEngine;
 
 namespace Gameplay.Character.Player.StateMachine.States
 {
@@ -23,27 +25,40 @@ namespace Gameplay.Character.Player.StateMachine.States
 
         public void Enter()
         {
-            _player.EnableCharacterController();
+            _player.EnableMover();
 
-            if (_player.CanBeLocalControlled && _playerService.CurrentControlled == _player)
-                EnterInputControlledPreset();
+            if (_playerService.CurrentControlled == _player)
+                EnterLocalControlledPreset();
             else
                 EnterAIControlledPreset();
         }
 
         public void Exit()
         {
-            _player.DisableCharacterController();
+            _player.DisableMover();
             _player.DisableLocalControlledBrain();
-            _player.UnsubscribeFromChangePlayerInput();
             _player.DisableAIControlledBrain();
+            UnsubscribeFromChangePlayerInput();
         }
 
-        private void EnterInputControlledPreset()
+        private void SubscribeOnChangePlayerInput() =>
+            _player.ChangePlayerInitiated += OnChangePlayerInitiated;
+
+        private void UnsubscribeFromChangePlayerInput() =>
+            _player.ChangePlayerInitiated -= OnChangePlayerInitiated;
+        
+        private void OnChangePlayerInitiated(PlayerFacade nextPlayer)
+        {
+            _playerService.Set(nextPlayer);
+            _player.EnterDefenceState();
+            nextPlayer.EnterDefenceState();
+        }
+
+        private void EnterLocalControlledPreset()
         {
             _playerService.Set(_player);
-            _player.EnableLocalControlledBrain();
-            _player.SubscribeOnChangePlayerInput();
+            SubscribeOnChangePlayerInput();
+            _player.EnableLocalControlledBrain(new [] { LocalAction.Move , LocalAction.ChangePlayer, LocalAction.Rotate});
             _player.PrioritizeCamera();
             _player.FocusOn(_ball.Owner.transform);
         }

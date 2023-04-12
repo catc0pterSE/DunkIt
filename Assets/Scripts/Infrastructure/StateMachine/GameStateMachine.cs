@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Infrastructure.CoroutineRunner;
-using Infrastructure.Factory;
 using Infrastructure.ServiceManagement;
 using Infrastructure.StateMachine.States;
 using Modules.StateMachine;

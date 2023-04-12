@@ -8,6 +8,7 @@ using Infrastructure.PlayerService;
 using Scene;
 using Scene.Ring;
 using UnityEngine;
+using Utility.Constants;
 
 namespace Infrastructure.Mediator
 {
@@ -97,9 +98,30 @@ namespace Infrastructure.Mediator
         public IPlayerService GetPlayerService() => _playerService;
         public CourtDimensions GetCourtDimensions() => _courtDimensions;
 
-        public bool TryGetNextToControl(PlayerFacade requester, out PlayerFacade playerFacade)
+        public bool TryGetNextToControl(PlayerFacade requester, out PlayerFacade nextPlayer)
         {
-            throw new NotImplementedException();
+            nextPlayer = null;
+            PlayerFacade[] playersTeam;
+
+            if (_leftTeam.Contains(requester))
+                playersTeam = _leftTeam;
+            else if (_rightTeam.Contains(requester))
+                playersTeam = _rightTeam;
+            else
+                throw new ArgumentException("Requester is not part of any team");
+
+            for (int i = 0; i < playersTeam.Length; i++)
+            {
+                if (playersTeam[i]!=requester)
+                    continue;
+
+                if (i == playersTeam.Length-1)
+                    nextPlayer = playersTeam[0];
+                else
+                    nextPlayer = playersTeam[i + 1];
+            }
+
+            return nextPlayer != null;
         }
     }
 }

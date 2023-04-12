@@ -3,12 +3,10 @@ using Cinemachine;
 using Gameplay.Character.Player.MonoBehaviour.BallHandle.Dunk;
 using Gameplay.Character.Player.MonoBehaviour.BallHandle.Pass;
 using Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw;
-using Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw.DropBall;
 using Gameplay.Character.Player.MonoBehaviour.Brains.AIControlled;
 using Gameplay.Character.Player.MonoBehaviour.Brains.LocalControlled;
 using Gameplay.Character.Player.MonoBehaviour.Events;
 using Gameplay.Character.Player.MonoBehaviour.Movement;
-using Gameplay.Character.Player.MonoBehaviour.PlayerSwapping;
 using Gameplay.Character.Player.MonoBehaviour.TargetTracking;
 using Gameplay.Character.Player.MonoBehaviour.TriggerZone;
 using Gameplay.Character.Player.StateMachine;
@@ -26,11 +24,8 @@ namespace Gameplay.Character.Player.MonoBehaviour
     public class PlayerFacade : CharacterFacade
     {
         [SerializeField] private PlayerEventLauncher _playerEventLauncher;
-        [SerializeField] private AIControlledBallDropper _aiControlledBallDropper;
-        [SerializeField] private LocalControlledBallDropper _localControlledBallDropper;
         [SerializeField] private AIControlledBrain _aiControlledBrain;
         [SerializeField] private LocalControlledBrain _localControlledBrain;
-        [SerializeField] private PlayerSwapper _playerSwapper;
         [SerializeField] private PlayerMover _playerMover;
         [SerializeField] private Animator _animator;
         [SerializeField] private BallThrower _ballThrower;
@@ -41,7 +36,6 @@ namespace Gameplay.Character.Player.MonoBehaviour
         [SerializeField] private Catcher _catcher;
         [SerializeField] private Dunker _dunker;
         [SerializeField] private FightForBallTriggerZone _fightForBallTriggerZone;
-        [SerializeField] private CharacterController _characterController;
 
         private TeamsMediator _teamsMediator;
         private CinemachineVirtualCamera _virtualCamera;
@@ -72,7 +66,7 @@ namespace Gameplay.Character.Player.MonoBehaviour
             OppositeRing = teamsMediator.GetOppositeRing(this);
             CourtDimensions courtDimensions = teamsMediator.GetCourtDimensions();
 
-            _playerEventLauncher.Initialize(inputService, teamsMediator);
+            _playerEventLauncher.Initialize(teamsMediator);
             _dunker.Initialize(Ball, OppositeRing);
             _localControlledBrain.Initialize(gameplayCamera.transform, inputService);
             _ballThrower.Initialize(Ball);
@@ -103,8 +97,8 @@ namespace Gameplay.Character.Player.MonoBehaviour
 
         public event Action<PlayerFacade, PlayerFacade> PassInitiated
         {
-            add => _playerEventLauncher.PassInitiated+=value;
-            remove =>_playerEventLauncher.PassInitiated-=value;
+            add => _playerEventLauncher.PassInitiated += value;
+            remove => _playerEventLauncher.PassInitiated -= value;
         }
 
         public event Action<PlayerFacade> ThrowInitiated
@@ -115,8 +109,14 @@ namespace Gameplay.Character.Player.MonoBehaviour
 
         public event Action<PlayerFacade> DunkInitiated
         {
-            add => _playerEventLauncher.DunkInitiated+=value;
-            remove => _playerEventLauncher.DunkInitiated-=value;
+            add => _playerEventLauncher.DunkInitiated += value;
+            remove => _playerEventLauncher.DunkInitiated -= value;
+        }
+
+        public event Action<PlayerFacade> ChangePlayerInitiated
+        {
+            add => _playerEventLauncher.ChangePlayerInitiated += value;
+            remove => _playerEventLauncher.ChangePlayerInitiated -= value;
         }
 
         public event Action<bool> ThrowReached
@@ -170,9 +170,9 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public void EnterThrowState() =>
             _stateMachine.Enter<ThrowState>();
 
-        public void EnterIdleState() =>
-            _stateMachine.Enter<IdleState>();
-        
+        public void EnterIdleState(Vector3 lookingAt) =>
+            _stateMachine.Enter<IdleState, Vector3>(lookingAt);
+
         public void EnterDropBallState() =>
             _stateMachine.Enter<DropBallState>();
 
@@ -200,37 +200,13 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public void EnterBallChasingState() =>
             _stateMachine.Enter<BallChasingState>();
 
-        public void EnableLocalControlledBrain() =>
-            _localControlledBrain.Enable();
+        public void EnableLocalControlledBrain(LocalAction[] localActions) =>
+            _localControlledBrain.Enable(localActions);
 
         public void DisableLocalControlledBrain() =>
             _localControlledBrain.Disable();
 
-        public void SubscribeOnThrowInput() =>
-            _playerEventLauncher.SubscribeOnThrowInput();
-
-        public void SubscribeOnPassInput() =>
-            _playerEventLauncher.SubscribeOnPassInput();
-
-        public void SubscribeOnDunkInput() =>
-            _playerEventLauncher.SubscribeOnDunkInput();
-
-        public void SubscribeOnChangePlayerInput() =>
-            _playerEventLauncher.SubscribeOnChangePlayerInput();
-
-        public void UnsubscribeFromThrowInput() =>
-            _playerEventLauncher.UnsubscribeFromThrowInput();
-
-        public void UnsubscribeFromPassInput() =>
-            _playerEventLauncher.UnsubscribeFromPassInput();
-
-        public void UnsubscribeFromDunkInput() =>
-            _playerEventLauncher.UnsubscribeFromDunkInput();
-
-        public void UnsubscribeFromChangePlayerInput() =>
-            _playerEventLauncher.UnsubscribeFromChangePlayerInput();
-
-        public void EnableAIControlledBrain(AI aiType) =>
+       public void EnableAIControlledBrain(AI aiType) =>
             _aiControlledBrain.Enable(aiType);
 
         public void DisableAIControlledBrain() =>
@@ -247,23 +223,11 @@ namespace Gameplay.Character.Player.MonoBehaviour
 
         public void DisableAIControlledBallThrower() =>
             _aiControlledThrowing.Disable();
-        
-        public void EnableLocalControlledBallDropper() =>
-            _localControlledBallDropper.Enable();
 
-        public void DisableLocalControlledBallDropper() =>
-            _localControlledBallDropper.Disable();
-
-        public void EnableAIControlledBallDropper() =>
-            _aiControlledBallDropper.Enable();
-
-        public void DisableAIControlledBallDropper() =>
-            _aiControlledBallDropper.Disable();
-
-        public void EnableDistanceTracker() =>
+        public void EnableTargetTracker() =>
             _targetTracker.Enable();
 
-        public void DisableDistanceTracker() =>
+        public void DisableTargetTracker() =>
             _targetTracker.Disable();
 
         public void EnableCatcher() =>
@@ -278,11 +242,11 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public void DisableFightForBallTriggerZone() =>
             _fightForBallTriggerZone.Disable();
 
-        public void EnableCharacterController() =>
-            _characterController.Enable();
+        public void EnableMover() =>
+            _playerMover.Enable();
 
-        public void DisableCharacterController() =>
-            _characterController.Disable();
+        public void DisableMover() =>
+            _playerMover.Disable();
 
         public void PrioritizeCamera() =>
             _virtualCamera.Prioritize();

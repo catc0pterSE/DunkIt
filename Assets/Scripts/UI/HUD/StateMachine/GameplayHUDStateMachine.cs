@@ -16,7 +16,8 @@ namespace UI.HUD.StateMachine
                 [typeof(DefenceState)] = new DefenceState(gameplayHUD),
                 [typeof(BallChasingState)] = new BallChasingState(gameplayHUD),
                 [typeof(DropBallState)] = new DropBallState(gameplayHUD),
-                [typeof(ThrowState)] = new ThrowState(gameplayHUD)
+                [typeof(ThrowState)] = new ThrowState(gameplayHUD),
+                [typeof(IdleState)] = new IdleState(gameplayHUD)
             };
         }
     }

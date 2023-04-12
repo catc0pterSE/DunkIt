@@ -5,6 +5,7 @@
         AttackWithBall,
         AttackWithoutBall,
         Defence,
-        ChasingBall
+        ChasingBall,
+        DropBall
     }
 }

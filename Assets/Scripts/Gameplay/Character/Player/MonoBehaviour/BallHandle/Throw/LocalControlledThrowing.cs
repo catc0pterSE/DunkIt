@@ -40,7 +40,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
         private void OnEnable()
         {
             SetUpRingCamera();
-            _mover.RotateTo(_oppositeRing.transform.position, StartThrow);
+            StartThrow();
         }
 
         private void OnDisable()

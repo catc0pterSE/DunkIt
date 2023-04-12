@@ -15,23 +15,16 @@ namespace Gameplay.Character.Player.StateMachine.States
 
         public void Enter()
         {
-            _player.EnableDistanceTracker();
-            
-            if (_player.CanBeLocalControlled || _player.IsAIOnlyControlled)
-                EnableAIControlledPreset();
-        }
-
-        private void EnableAIControlledPreset()
-        {
+            _player.EnableMover();
+            _player.EnableTargetTracker();
             _player.EnableAIControlledBrain(AI.AttackWithoutBall);
-            _player.EnableCharacterController();
         }
 
         public void Exit()
         {
-            _player.DisableDistanceTracker();
+            _player.DisableTargetTracker();
             _player.DisableAIControlledBrain();
-            _player.DisableCharacterController();
+            _player.DisableMover();
         }
     }
 }

@@ -16,11 +16,13 @@ namespace UI.HUD.StateMachine.States
         public void Enter(PlayerFacade playerFacade)
         {
             _gameplayHUD.SetChangePlayerAvailability(true);
+            _gameplayHUD.SetMovementAvailability(true);
         }
 
         public void Exit()
         {
             _gameplayHUD.SetChangePlayerAvailability(false);
+            _gameplayHUD.SetMovementAvailability(false);
         }
     }
 }

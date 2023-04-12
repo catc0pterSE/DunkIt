@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Modules.MonoBehaviour;
 using UnityEngine;
+using Utility.Extensions;
 
 namespace Gameplay.Character.Player.MonoBehaviour.Movement
 {
@@ -20,32 +21,39 @@ namespace Gameplay.Character.Player.MonoBehaviour.Movement
             _movementSpeed = movementSpeed;
         }
 
+        private void OnEnable()
+        {
+            _characterController.Enable();
+        }
+
+        private void Update()
+        {
+            if (_characterController.isGrounded)
+                return;
+
+            ApplyGravity();
+        }
+        
         private void OnDisable()
         {
-            StopRotationRoutine();
+           _characterController.Disable();
         }
 
-        public void MoveLookingStraight(Vector3 movementDirection)
-        {
-            Rotate(movementDirection);
-
-            Move(movementDirection);
-        }
-
-        /*public void MoveLookingAt(Vector3 movementDirection, Vector3 lookAt) //TODO : do i need it?
-        {
-            Vector3 positionProjection = new Vector3(lookAt.x, transform.position.y, lookAt.z);
-
-            Rotate(positionProjection - transform.position);
-            Move(movementDirection);
-        }*/
-
-        private void Move(Vector3 movementDirection)
+        public void Move(Vector3 movementDirection)
         {
             StopRotationRoutine();
-            movementDirection += GetGravity();
 
             _characterController.Move(movementDirection * (Time.deltaTime * _movementSpeed));
+        }
+
+        public void Rotate(Vector3 direction)
+        {
+            if (direction == Vector3.zero)
+                return;
+
+            Quaternion toRotation = Quaternion.LookRotation(direction, Vector3.up);
+            transform.rotation =
+                Quaternion.RotateTowards(transform.rotation, toRotation, _rotationSpeed * Time.deltaTime);
         }
 
         public void RotateTo(Vector3 position, Action callback = null)
@@ -63,21 +71,8 @@ namespace Gameplay.Character.Player.MonoBehaviour.Movement
                 StopCoroutine(_rotating);
         }
 
-
-        private Vector3 GetGravity()
-        {
-            return Physics.gravity * _gravityModifier;
-        }
-
-        private void Rotate(Vector3 direction)
-        {
-            if (direction == Vector3.zero)
-                return;
-
-            Quaternion toRotation = Quaternion.LookRotation(direction, Vector3.up);
-            transform.rotation =
-                Quaternion.RotateTowards(transform.rotation, toRotation, _rotationSpeed * Time.deltaTime);
-        }
+        private void ApplyGravity() =>
+            _characterController.Move(Physics.gravity * (_gravityModifier * Time.deltaTime));
 
         private IEnumerator RotateToPosition(Vector3 position, Action callback = null)
         {

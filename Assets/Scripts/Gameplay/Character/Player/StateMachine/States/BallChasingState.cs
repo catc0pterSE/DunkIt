@@ -1,5 +1,6 @@
 ﻿using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Character.Player.MonoBehaviour.Brains.AIControlled;
+using Gameplay.Character.Player.MonoBehaviour.Brains.LocalControlled;
 using Infrastructure.PlayerService;
 using Modules.StateMachine;
 using UI.HUD.StateMachine.States;
@@ -23,10 +24,10 @@ namespace Gameplay.Character.Player.StateMachine.States
 
         public void Enter()
         {
-            _player.EnableCharacterController();
+            _player.EnableMover();
             _player.EnableCatcher();
 
-            if (_player.CanBeLocalControlled && _playerService.CurrentControlled == _player)
+            if (_playerService.CurrentControlled == _player)
                 EnableLocalControlledPreset();
             else
                 EnableAIControlledPreset();
@@ -35,10 +36,23 @@ namespace Gameplay.Character.Player.StateMachine.States
         private void EnableLocalControlledPreset()
         {
             _playerService.Set(_player);
-            _player.EnableLocalControlledBrain();
-            _player.SubscribeOnChangePlayerInput();
+            SubscribeOnChangePlayerInput();
+            _player.EnableLocalControlledBrain(new [] { LocalAction.Move , LocalAction.ChangePlayer, LocalAction.Rotate});
             _player.PrioritizeCamera();
             _player.FocusOn(_ball.transform);
+        }
+        
+        private void SubscribeOnChangePlayerInput() =>
+            _player.ChangePlayerInitiated += OnChangePlayerInitiated;
+
+        private void UnsubscribeFromChangePlayerInput() =>
+            _player.ChangePlayerInitiated -= OnChangePlayerInitiated;
+        
+        private void OnChangePlayerInitiated(PlayerFacade nextPlayer)
+        {
+            _playerService.Set(nextPlayer);
+            _player.EnterBallChasingState();
+            nextPlayer.EnterBallChasingState();
         }
 
         private void EnableAIControlledPreset() =>
@@ -47,10 +61,10 @@ namespace Gameplay.Character.Player.StateMachine.States
         public void Exit()
         {
             _player.DisableAIControlledBrain();
-            _player.DisableCharacterController();
-            _player.UnsubscribeFromChangePlayerInput();
+            _player.DisableMover();
             _player.DisableLocalControlledBrain();
             _player.DisableCatcher();
+            UnsubscribeFromChangePlayerInput();
         }
     }
 }
