@@ -15,29 +15,23 @@ namespace Gameplay.StateMachine.Transitions
         private readonly Ball _ball;
         private readonly PlayerFacade[] _leftTeam;
         private readonly PlayerFacade[] _rightTeam;
-        private readonly Ring _leftRing;
-        private readonly Ring _ringRing;
         private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
 
-        public AnyToDropBallTransition(Ball ball, PlayerFacade[] leftTeam, PlayerFacade[] rightTeam, SceneInitials sceneInitials, GameplayLoopStateMachine gameplayLoopStateMachine)
+        public AnyToDropBallTransition(Ball ball, PlayerFacade[] leftTeam, PlayerFacade[] rightTeam, GameplayLoopStateMachine gameplayLoopStateMachine)
         {
             _ball = ball;
             _leftTeam = leftTeam;
             _rightTeam = rightTeam;
-            _leftRing = sceneInitials.LeftRing;
-            _ringRing = sceneInitials.RightRing;
             _gameplayLoopStateMachine = gameplayLoopStateMachine;
         }
 
         public void Enable()
         {
-            SubscribeOnRings();
             SubscribeOnBall();
         }
 
         public void Disable()
         {
-            UnsubscribeFromRings();
             UnsubscribeFromBall();
         }
 
@@ -46,24 +40,6 @@ namespace Gameplay.StateMachine.Transitions
 
         private void UnsubscribeFromBall() =>
             _ball.Lost -= OnBallLost;
-
-        private void SubscribeOnRings()
-        {
-            _leftRing.Goal += OnLeftRingGoalScored;
-            _ringRing.Goal += OnRightRingGoalScored;
-        }
-
-        private void UnsubscribeFromRings()
-        {
-            _leftRing.Goal -= OnLeftRingGoalScored;
-            _ringRing.Goal -= OnRightRingGoalScored;
-        }
-
-        private void OnLeftRingGoalScored() =>
-            EnterLeftTeamDropsBall();
-
-        private void OnRightRingGoalScored() =>
-            EnterRightTeamDropsBall();
 
         private void OnBallLost(CharacterFacade lastOwner)
         {

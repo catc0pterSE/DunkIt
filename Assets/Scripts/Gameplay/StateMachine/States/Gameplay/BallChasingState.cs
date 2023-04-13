@@ -19,7 +19,8 @@ namespace Gameplay.StateMachine.States.Gameplay
             Transitions = new ITransition[]
             {
                 new AnyToAttackDefenceStateTransition(ball, gameplayLoopStateMachine),
-                new AnyToDropBallTransition(ball, leftTeam, rightTeam, sceneInitials, gameplayLoopStateMachine)
+                new AnyToDropBallTransition(ball, leftTeam, rightTeam, gameplayLoopStateMachine),
+                new AnyToGoalState(sceneInitials, gameplayLoopStateMachine)
             };
         }
 

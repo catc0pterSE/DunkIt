@@ -16,8 +16,6 @@ namespace UI.HUD.Controls.StateMachine.States
         
         public void Enter(PlayerFacade player)
         {
-            
-            Debug.Log("drop state");
             _controlsHUDView.Enable();
             _player = player;
             SubscribeHudOnCurrentPlayer();

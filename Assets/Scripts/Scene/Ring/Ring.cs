@@ -19,11 +19,12 @@ namespace Scene.Ring
         [SerializeField] private CinemachineTargetGroup _ringTargetGroup;
         [SerializeField] private bool _isFlipped;
         [SerializeField] private Transform _ringCenter;
+        [SerializeField] private CinemachineVirtualCamera _goalCamera;
 
         private Coroutine _listeningToWinZone;
         private WaitForSeconds _goalTrackingWindowWait;
         
-        public event Action Goal;
+        public event Action<Ring> Goal;
 
         public CinemachineTargetGroup RingTargetGroup => _ringTargetGroup;
 
@@ -39,6 +40,8 @@ namespace Scene.Ring
         public Vector3 RingCenter => _ringCenter.transform.position;
 
         public bool IsFlipped => _isFlipped;
+
+        public CinemachineVirtualCamera GoalCamera => _goalCamera;
 
         private void Awake()
         {
@@ -75,7 +78,7 @@ namespace Scene.Ring
             if (_listeningToWinZone != null)
                 StopCoroutine(_listeningToWinZone);
 
-            Goal?.Invoke();
+            Goal?.Invoke(this);
         }
     }
 }

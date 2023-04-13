@@ -123,11 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!4 &5578405 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2396115851720772628, guid: d29c001c95e5a294bb0f66c6de27848f, type: 3}
-  m_PrefabInstance: {fileID: 7575453231172695832}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &714479120
 GameObject:
   m_ObjectHideFlags: 0
@@ -196,11 +191,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1404796807 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6554181873222619282, guid: d29c001c95e5a294bb0f66c6de27848f, type: 3}
-  m_PrefabInstance: {fileID: 7575453231172695832}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2009175474
 GameObject:
   m_ObjectHideFlags: 0
@@ -424,70 +414,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1693107909918744240, guid: d29c001c95e5a294bb0f66c6de27848f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3119939407694449978, guid: d29c001c95e5a294bb0f66c6de27848f, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.03930734
-      objectReference: {fileID: 0}
-    - target: {fileID: 4034084039981177713, guid: d29c001c95e5a294bb0f66c6de27848f, type: 3}
-      propertyPath: _ringCenter
-      value: 
-      objectReference: {fileID: 1404796807}
-    - target: {fileID: 5498443330463483895, guid: d29c001c95e5a294bb0f66c6de27848f, type: 3}
-      propertyPath: _ringCenter
-      value: 
-      objectReference: {fileID: 5578405}
-    - target: {fileID: 5834931463599690172, guid: d29c001c95e5a294bb0f66c6de27848f, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: -0.28366265
-      objectReference: {fileID: 0}
-    - target: {fileID: 5834931463599690172, guid: d29c001c95e5a294bb0f66c6de27848f, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.039307345
-      objectReference: {fileID: 0}
-    - target: {fileID: 5834931463599690172, guid: d29c001c95e5a294bb0f66c6de27848f, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0.13151053
-      objectReference: {fileID: 0}
-    - target: {fileID: 7594750932976958550, guid: d29c001c95e5a294bb0f66c6de27848f, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 7594750932976958550, guid: d29c001c95e5a294bb0f66c6de27848f, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7594750932976958550, guid: d29c001c95e5a294bb0f66c6de27848f, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 7594750932976958550, guid: d29c001c95e5a294bb0f66c6de27848f, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7594750932976958550, guid: d29c001c95e5a294bb0f66c6de27848f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 7829197075091322425, guid: d29c001c95e5a294bb0f66c6de27848f, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8593964234089917570, guid: d29c001c95e5a294bb0f66c6de27848f, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 8593964234089917570, guid: d29c001c95e5a294bb0f66c6de27848f, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 8593964234089917570, guid: d29c001c95e5a294bb0f66c6de27848f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 90
-      objectReference: {fileID: 0}
     - target: {fileID: 8600511764659509137, guid: d29c001c95e5a294bb0f66c6de27848f, type: 3}
       propertyPath: m_RootOrder
       value: 1

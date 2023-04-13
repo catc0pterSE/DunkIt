@@ -62,7 +62,8 @@ namespace Gameplay.StateMachine
                 [typeof(DunkState)] = new DunkState( leftTeam, rightTeam, sceneInitials, ball,  this),
                 [typeof(ThrowState)] = new ThrowState(ball, this),
                 [typeof(DropBallState)] = new DropBallState(leftTeam, rightTeam, ball, sceneInitials, loadingCurtain, this),
-                [typeof(FightForBallState)] = new FightForBallState(playableTeam, notPlayableTeam, ball, this, gameObjectFactory)
+                [typeof(FightForBallState)] = new FightForBallState(playableTeam, notPlayableTeam, ball, this, gameObjectFactory),
+                [typeof(GoalState)] = new GoalState(leftTeam, rightTeam, sceneInitials, coroutineRunner, this)
             };
         }
 
