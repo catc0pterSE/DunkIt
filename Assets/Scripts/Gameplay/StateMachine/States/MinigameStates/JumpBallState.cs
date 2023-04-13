@@ -8,7 +8,6 @@ using Gameplay.StateMachine.Transitions;
 using Infrastructure.Factory;
 using Infrastructure.Input.InputService;
 using Modules.StateMachine;
-using UI.HUD;
 using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.MinigameStates
@@ -34,13 +33,9 @@ namespace Gameplay.StateMachine.States.MinigameStates
             Referee referee,
             Ball.MonoBehavior.Ball ball,
             CinemachineBrain gameplayCamera,
-            IGameplayHUD gameplayHUD,
             GameplayLoopStateMachine gameplayLoopStateMachine,
             IGameObjectFactory gameObjectFactory,
             IInputService inputService
-        ) : base
-        (
-            gameplayHUD
         )
         {
             Transitions = new ITransition[]

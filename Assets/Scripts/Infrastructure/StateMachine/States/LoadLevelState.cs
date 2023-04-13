@@ -16,9 +16,9 @@ using Modules.StateMachine;
 using Scene;
 using UI;
 using UI.HUD;
-using UI.HUD.Mobile;
-using UI.HUD.StateMachine;
-using UI.HUD.StateMachine.States;
+using UI.HUD.Controls;
+using UI.HUD.Controls.Mobile;
+using UI.HUD.Controls.StateMachine;
 using UnityEngine;
 using Utility.Constants;
 using Utility.Extensions;
@@ -86,9 +86,10 @@ namespace Infrastructure.StateMachine.States
 
             leftTeam.Map(player => player.Initialize(teamsMediator, true, false, SpawnVirtualCamera()));
             rightTeam.Map(player => player.Initialize(teamsMediator, false, true, SpawnVirtualCamera()));
-            _serviceContainer.Single<IPlayerService>().Set(leftTeam.First()); //TODO: move somewhere
-
-            IGameplayHUD gameplayHUDView = SpawnHUD().Initialize(leftTeam.Union(rightTeam).ToArray(), camera.Camera, _serviceContainer.Single<IHUDStateController>());
+            _serviceContainer.Single<IPlayerService>().Set(leftTeam.First());
+            
+            SpawnControlsHUDView().Initialize(_serviceContainer.Single<IControlsHUDStateController>());
+            
 
             GameplayLoopStateMachine gameplayLoopStateMachine =
                 new GameplayLoopStateMachine
@@ -97,7 +98,6 @@ namespace Infrastructure.StateMachine.States
                     rightTeam,
                     referee,
                     camera,
-                    gameplayHUDView,
                     ball,
                     sceneInitials,
                     LoadingCurtain,
@@ -132,16 +132,16 @@ namespace Infrastructure.StateMachine.States
         private Ball SpawnBall() =>
             _gameObjectFactory.CreateBall();
 
-        private IGameplayHUD SpawnHUD() //TODO different for different platforms
+        private IControlsHUDView SpawnControlsHUDView() //TODO different for different platforms
         {
             return SpawnMobileHUD();
         }
 
-        private IGameplayHUD SpawnMobileHUD()
+        private IControlsHUDView SpawnMobileHUD()
         {
-            MobileGameplayHUD mobileGameplayHUD = _gameObjectFactory.CreateMobileHUD();
-            mobileGameplayHUD.SetUiInputController(_serviceContainer.Single<IUIInputController>());
-            return mobileGameplayHUD;
+            MobileControlsHUDView mobileControlsHUDView = _gameObjectFactory.CreateMobileControlsHUD();
+            mobileControlsHUDView.SetUiInputController(_serviceContainer.Single<IUIInputController>());
+            return mobileControlsHUDView;
         }
 
         private CinemachineVirtualCamera SpawnVirtualCamera() =>

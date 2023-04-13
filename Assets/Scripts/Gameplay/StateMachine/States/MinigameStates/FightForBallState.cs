@@ -3,11 +3,9 @@ using System.Linq;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Minigame;
 using Gameplay.Minigame.FightForBall;
-using Gameplay.StateMachine.States.Gameplay;
 using Gameplay.StateMachine.Transitions;
 using Infrastructure.Factory;
 using Modules.StateMachine;
-using UI.HUD;
 using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.MinigameStates
@@ -17,21 +15,17 @@ namespace Gameplay.StateMachine.States.MinigameStates
         private readonly PlayerFacade[] _playerTeam;
         private readonly PlayerFacade[] _enemyTeam;
         private readonly Ball.MonoBehavior.Ball _ball;
-        private readonly GameplayLoopStateMachine _gameplayLoopStateMachine;
         private readonly FightForBallMinigame _fightForBallMinigame;
 
         private PlayerFacade _fightingPlayer;
         private PlayerFacade _fightingEnemy;
 
         public FightForBallState(PlayerFacade[] playerTeam, PlayerFacade[] enemyTeam, Ball.MonoBehavior.Ball ball,
-            IGameplayHUD gameplayHUD, GameplayLoopStateMachine gameplayLoopStateMachine,
-            IGameObjectFactory gameObjectFactory)
-            : base(gameplayHUD)
+            GameplayLoopStateMachine gameplayLoopStateMachine, IGameObjectFactory gameObjectFactory)
         {
             _playerTeam = playerTeam;
             _enemyTeam = enemyTeam;
             _ball = ball;
-            _gameplayLoopStateMachine = gameplayLoopStateMachine;
             _fightForBallMinigame = gameObjectFactory.CreateFightForBallMinigame();
 
             Transitions = new ITransition[]

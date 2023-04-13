@@ -4,7 +4,6 @@ using Gameplay.StateMachine.Transitions;
 using Infrastructure.CoroutineRunner;
 using Modules.StateMachine;
 using Scene;
-using UI.HUD;
 using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.Gameplay
@@ -13,7 +12,6 @@ namespace Gameplay.StateMachine.States.Gameplay
     {
         private readonly PlayerFacade[] _leftTeam;
         private readonly PlayerFacade[] _rightTeam;
-        private readonly IGameplayHUD _gameplayHUD;
 
         private PlayerFacade[] _attackingTeam;
         private PlayerFacade[] _defencingTeam;
@@ -24,14 +22,12 @@ namespace Gameplay.StateMachine.States.Gameplay
             PlayerFacade[] rightTeam,
             Ball.MonoBehavior.Ball ball,
             SceneInitials sceneInitials,
-            IGameplayHUD gameplayHUD,
             GameplayLoopStateMachine gameplayLoopStateMachine,
             ICoroutineRunner coroutineRunner
         )
         {
             _leftTeam = leftTeam;
             _rightTeam = rightTeam;
-            _gameplayHUD = gameplayHUD;
 
             Transitions = new ITransition[]
             {
@@ -45,16 +41,9 @@ namespace Gameplay.StateMachine.States.Gameplay
         public void Enter(PlayerFacade ballOwner)
         {
             base.Enter();
-            _gameplayHUD.Enable();
             _attackingTeam = _leftTeam.Contains(ballOwner) ? _leftTeam : _rightTeam;
             _defencingTeam = _rightTeam.Contains(ballOwner) ? _leftTeam : _rightTeam;
             SetPlayersStates(ballOwner);
-        }
-
-        public override void Exit()
-        {
-            base.Exit();
-            _gameplayHUD.Disable();
         }
 
         private void SetPlayersStates(PlayerFacade ballOwner)

@@ -1,8 +1,6 @@
-﻿using System.Linq;
-using Gameplay.Character.Player.MonoBehaviour;
+﻿using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.Cutscene;
 using Modules.StateMachine;
-using UI.HUD;
 using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.CutsceneStates
@@ -10,18 +8,15 @@ namespace Gameplay.StateMachine.States.CutsceneStates
     public abstract class CutsceneState : StateWithTransitions
     {
         private readonly PlayerFacade[] _players;
-        private readonly IGameplayHUD _gameplayHUD;
         private readonly ICutscene _cutscene;
 
         protected CutsceneState
         (
             PlayerFacade[] players,
-            IGameplayHUD gameplayHUD,
             ICutscene cutscene
         )
         {
             _players = players;
-            _gameplayHUD = gameplayHUD;
             _cutscene = cutscene;
         }
 
@@ -29,16 +24,10 @@ namespace Gameplay.StateMachine.States.CutsceneStates
         public override void Enter()
         {
             base.Enter();
-            DisableGameplayHUD();
             SetCharactersStates();
             SubscribeOnCutscene();
             EnableCutscene();
             LaunchCutscene();
-        }
-
-        private void DisableGameplayHUD()
-        {
-            _gameplayHUD.Disable();
         }
 
         public override void Exit()

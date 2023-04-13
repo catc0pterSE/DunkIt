@@ -5,7 +5,7 @@ using Infrastructure.PlayerService;
 using Infrastructure.Provider;
 using Infrastructure.ServiceManagement;
 using Modules.StateMachine;
-using UI.HUD.StateMachine;
+using UI.HUD.Controls.StateMachine;
 using Utility.Constants;
 
 namespace Infrastructure.StateMachine.States
@@ -58,6 +58,6 @@ namespace Infrastructure.StateMachine.States
             _services.RegisterSingle<IPlayerService>(new PlayerService.PlayerService());
         
         private void RegisterHudStateController() =>
-            _services.RegisterSingle(_services.Single<IPlayerService>() as IHUDStateController) ;
+            _services.RegisterSingle(_services.Single<IPlayerService>() as IControlsHUDStateController) ;
     }
 }

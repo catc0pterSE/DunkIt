@@ -28,7 +28,7 @@ namespace Gameplay.Character.Player.StateMachine
                 [typeof(NotControlledState)] = new NotControlledState(player)
             };
 
-            Enter<BallChasingState>();
+            Enter<NotControlledState>();
         }
     }
 }

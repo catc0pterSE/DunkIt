@@ -1,17 +1,14 @@
-﻿
-using System;
+﻿using System;
 using Modules.MonoBehaviour;
 using UnityEngine;
 
-namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
+namespace Gameplay.Character.Player.MonoBehaviour.BallHandle
 {
-    using Ball.MonoBehavior;
-    
     public class BallThrower: SwitchableComponent
     {
-        private Ball _ball;
+        private Ball.MonoBehavior.Ball _ball;
 
-        public void Initialize(Ball ball)
+        public void Initialize(Ball.MonoBehavior.Ball ball)
         {
             _ball = ball;
         }

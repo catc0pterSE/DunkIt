@@ -1,5 +1,6 @@
 ﻿using System;
 using Cinemachine;
+using Gameplay.Character.Player.MonoBehaviour.BallHandle;
 using Gameplay.Character.Player.MonoBehaviour.BallHandle.Dunk;
 using Gameplay.Character.Player.MonoBehaviour.BallHandle.Pass;
 using Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw;
@@ -94,6 +95,12 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public bool IsAIOnlyControlled { get; private set; }
 
         public Type CurrentStateType => _stateMachine.CurrentState;
+
+        public event Action StateChanged
+        {
+            add => _stateMachine.StateChanged += value;
+            remove => _stateMachine.StateChanged -= value;
+        }
 
         public event Action<PlayerFacade, PlayerFacade> PassInitiated
         {

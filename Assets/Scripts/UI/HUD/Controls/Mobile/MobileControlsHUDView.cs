@@ -1,26 +1,23 @@
 ﻿using System;
-using Gameplay.Character.Player.MonoBehaviour;
 using Infrastructure.Input;
 using Modules.MonoBehaviour;
-using UI.HUD.StateMachine;
-using UI.Indication;
+using UI.HUD.Controls.StateMachine;
 using UnityEngine;
 
-namespace UI.HUD.Mobile
+namespace UI.HUD.Controls.Mobile
 {
-    public class MobileGameplayHUD : SwitchableMonoBehaviour, IGameplayHUD
+    public class MobileControlsHUDView : SwitchableMonoBehaviour, IControlsHUDView
     {
         [SerializeField] private ButtonSimulation _throwButton;
         [SerializeField] private ButtonSimulation _dunkButton;
         [SerializeField] private ButtonSimulation _passButton;
         [SerializeField] private ButtonSimulation _changePlayerButton;
         [SerializeField] private GameObject _joystick;
-        [SerializeField] private OffScreenIndicationRenderer _offScreenIndicationRenderer;
-        
+
 
         private IUIInputController _uiInputController;
         private GameplayHUDStateMachine _stateMachine;
-        private IHUDStateController _ihudStateContoller;
+        private IControlsHUDStateController _hudStateController;
 
         private void OnEnable() =>
             SubscribeUIInputControllerOnButtons();
@@ -28,11 +25,10 @@ namespace UI.HUD.Mobile
         private void OnDisable() =>
             UnsubscribeUIInputControllerFromButtons();
 
-        
-        public IGameplayHUD Initialize(PlayerFacade[] indicationTargets, Camera gameplayCamera, IHUDStateController hudStateController)
+
+        public IControlsHUDView Initialize(IControlsHUDStateController controlsHUDStateController)
         {
-            _ihudStateContoller = hudStateController;
-            _offScreenIndicationRenderer.Initialize(indicationTargets, gameplayCamera);
+            _hudStateController = controlsHUDStateController;
             _stateMachine = new GameplayHUDStateMachine(this);
             ObserveStateController();
             return this;
@@ -87,7 +83,7 @@ namespace UI.HUD.Mobile
         }
 
         private void ObserveStateController() =>
-            _ihudStateContoller.HudStateSelection.Observe(OnCurrentCurrentPlayerDataChanged);
+            _hudStateController.HudStateSelection.Observe(OnCurrentCurrentPlayerDataChanged);
 
         private void OnCurrentCurrentPlayerDataChanged(Action<GameplayHUDStateMachine> action) =>
             action.Invoke(_stateMachine);

@@ -6,8 +6,6 @@ using Gameplay.StateMachine.States.MinigameStates;
 using Infrastructure.Factory;
 using Infrastructure.Input.InputService;
 using Modules.StateMachine;
-using UI.HUD;
-using UnityEngine;
 
 namespace Gameplay.StateMachine.States.CutsceneStates
 {
@@ -24,7 +22,6 @@ namespace Gameplay.StateMachine.States.CutsceneStates
             Referee referee,
             CinemachineBrain camera,
             Ball.MonoBehavior.Ball ball,
-            IGameplayHUD gameplayHUD,
             GameplayLoopStateMachine gameplayLoopStateMachine,
             IGameObjectFactory gameObjectFactory, 
             IInputService inputService
@@ -32,7 +29,6 @@ namespace Gameplay.StateMachine.States.CutsceneStates
         (
             
             leftTeam.Union(rightTeam).ToArray(),
-            gameplayHUD,
             gameObjectFactory.CreateStartCutscene().Initialize(camera, leftTeam, rightTeam, referee, inputService)
         )
         {

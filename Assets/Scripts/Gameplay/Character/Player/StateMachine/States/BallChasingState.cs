@@ -3,7 +3,6 @@ using Gameplay.Character.Player.MonoBehaviour.Brains.AIControlled;
 using Gameplay.Character.Player.MonoBehaviour.Brains.LocalControlled;
 using Infrastructure.PlayerService;
 using Modules.StateMachine;
-using UI.HUD.StateMachine.States;
 
 namespace Gameplay.Character.Player.StateMachine.States
 {
@@ -35,7 +34,6 @@ namespace Gameplay.Character.Player.StateMachine.States
 
         private void EnableLocalControlledPreset()
         {
-            _playerService.Set(_player);
             SubscribeOnChangePlayerInput();
             _player.EnableLocalControlledBrain(new [] { LocalAction.Move , LocalAction.ChangePlayer, LocalAction.Rotate});
             _player.PrioritizeCamera();

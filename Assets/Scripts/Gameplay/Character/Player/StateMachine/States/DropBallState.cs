@@ -27,8 +27,8 @@ namespace Gameplay.Character.Player.StateMachine.States
 
         private void EnableLocalControlledPreset()
         {
-            _player.PrioritizeCamera();
             _playerService.Set(_player);
+            _player.PrioritizeCamera();
             _player.FocusOn(_player.OppositeRing.transform);
             _player.EnableLocalControlledBrain(new [] { LocalAction.Pass, LocalAction.Rotate });
         }

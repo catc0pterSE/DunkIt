@@ -9,7 +9,7 @@ using Gameplay.Minigame.JumpBall;
 using Infrastructure.Input.InputService;
 using Infrastructure.ServiceManagement;
 using UI;
-using UI.HUD.Mobile;
+using UI.HUD.Controls.Mobile;
 
 namespace Infrastructure.Factory
 {
@@ -18,7 +18,7 @@ namespace Infrastructure.Factory
         public PlayerFacade CreatePlayer();
         public Referee CreateReferee();
         public Ball CreateBall();
-        public MobileGameplayHUD CreateMobileHUD();
+        public MobileControlsHUDView CreateMobileControlsHUD();
         public CameraFacade CreateCamera();
         public LoadingCurtain CreateLoadingCurtain();
         public StartCutscene CreateStartCutscene();

@@ -1,6 +1,6 @@
 ﻿using Modules.MonoBehaviour;
 
-namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw.DropBall
+namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.DropBall
 {
     public class LocalControlledBallDropper: SwitchableComponent
     {

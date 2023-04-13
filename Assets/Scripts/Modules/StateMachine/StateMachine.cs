@@ -10,22 +10,33 @@ namespace Modules.StateMachine
 
         public Type CurrentState => _currentState.GetType();
 
+        public event Action StateChanged;
+
         public void Enter<TState>() where TState : class, IParameterlessState
         {
-            if (TryChangeState(out TState state))
-                state.Enter();
+            if (TryChangeState(out TState state) == false)
+                return;
+            
+            state.Enter();
+            StateChanged?.Invoke();
         }
 
         public void Enter<TState, TPayLoad>(TPayLoad payload) where TState : class, IParameterState<TPayLoad>
         {
-            if (TryChangeState(out TState state))
-                state.Enter(payload);
+            if (TryChangeState(out TState state) == false)
+                return;
+            
+            state.Enter(payload);
+            StateChanged?.Invoke();
         }
         
         public void Enter<TState, TPayLoad1, TPayLoad2>(TPayLoad1 payLoad1, TPayLoad2 payLoad2) where TState : class, IParameterState<TPayLoad1, TPayLoad2>
         {
-            if (TryChangeState(out TState state))
-                state.Enter(payLoad1, payLoad2);
+            if (TryChangeState(out TState state) == false)
+                return;
+            
+            state.Enter(payLoad1, payLoad2);
+            StateChanged?.Invoke();
         }
 
         private TState GetState<TState>() where TState : class, IState =>
@@ -37,9 +48,6 @@ namespace Modules.StateMachine
 
             if (state == null)
                 return false;
-
-            /*if (state is IParameterlessState && _currentState == state) // TODO: do i need it?
-                return false;*/
 
             ExitCurrentState();
             SetCurrentState(state);

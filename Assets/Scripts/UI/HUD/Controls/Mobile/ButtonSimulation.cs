@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace UI.HUD.Mobile
+namespace UI.HUD.Controls.Mobile
 {
     public class ButtonSimulation : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {

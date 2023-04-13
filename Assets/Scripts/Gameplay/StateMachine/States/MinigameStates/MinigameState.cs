@@ -1,26 +1,16 @@
 ﻿using Gameplay.Minigame;
 using Modules.StateMachine;
-using UI.HUD;
 
 namespace Gameplay.StateMachine.States.MinigameStates
 {
     public abstract class MinigameState : StateWithTransitions
     {
-        private readonly IGameplayHUD _gameplayHUD;
         protected abstract IMinigame Minigame { get; }
-
-        protected MinigameState(IGameplayHUD gameplayHUD)
-        {
-            
-            _gameplayHUD = gameplayHUD;
-        }
-
         public override void Enter()
         {
             base.Enter();
             SetCharactersStates();
             InitializeMinigame();
-            DisableGameplayHUD();
             SubscribeOnMinigame();
             EnableMinigame();
             LaunchMinigame();
@@ -30,10 +20,6 @@ namespace Gameplay.StateMachine.States.MinigameStates
         protected abstract void OnMiniGameWon();
         protected abstract void OnMiniGameLost();
         protected abstract void SetCharactersStates();
-
-        private void DisableGameplayHUD() =>
-            _gameplayHUD.Disable();
-
 
         public override void Exit()
         {

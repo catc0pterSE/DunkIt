@@ -56,7 +56,6 @@ namespace Gameplay.Character.Player.StateMachine.States
 
         private void EnterLocalControlledPreset()
         {
-            _playerService.Set(_player);
             SubscribeOnChangePlayerInput();
             _player.EnableLocalControlledBrain(new [] { LocalAction.Move , LocalAction.ChangePlayer, LocalAction.Rotate});
             _player.PrioritizeCamera();

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Modules.MonoBehaviour;
 using UnityEngine;
 using Utility.Constants;
 
-namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
+namespace Gameplay.Character.Player.MonoBehaviour.BallHandle
 {
     public class TrajectoryDrawer : SwitchableComponent
     {

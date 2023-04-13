@@ -28,7 +28,6 @@ namespace Gameplay.Character.Player.StateMachine.States
             {
                 if (_playerService.CurrentControlled == _player)
                 {
-                    _playerService.Set(_player);
                     _player.PrioritizeCamera();
                     _player.FocusOn(_ball.Owner.transform);
                 }

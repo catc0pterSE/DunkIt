@@ -14,7 +14,6 @@ using Infrastructure.StateMachine;
 using Modules.StateMachine;
 using Scene;
 using UI;
-using UI.HUD;
 
 namespace Gameplay.StateMachine
 {
@@ -26,7 +25,6 @@ namespace Gameplay.StateMachine
             PlayerFacade[] rightTeam,
             Referee referee,
             CameraFacade camera,
-            IGameplayHUD gameplayHUD,
             Ball.MonoBehavior.Ball ball,
             SceneInitials sceneInitials,
             LoadingCurtain loadingCurtain,
@@ -56,15 +54,15 @@ namespace Gameplay.StateMachine
 
             States = new Dictionary<Type, IState>
             {
-                [typeof(StartCutsceneState)] = new StartCutsceneState(leftTeam, rightTeam, referee, camera.CinemachineBrain, ball, gameplayHUD, this, gameObjectFactory, inputService),
-                [typeof(JumpBallState)] = new JumpBallState(leftTeam, rightTeam, playableTeam, notPlayableTeam, referee, ball, camera.CinemachineBrain, gameplayHUD, this, gameObjectFactory, inputService),
-                [typeof(AttackDefenceState)] = new AttackDefenceState(leftTeam, rightTeam, ball, sceneInitials, gameplayHUD, this, coroutineRunner),
-                [typeof(BallChasingState)] = new BallChasingState(leftTeam, rightTeam, gameplayHUD, ball, sceneInitials, this),
-                [typeof(PassState)] = new PassState(ball, gameplayHUD, this),
+                [typeof(StartCutsceneState)] = new StartCutsceneState(leftTeam, rightTeam, referee, camera.CinemachineBrain, ball, this, gameObjectFactory, inputService),
+                [typeof(JumpBallState)] = new JumpBallState(leftTeam, rightTeam, playableTeam, notPlayableTeam, referee, ball, camera.CinemachineBrain,  this, gameObjectFactory, inputService),
+                [typeof(AttackDefenceState)] = new AttackDefenceState(leftTeam, rightTeam, ball, sceneInitials,  this, coroutineRunner),
+                [typeof(BallChasingState)] = new BallChasingState(leftTeam, rightTeam, ball, sceneInitials, this),
+                [typeof(PassState)] = new PassState(ball,  this),
                 [typeof(DunkState)] = new DunkState( leftTeam, rightTeam, sceneInitials, ball,  this),
                 [typeof(ThrowState)] = new ThrowState(ball, this),
-                [typeof(DropBallState)] = new DropBallState(leftTeam, rightTeam, ball, sceneInitials, gameplayHUD, loadingCurtain, this),
-                [typeof(FightForBallState)] = new FightForBallState(playableTeam, notPlayableTeam, ball, gameplayHUD, this, gameObjectFactory)
+                [typeof(DropBallState)] = new DropBallState(leftTeam, rightTeam, ball, sceneInitials, loadingCurtain, this),
+                [typeof(FightForBallState)] = new FightForBallState(playableTeam, notPlayableTeam, ball, this, gameObjectFactory)
             };
         }
 

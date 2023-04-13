@@ -13,6 +13,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.Brains.LocalControlled
     {
         [SerializeField] private PlayerMover _mover;
         [SerializeField] private PlayerEventLauncher _eventLauncher;
+        [SerializeField] private PlayerFacade _host;
 
         private Transform _gameplayCamera;
         private IInputService _inputService;

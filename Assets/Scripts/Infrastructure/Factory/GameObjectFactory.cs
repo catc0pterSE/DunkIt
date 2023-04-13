@@ -10,7 +10,7 @@ using Gameplay.Minigame.JumpBall;
 using Infrastructure.Input.InputService;
 using Infrastructure.Provider;
 using UI;
-using UI.HUD.Mobile;
+using UI.HUD.Controls.Mobile;
 using Utility.Constants;
 
 namespace Infrastructure.Factory
@@ -54,9 +54,9 @@ namespace Infrastructure.Factory
                    ?? throw new NullReferenceException("No Ball script on Ball prefab");
         }
 
-        public MobileGameplayHUD CreateMobileHUD()
+        public MobileControlsHUDView CreateMobileControlsHUD()
         {
-            return _assetProvider.Instantiate(ResourcesPathes.MobileHUDPath).GetComponent<MobileGameplayHUD>()
+            return _assetProvider.Instantiate(ResourcesPathes.MobileControlsHUDViewPath).GetComponent<MobileControlsHUDView>()
                    ?? throw new NullReferenceException("No GameplayHUD script on GameplayHUD prefab");
         }
 

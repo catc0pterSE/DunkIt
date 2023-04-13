@@ -4,29 +4,24 @@ using Gameplay.StateMachine.Transitions;
 using Modules.StateMachine;
 using Scene;
 using UI;
-using UI.HUD;
 using Utility.Constants;
 using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.Gameplay
 {
-    using Ball.MonoBehavior;
-
     public class DropBallState : StateWithTransitions, IParameterState<PlayerFacade>
     {
         private readonly PlayerFacade[] _leftTeam;
         private readonly PlayerFacade[] _rightTeam;
-        private readonly Ball _ball;
+        private readonly Ball.MonoBehavior.Ball _ball;
         private readonly SceneInitials _sceneInitials;
         private readonly LoadingCurtain _loadingCurtain;
 
         private PlayerFacade _droppingPlayer;
-        private IGameplayHUD _gameplayHUD;
 
-        public DropBallState(PlayerFacade[] leftTeam, PlayerFacade[] rightTeam, Ball ball, SceneInitials sceneInitials, IGameplayHUD gameplayHUD,
+        public DropBallState(PlayerFacade[] leftTeam, PlayerFacade[] rightTeam, Ball.MonoBehavior.Ball ball, SceneInitials sceneInitials, 
             LoadingCurtain loadingCurtain, GameplayLoopStateMachine gameplayLoopStateMachine)
         {
-            _gameplayHUD = gameplayHUD;
             _leftTeam = leftTeam;
             _rightTeam = rightTeam;
             _ball = ball;
@@ -49,13 +44,6 @@ namespace Gameplay.StateMachine.States.Gameplay
                 _ball.SetOwner(_droppingPlayer);
                 SetPlayersStates();
             });
-            
-            _gameplayHUD.Enable();
-        }
-
-        public override void Exit()
-        {
-            _gameplayHUD.Disable();
         }
 
         private void ArrangePlayers()
