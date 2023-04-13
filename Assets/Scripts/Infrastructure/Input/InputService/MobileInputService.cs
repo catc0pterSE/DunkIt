@@ -21,6 +21,8 @@ namespace Infrastructure.Input.InputService
         public bool PassButtonHeldDown { get; private set; }
         public bool DunkButtonHeldDown { get; private set; }
         public bool ChangePlayerButtonHeldDown { get; private set; }
+        public bool JumpButtonHeldDown { get; private set; }
+        
         public Vector3 PointerPosition => UnityEngine.Input.mousePosition;
 
         public event Action<Vector2> MovementInputReceived;
@@ -29,12 +31,14 @@ namespace Infrastructure.Input.InputService
         public event Action DunkButtonDown;
         public event Action ChangePlayerButtonDown;
         public event Action PassButtonDown;
+        public event Action JumpButtonDown;
 
         public event Action PointerUp;
         public event Action ThrowButtonUp;
         public event Action DunkButtonUp;
         public event Action ChangePlayerButtonUp;
         public event Action PassButtonUp;
+        public event Action JumpButtonUp;
 
         private void Awake()
         {
@@ -107,6 +111,18 @@ namespace Infrastructure.Input.InputService
         {
             ChangePlayerButtonUp?.Invoke();
             ChangePlayerButtonHeldDown = false;
+        }
+
+        public void OnUIJumpButtonUP()
+        {
+            JumpButtonUp?.Invoke();
+            JumpButtonHeldDown = false;
+        }
+
+        public void OnUIJumpButtonDown()
+        {
+            JumpButtonDown?.Invoke();
+            JumpButtonHeldDown = true;
         }
     }
 }

@@ -1,8 +1,9 @@
-﻿using Cinemachine;
+﻿using System.Linq;
+using Cinemachine;
 using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.Transitions;
+using Infrastructure.CoroutineRunner;
 using Modules.StateMachine;
-using Scene;
 using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.Gameplay
@@ -14,13 +15,14 @@ namespace Gameplay.StateMachine.States.Gameplay
 
         private CinemachineVirtualCamera _dunkVirtualCamera;
 
-        public DunkState(PlayerFacade[] leftTeam, PlayerFacade[] rightTeam, SceneInitials sceneInitials, Ball ball, GameplayLoopStateMachine gameplayLoopStateMachine)
+        public DunkState(PlayerFacade[] players, Ball ball, ICoroutineRunner coroutineRunner, GameplayLoopStateMachine gameplayLoopStateMachine)
         {
             _ball = ball;
 
             Transitions = new ITransition[]
             {
                 new AnyToBallChasingStateTransition(ball, gameplayLoopStateMachine),
+                new AnyToFightForBallTransition(players, gameplayLoopStateMachine, coroutineRunner, 0.5f)
             };
         }
 

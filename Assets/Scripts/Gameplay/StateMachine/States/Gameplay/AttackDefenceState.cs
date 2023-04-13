@@ -20,8 +20,6 @@ namespace Gameplay.StateMachine.States.Gameplay
         (
             PlayerFacade[] leftTeam,
             PlayerFacade[] rightTeam,
-            Ball.MonoBehavior.Ball ball,
-            SceneInitials sceneInitials,
             GameplayLoopStateMachine gameplayLoopStateMachine,
             ICoroutineRunner coroutineRunner
         )

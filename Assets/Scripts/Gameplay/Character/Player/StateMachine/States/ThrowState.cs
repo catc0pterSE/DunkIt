@@ -14,6 +14,7 @@ namespace Gameplay.Character.Player.StateMachine.States
 
         public void Enter()
         {
+            _player.EnableFightForBallTriggerZone();
             _player.RotateTo(_player.OppositeRing.transform.position, () =>
             {
                 if (_player.CanBeLocalControlled)
@@ -27,6 +28,7 @@ namespace Gameplay.Character.Player.StateMachine.States
         {
             _player.DisableLocalControlledBallThrower();
             _player.DisableAIControlledBallThrower();
+            _player.DisableFightForBallTriggerZone();
         }
     }
 }

@@ -7,6 +7,7 @@
         Throw,
         ChangePlayer,
         Move,
-        Rotate
+        Rotate,
+        Jump
     }
 }

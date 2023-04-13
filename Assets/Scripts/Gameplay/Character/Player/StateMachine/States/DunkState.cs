@@ -17,9 +17,13 @@ namespace Gameplay.Character.Player.StateMachine.States
 
         public void Enter()
         {
+            _player.EnableFightForBallTriggerZone();
             _player.Dunk();
         }
 
-        public void Exit() { }
+        public void Exit()
+        {
+            _player.DisableFightForBallTriggerZone();
+        }
     }
 }

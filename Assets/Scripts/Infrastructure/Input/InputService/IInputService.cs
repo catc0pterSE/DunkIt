@@ -14,6 +14,8 @@ namespace Infrastructure.Input.InputService
         public bool PassButtonHeldDown { get;  }
         public bool DunkButtonHeldDown { get;  }
         public bool ChangePlayerButtonHeldDown { get; }
+        
+        public bool JumpButtonHeldDown { get; }
 
         public event Action<Vector2> MovementInputReceived;
         public event Action PointerDown;
@@ -22,9 +24,11 @@ namespace Infrastructure.Input.InputService
         public event Action DunkButtonDown;
         public event Action ChangePlayerButtonDown;
         public event Action PassButtonDown;
+        public event Action JumpButtonDown;
         public event Action ThrowButtonUp;
         public event Action DunkButtonUp;
         public event Action ChangePlayerButtonUp;
-        public event Action PassButtonUp;
+        public event Action PassButtonUp;       
+        public event Action JumpButtonUp;
     }
 }

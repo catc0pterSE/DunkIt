@@ -17,15 +17,18 @@ using UI;
 
 namespace Gameplay.StateMachine
 {
+    using Ball.MonoBehavior;
+    
     public class GameplayLoopStateMachine : Modules.StateMachine.StateMachine
     {
+       
         public GameplayLoopStateMachine
         (
             PlayerFacade[] leftTeam,
             PlayerFacade[] rightTeam,
             Referee referee,
             CameraFacade camera,
-            Ball.MonoBehavior.Ball ball,
+            Ball ball,
             SceneInitials sceneInitials,
             LoadingCurtain loadingCurtain,
             ICoroutineRunner coroutineRunner,
@@ -56,11 +59,11 @@ namespace Gameplay.StateMachine
             {
                 [typeof(StartCutsceneState)] = new StartCutsceneState(leftTeam, rightTeam, referee, camera.CinemachineBrain, ball, this, gameObjectFactory, inputService),
                 [typeof(JumpBallState)] = new JumpBallState(leftTeam, rightTeam, playableTeam, notPlayableTeam, referee, ball, camera.CinemachineBrain,  this, gameObjectFactory, inputService),
-                [typeof(AttackDefenceState)] = new AttackDefenceState(leftTeam, rightTeam, ball, sceneInitials,  this, coroutineRunner),
+                [typeof(AttackDefenceState)] = new AttackDefenceState(leftTeam, rightTeam, this, coroutineRunner),
                 [typeof(BallChasingState)] = new BallChasingState(leftTeam, rightTeam, ball, sceneInitials, this),
                 [typeof(PassState)] = new PassState(ball,  this),
-                [typeof(DunkState)] = new DunkState( leftTeam, rightTeam, sceneInitials, ball,  this),
-                [typeof(ThrowState)] = new ThrowState(ball, this),
+                [typeof(DunkState)] = new DunkState( leftTeam.Union(rightTeam).ToArray(),  ball, coroutineRunner,  this),
+                [typeof(ThrowState)] = new ThrowState(leftTeam.Union(rightTeam).ToArray(), ball, this, coroutineRunner),
                 [typeof(DropBallState)] = new DropBallState(leftTeam, rightTeam, ball, sceneInitials, loadingCurtain, this),
                 [typeof(FightForBallState)] = new FightForBallState(playableTeam, notPlayableTeam, ball, this, gameObjectFactory),
                 [typeof(GoalState)] = new GoalState(leftTeam, rightTeam, sceneInitials, coroutineRunner, this)

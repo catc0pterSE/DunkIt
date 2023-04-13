@@ -1,6 +1,8 @@
 ﻿using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.Transitions;
+using Infrastructure.CoroutineRunner;
 using Modules.StateMachine;
+using UnityEngine;
 
 namespace Gameplay.StateMachine.States.Gameplay
 {
@@ -8,14 +10,16 @@ namespace Gameplay.StateMachine.States.Gameplay
     {
       private PlayerFacade _throwingPlayer;
 
-        public ThrowState(
+        public ThrowState(PlayerFacade[] players,
             Ball.MonoBehavior.Ball ball,
-            GameplayLoopStateMachine gameplayLoopStateMachine
+            GameplayLoopStateMachine gameplayLoopStateMachine,
+            ICoroutineRunner coroutineRunner
         )
         {
             Transitions = new ITransition[]
             {
-                new AnyToBallChasingStateTransition(ball, gameplayLoopStateMachine)
+                new AnyToBallChasingStateTransition(ball, gameplayLoopStateMachine),
+                new AnyToFightForBallTransition(players, gameplayLoopStateMachine, coroutineRunner, 2)
             };
         }
 

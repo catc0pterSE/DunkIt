@@ -32,7 +32,8 @@ namespace Gameplay.Character.Player.MonoBehaviour.Brains.LocalControlled
                 [LocalAction.Pass] = SubscribeOnPassInput,
                 [LocalAction.Throw] = SubscribeOnThrowInput,
                 [LocalAction.ChangePlayer] = SubscribeOnChangePlayerInput,
-                [LocalAction.Rotate] = SubscribeRotateOnInput
+                [LocalAction.Rotate] = SubscribeRotateOnInput,
+                [LocalAction.Jump] = SubscribeJumpOnInput
              };
         }
 
@@ -44,6 +45,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.Brains.LocalControlled
             UnsubscribeFromChangePlayerInput();
             UnsubscribeMoveFromInput();
             UnsubscribeRotateFromInput();
+            UnsubscribeJumpFromInput();
         }
 
         public void Enable(LocalAction[] actionsToEnable)
@@ -75,6 +77,12 @@ namespace Gameplay.Character.Player.MonoBehaviour.Brains.LocalControlled
 
         private void SubscribeOnChangePlayerInput() =>
             _inputService.ChangePlayerButtonDown += _eventLauncher.InitiateChangePlayer;
+
+        private void SubscribeJumpOnInput() =>
+            _inputService.JumpButtonDown += _mover.Jump;
+        
+        private void UnsubscribeJumpFromInput() =>
+            _inputService.JumpButtonDown -= _mover.Jump;
 
         private void UnsubscribeFromThrowInput() =>
             _inputService.ThrowButtonDown -= _eventLauncher.InitiateThrow;

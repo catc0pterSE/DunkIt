@@ -12,6 +12,7 @@ namespace UI.HUD.Controls.Mobile
         [SerializeField] private ButtonSimulation _dunkButton;
         [SerializeField] private ButtonSimulation _passButton;
         [SerializeField] private ButtonSimulation _changePlayerButton;
+        [SerializeField] private ButtonSimulation _jumpButton;
         [SerializeField] private GameObject _joystick;
 
 
@@ -25,6 +26,8 @@ namespace UI.HUD.Controls.Mobile
         private void OnDisable() =>
             UnsubscribeUIInputControllerFromButtons();
 
+
+        
 
         public IControlsHUDView Initialize(IControlsHUDStateController controlsHUDStateController)
         {
@@ -52,6 +55,10 @@ namespace UI.HUD.Controls.Mobile
         public void SetMovementAvailability(bool isAvailable) =>
             _joystick.gameObject.SetActive(isAvailable);
 
+        public void SetJumpAvailability(bool isAvailable) =>
+            _jumpButton.gameObject.SetActive(isAvailable);
+        
+
         private void SubscribeUIInputControllerOnButtons()
         {
             _throwButton.Down += _uiInputController.OnUIThrowButtonDown;
@@ -65,6 +72,9 @@ namespace UI.HUD.Controls.Mobile
 
             _changePlayerButton.Down += _uiInputController.OnUIChangePlayerButtonDown;
             _changePlayerButton.Up += _uiInputController.OnUIChangePlayerButtonUp;
+            
+            _jumpButton.Down += _uiInputController.OnUIJumpButtonDown;
+            _jumpButton.Up += _uiInputController.OnUIJumpButtonUP;
         }
 
         private void UnsubscribeUIInputControllerFromButtons()
@@ -80,6 +90,9 @@ namespace UI.HUD.Controls.Mobile
 
             _changePlayerButton.Down -= _uiInputController.OnUIChangePlayerButtonDown;
             _changePlayerButton.Up -= _uiInputController.OnUIChangePlayerButtonUp;
+            
+            _jumpButton.Down -= _uiInputController.OnUIJumpButtonDown;
+            _jumpButton.Up -= _uiInputController.OnUIJumpButtonUP;
         }
 
         private void ObserveStateController() =>

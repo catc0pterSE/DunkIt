@@ -149,9 +149,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _characterController: {fileID: 4871018274306801538}
   _rotationSpeed: 800
-  _gravityModifier: 0.5
+  _gravityModifier: 1
   _minAngle: 5
   _movementSpeed: 4
+  _jumpForce: 35
+  _jumpHeight: 7
 --- !u!114 &-1168070809799237236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -677,7 +679,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7789709571627010022}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.05099964, y: 0.62, z: 0.4749999}
+  m_LocalPosition: {x: 0.05099964, y: 0.62, z: 0.91}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -694,7 +696,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 1.21
+  m_Radius: 0.8
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -737,7 +739,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8939039133351713092}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.04, y: 0, z: 0.93}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -754,7 +756,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 2
+  m_Radius: 0.5
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}

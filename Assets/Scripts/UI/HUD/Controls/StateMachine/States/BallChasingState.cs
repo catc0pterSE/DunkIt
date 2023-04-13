@@ -18,13 +18,15 @@ namespace UI.HUD.Controls.StateMachine.States
             _controlsHUDView.Enable();
             _controlsHUDView.SetChangePlayerAvailability(true);
             _controlsHUDView.SetMovementAvailability(true);
+            _controlsHUDView.SetJumpAvailability(true);
         }
 
         public void Exit()
         {
-            _controlsHUDView.Disable();
             _controlsHUDView.SetChangePlayerAvailability(false);
             _controlsHUDView.SetMovementAvailability(false);
+            _controlsHUDView.SetJumpAvailability(false);
+            _controlsHUDView.Disable();
         }
     }
 }

@@ -13,8 +13,11 @@ namespace Gameplay.Character.Player.MonoBehaviour.Movement
         [SerializeField] private float _gravityModifier = 1;
         [SerializeField] private float _minAngle = 10;
         [SerializeField] private float _movementSpeed = 4;
+        [SerializeField] private float _jumpForce = 10;
+        [SerializeField] private float _jumpHeight = 5;
 
-        private Coroutine _rotating;
+        private Coroutine _rotateRoutine;
+        private Coroutine _jumpRoutine;
 
         public void Configure(float movementSpeed)
         {
@@ -26,17 +29,13 @@ namespace Gameplay.Character.Player.MonoBehaviour.Movement
             _characterController.Enable();
         }
 
-        private void Update()
-        {
-            if (_characterController.isGrounded)
-                return;
-
+        private void Update() =>
             ApplyGravity();
-        }
-        
+
+
         private void OnDisable()
         {
-           _characterController.Disable();
+            _characterController.Disable();
         }
 
         public void Move(Vector3 movementDirection)
@@ -44,6 +43,29 @@ namespace Gameplay.Character.Player.MonoBehaviour.Movement
             StopRotationRoutine();
 
             _characterController.Move(movementDirection * (Time.deltaTime * _movementSpeed));
+        }
+
+        public void Jump()
+        {
+            Debug.Log("Jump");
+            
+            if (_characterController.isGrounded == false)
+                return;
+            
+            if (_jumpRoutine != null)
+                StopCoroutine(_jumpRoutine);
+
+            _jumpRoutine = StartCoroutine(JumpRoutine());
+        }
+
+        private IEnumerator JumpRoutine()
+        {
+            float startHeight = transform.position.y;
+            while (transform.position.y < _jumpHeight - startHeight)
+            {
+                _characterController.Move(Vector3.up * (_jumpForce * Time.deltaTime));
+                yield return null;
+            }
         }
 
         public void Rotate(Vector3 direction)
@@ -62,13 +84,13 @@ namespace Gameplay.Character.Player.MonoBehaviour.Movement
 
             StopRotationRoutine();
 
-            _rotating = StartCoroutine(RotateToPosition(positionProjection, callback));
+            _rotateRoutine = StartCoroutine(RotateToPosition(positionProjection, callback));
         }
 
         private void StopRotationRoutine()
         {
-            if (_rotating != null)
-                StopCoroutine(_rotating);
+            if (_rotateRoutine != null)
+                StopCoroutine(_rotateRoutine);
         }
 
         private void ApplyGravity() =>

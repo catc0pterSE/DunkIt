@@ -13,5 +13,7 @@ namespace Infrastructure.Input
         public void OnUIPassButtonUp();
         public void OnUIDunkButtonUp();
         public void OnUIChangePlayerButtonUp();
+        public void OnUIJumpButtonUP();
+        public void OnUIJumpButtonDown();
     }
 }

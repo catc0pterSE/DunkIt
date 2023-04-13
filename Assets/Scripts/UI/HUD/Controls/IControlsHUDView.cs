@@ -14,6 +14,8 @@ namespace UI.HUD.Controls
         public void SetChangePlayerAvailability(bool isAvailable);
         
         public void SetMovementAvailability(bool isAvailable);
+        
+        public void SetJumpAvailability(bool isAvailable);
 
         public IControlsHUDView Initialize(IControlsHUDStateController controlsHUDStateController);
     }

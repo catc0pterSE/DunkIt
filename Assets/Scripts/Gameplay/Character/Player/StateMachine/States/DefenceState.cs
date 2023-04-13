@@ -57,7 +57,7 @@ namespace Gameplay.Character.Player.StateMachine.States
         private void EnterLocalControlledPreset()
         {
             SubscribeOnChangePlayerInput();
-            _player.EnableLocalControlledBrain(new [] { LocalAction.Move , LocalAction.ChangePlayer, LocalAction.Rotate});
+            _player.EnableLocalControlledBrain(new [] { LocalAction.Move , LocalAction.Jump, LocalAction.ChangePlayer, LocalAction.Rotate});
             _player.PrioritizeCamera();
             _player.FocusOn(_ball.Owner.transform);
         }
