@@ -47,8 +47,6 @@ namespace Gameplay.Character.Player.MonoBehaviour.Movement
 
         public void Jump()
         {
-            Debug.Log("Jump");
-            
             if (_characterController.isGrounded == false)
                 return;
             

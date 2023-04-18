@@ -3,7 +3,6 @@ using Gameplay.Character.Player.MonoBehaviour;
 using Gameplay.StateMachine.Transitions;
 using Infrastructure.CoroutineRunner;
 using Modules.StateMachine;
-using Scene;
 using Utility.Extensions;
 
 namespace Gameplay.StateMachine.States.Gameplay

@@ -24,13 +24,13 @@ namespace Gameplay.Character.Player.StateMachine.States
             _player.EnableTargetTracker();
 
             if (_player.CanBeLocalControlled)
-                EnableInputControlledPreset();
+                EnableLocalControlledPreset();
 
             if (_player.IsAIOnlyControlled)
                 EnableAIControlledPreset();
         }
 
-        private void EnableInputControlledPreset()
+        private void EnableLocalControlledPreset()
         {
             _playerService.Set(_player);
             _player.EnableLocalControlledBrain(new [] { LocalAction.Dunk , LocalAction.Pass, LocalAction.Throw, LocalAction.Move, LocalAction.Rotate});
