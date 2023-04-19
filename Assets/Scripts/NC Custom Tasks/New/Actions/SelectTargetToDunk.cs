@@ -3,7 +3,7 @@ using NodeCanvas.Framework;
 
 namespace NC_Custom_Tasks.Actions
 {
-    public class SelectAttackTargetToDunk : SelectAttackTarget
+    public class SelectTargetToDunk : SelectAttackTarget
     {
         [BlackboardOnly] public BBParameter<TargetTracker> TargetTracker;
         public float Delta;

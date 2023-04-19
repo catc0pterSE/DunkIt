@@ -88,12 +88,11 @@ namespace Gameplay.Character.Player.MonoBehaviour
         public Animator Animator => _animator;
         public bool CanBeLocalControlled { get; private set; }
         public Ring OppositeRing { get; private set; }
-
         public float MaxPassDistance => _targetTracker.MaxPassDistance;
         public bool IsInThrowDistance => _targetTracker.IsInThrowDistance;
         public bool IsInDunkDistance => _targetTracker.IsInDunkDistance;
+        public bool CanPass => _targetTracker.CanPass;
         public bool IsAIOnlyControlled { get; private set; }
-
         public Type CurrentStateType => _stateMachine.CurrentState;
 
         public event Action StateChanged

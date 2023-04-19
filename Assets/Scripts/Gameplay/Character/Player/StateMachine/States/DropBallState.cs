@@ -19,6 +19,8 @@ namespace Gameplay.Character.Player.StateMachine.States
 
         public void Enter()
         {
+            _player.EnableTargetTracker();
+            
             if (_player.CanBeLocalControlled)
                 EnableLocalControlledPreset();
             else

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections;
+using System.ComponentModel;
 using Modules.MonoBehaviour;
 using Scene.Ring;
 using UnityEngine;
@@ -6,24 +7,29 @@ using Utility.Constants;
 
 namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
 {
-    public class AIControlledThrowing: SwitchableComponent
+    public class AIControlledThrowing : SwitchableComponent
     {
         [SerializeField] private BallThrower _ballThrower;
         [SerializeField] private Transform _ballHolder;
-        [SerializeField] private float _minBallSpeed;
         [SerializeField] private float _maxBallSpeed;
         [SerializeField] private float _minAimDeviation;
         [SerializeField] private float _maxAimDeviation;
-        
+        [SerializeField] private float _minAimingTime = 0.5f;
+        [SerializeField] private float _maxAimingTime = 1.5f;
+
         private Ring _oppositeRing;
+        private Coroutine _aimAndThrowRoutine;
 
         public void Initialize(Ring oppositeRing)
         {
             _oppositeRing = oppositeRing;
         }
-        
-        private void OnEnable() =>
-            _ballThrower.Throw(CalculateVelocity());
+
+        private void OnEnable()
+        {
+            StopAimAndThrowRoutine();
+            _aimAndThrowRoutine = StartCoroutine(AimAndThrow());
+        }
 
         private Vector3 CalculateVelocity()
         {
@@ -49,12 +55,24 @@ namespace Gameplay.Character.Player.MonoBehaviour.BallHandle.Throw
 
             return launchVelocity;
         }
-        
+
         private Vector3 GetTarget()
         {
             Vector3 ringCenter = _oppositeRing.RingCenter;
             Vector3 randomInSphere = Random.insideUnitSphere * Random.Range(_minAimDeviation, _maxAimDeviation);
             return ringCenter + randomInSphere;
+        }
+
+        private void StopAimAndThrowRoutine()
+        {
+            if (_aimAndThrowRoutine != null)
+                StopCoroutine(_aimAndThrowRoutine);
+        }
+
+        private IEnumerator AimAndThrow()
+        {
+            yield return new WaitForSeconds(Random.Range(_minAimingTime, _maxAimingTime));
+            _ballThrower.Throw(CalculateVelocity());
         }
     }
 }

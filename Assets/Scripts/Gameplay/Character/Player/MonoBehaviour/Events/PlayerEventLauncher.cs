@@ -35,9 +35,9 @@ namespace Gameplay.Character.Player.MonoBehaviour.Events
 
         public void InitiatePass()
         {
-            if (_targetTracker.TrySelectAllyToPass(out PlayerFacade passTarget) && _host.OwnsBall)
+            if (_targetTracker.CanPass && _host.OwnsBall)
             {
-                PassInitiated?.Invoke(_host, passTarget);
+                PassInitiated?.Invoke(_host, _targetTracker.PassTarget);
             }
         }
 

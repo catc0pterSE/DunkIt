@@ -23,7 +23,7 @@ namespace Scene
 
         public float ZMax { get; }
 
-        public bool CheckIfPointInsideCourt(Vector3 point) =>
-            point.x >= XMin && point.x <= XMax && point.z >= ZMin && point.z <= ZMax;
+        public bool CheckIfPointInsideCourt(Vector3 point, float delta = 0) =>
+            point.x - delta >= XMin && point.x + delta <= XMax && point.z - delta >= ZMin && point.z + delta <= ZMax;
     }
 }

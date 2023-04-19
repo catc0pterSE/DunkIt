@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace NC_Custom_Tasks.Actions
 {
-    public class Move : ActionTask
+    public class MoveLookingSraight : ActionTask
     {
         [BlackboardOnly] public BBParameter<PlayerMover> Mover;
         [BlackboardOnly] public BBParameter<Vector3> Direction;

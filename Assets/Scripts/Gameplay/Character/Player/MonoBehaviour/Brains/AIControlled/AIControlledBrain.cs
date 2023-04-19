@@ -13,14 +13,11 @@ namespace Gameplay.Character.Player.MonoBehaviour.Brains.AIControlled
     {
        
         [SerializeField] private BehaviourTreeOwner _behaviourTreeOwner;
-
-        public AI CurrentAIType { get; private set; }
         
        public void Initialize(PlayerFacade[] allies, Ring oppositeRing, Ring playerRing, CourtDimensions courtDimensions, PlayerFacade[] oppositeTeam)
         {
             _behaviourTreeOwner.AddBinds(new Dictionary<string, object>
             {
-                [BehaviourTreeVariableNames.AITypeVariableName] = CurrentAIType,
                 [BehaviourTreeVariableNames.AlliesVariableName] = allies,
                 [BehaviourTreeVariableNames.OppositeRingVariableName] = oppositeRing,
                 [BehaviourTreeVariableNames.PlayerRingVariableName] = playerRing,
@@ -37,7 +34,7 @@ namespace Gameplay.Character.Player.MonoBehaviour.Brains.AIControlled
        public void Enable(AI aiType)
        {
            base.Enable();
-           CurrentAIType = aiType;
+           _behaviourTreeOwner.behaviour.blackboard.variables[BehaviourTreeVariableNames.AITypeVariableName].value = aiType;
            _behaviourTreeOwner.Enable();
        }
     }

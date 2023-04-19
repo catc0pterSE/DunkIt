@@ -338,9 +338,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51da209d7df5422aaa9b04b80568ae84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxThrowDistance: 14
-  _maxDunkDistance: 6
-  _maxPassDistance: 18
+  _maxThrowDistance: 12
+  _maxDunkDistance: 5
+  _maxPassDistance: 12
 --- !u!114 &-2012806606389975634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,12 +385,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30127c5682af49e684fac8c1e0737bff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ballThrower: {fileID: 0}
-  _ballHolder: {fileID: 0}
-  _minBallSpeed: 0
-  _maxBallSpeed: 0
-  _minAimDeviation: 0
-  _maxAimDeviation: 0
+  _ballThrower: {fileID: 1388355857346884750}
+  _ballHolder: {fileID: 4042918883656718937}
+  _maxBallSpeed: 20
+  _minAimDeviation: 0.1
+  _maxAimDeviation: 2
+  _minAimingTime: 0.5
+  _maxAimingTime: 1.5
 --- !u!114 &1864448214675077806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -452,9 +453,45 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _parentBlackboard: {fileID: 0}
-  _serializedBlackboard: '{"_variables":{}}'
-  _objectReferences: []
-  _serializedVariables: []
+  _serializedBlackboard: '{"_variables":{"EventLauncher":{"_value":1,"_name":"EventLauncher","_id":"450699ba-574e-42bd-b94a-7c0da96fd831","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Events.PlayerEventLauncher,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"Facade":{"_value":2,"_name":"Facade","_id":"2d01fcb4-de73-4b19-950f-ba614499f3f7","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.PlayerFacade,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"TargetTracker":{"_value":3,"_name":"TargetTracker","_id":"daa30b6c-18de-4f6c-b6ba-4313883a7707","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.TargetTracking.TargetTracker,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"Transform":{"_value":4,"_name":"Transform","_id":"5dfefc98-975d-4d69-bf98-975618bf8fed","$type":"NodeCanvas.Framework.Variable`1[[UnityEngine.Transform,
+    UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"},"Mover":{"_value":5,"_name":"Mover","_id":"09c03325-df44-40df-bbcc-eed6ba5be17f","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Movement.PlayerMover,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}}}'
+  _objectReferences:
+  - {fileID: 0}
+  - {fileID: 5622137588025261266}
+  - {fileID: 5054484669908984701}
+  - {fileID: -8693731189481653844}
+  - {fileID: 8078427120944833169}
+  - {fileID: 3567767349144517149}
+  _serializedVariables:
+  - _json: '{"_value":1,"_name":"EventLauncher","_id":"450699ba-574e-42bd-b94a-7c0da96fd831","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Events.PlayerEventLauncher,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
+    _references:
+    - {fileID: 0}
+    - {fileID: 5622137588025261266}
+  - _json: '{"_value":1,"_name":"Facade","_id":"2d01fcb4-de73-4b19-950f-ba614499f3f7","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.PlayerFacade,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
+    _references:
+    - {fileID: 0}
+    - {fileID: 5054484669908984701}
+  - _json: '{"_value":1,"_name":"TargetTracker","_id":"daa30b6c-18de-4f6c-b6ba-4313883a7707","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.TargetTracking.TargetTracker,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
+    _references:
+    - {fileID: 0}
+    - {fileID: -8693731189481653844}
+  - _json: '{"_value":1,"_name":"Transform","_id":"5dfefc98-975d-4d69-bf98-975618bf8fed","$type":"NodeCanvas.Framework.Variable`1[[UnityEngine.Transform,
+      UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
+    _references:
+    - {fileID: 0}
+    - {fileID: 8078427120944833169}
+  - _json: '{"_value":1,"_name":"Mover","_id":"09c03325-df44-40df-bbcc-eed6ba5be17f","$type":"NodeCanvas.Framework.Variable`1[[Gameplay.Character.Player.MonoBehaviour.Movement.PlayerMover,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]"}'
+    _references:
+    - {fileID: 0}
+    - {fileID: 3567767349144517149}
 --- !u!1 &4042918882263731115
 GameObject:
   m_ObjectHideFlags: 0
