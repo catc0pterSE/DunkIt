@@ -6,15 +6,15 @@ using Vector3 = UnityEngine.Vector3;
 
 namespace NC_Custom_Tasks.Conditions
 {
-    public class AllyIsOnOptimalPassRange : ConditionTask
+    public class PlayerIsOnOptimalPassRange : ConditionTask
     {
-        [BlackboardOnly] public BBParameter<PlayerFacade> Ally;
+        [BlackboardOnly] public BBParameter<PlayerFacade> PlayerToCheck;
         [BlackboardOnly] public BBParameter<Transform> HostTransform;
         public float DistanceTolerance;
 
         protected override bool OnCheck()
         {
-            PlayerFacade ally = Ally.value;;
+            PlayerFacade ally = PlayerToCheck.value;;
 
             float distanceToAlly = Vector3.Distance(ally.transform.position, HostTransform.value.position);
 

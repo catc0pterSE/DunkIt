@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace NC_Custom_Tasks.Actions
 {
-    public class SelectTargetAlongAlly : ActionTask
+    public class SelectTargetAlongPlayerInPassRangeCloserToSomeRing : ActionTask
     {
-        [BlackboardOnly] public BBParameter<PlayerFacade> Ally;
-        [BlackboardOnly] public BBParameter<Ring> OppositeRing;
+        [BlackboardOnly] public BBParameter<PlayerFacade> PlayerToMoveAlong;
+        [BlackboardOnly] public BBParameter<Ring> Ring;
         [BlackboardOnly] public BBParameter<CourtDimensions> CourtDimensions;
         [BlackboardOnly] public BBParameter<Vector3> TargetAlongAlly;
         [BlackboardOnly] public BBParameter<float> OffsetAngle;
@@ -18,17 +18,17 @@ namespace NC_Custom_Tasks.Actions
 
         protected override void OnExecute()
         {
-            Vector3 allyPosition = Ally.value.transform.position;
-            Vector3 projectedRingPosition = OppositeRing.value.transform.position;
+            Vector3 allyPosition = PlayerToMoveAlong.value.transform.position;
+            Vector3 projectedRingPosition = Ring.value.transform.position;
             projectedRingPosition.y = allyPosition.y;
             Vector3 allyToRing = (projectedRingPosition - allyPosition).normalized;
             CourtDimensions courtDimensions = CourtDimensions.value;
             
-            Quaternion deflection = allyPosition.z > courtDimensions.CourtCenter.z == OppositeRing.value.IsFlipped
+            Quaternion deflection = allyPosition.z > courtDimensions.CourtCenter.z == Ring.value.IsFlipped
                 ? Quaternion.Euler(0, -OffsetAngle.value, 0)
                 : Quaternion.Euler(0, OffsetAngle.value, 0);
             
-            Vector3 roughDestination = deflection * allyToRing * (Ally.value.MaxPassDistance - DistanceDelta) + allyPosition;
+            Vector3 roughDestination = deflection * allyToRing * (PlayerToMoveAlong.value.MaxPassDistance - DistanceDelta) + allyPosition;
             
             Vector3 destination = new Vector3
             (

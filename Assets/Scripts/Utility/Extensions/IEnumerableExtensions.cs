@@ -97,6 +97,33 @@ namespace Utility.Extensions
             
             return closest;
         }
+        
+        public static T FindClosest<T>(this IEnumerable<T> enumerable, Vector3 position) where T: MonoBehaviour
+        {
+            var array = enumerable as T[] ?? enumerable.ToArray();
+            
+            if (array.Length == 0)
+                throw new Exception("Array is empty");
+            
+            if (array == null)
+                throw new NullReferenceException("Array is not initialized");
+            
+            float minDistance = Single.MaxValue;
+            T closest = null;
+
+            foreach (T element in array)
+            {
+                float distance = Vector3.Distance(element.transform.position, position);
+
+                if (distance < minDistance)
+                {
+                    closest = element;
+                    minDistance = distance;
+                }
+            }
+            
+            return closest;
+        }
 
         public static Vector3 FindClosest(this IEnumerable<Vector3> enumerable, Vector3 position)
         {
